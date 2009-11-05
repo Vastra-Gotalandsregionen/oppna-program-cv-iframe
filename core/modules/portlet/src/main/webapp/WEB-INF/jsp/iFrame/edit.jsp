@@ -115,6 +115,10 @@
                 <td><label for="<portlet:namespace/>auth">Authenticate</label></td>
                 <td><form:checkbox path="auth" id="${ns}auth" /></td>
             </tr>
+            <tr id="<portlet:namespace/>siteKey">
+                <td><label for="<portlet:namespace/>siteKey">Site Key</label></td>
+                <td><form:input path="siteKey" id="${ns}siteKey" /></td>
+            </tr>
             <tr id="<portlet:namespace/>authType">
                 <td><label for="<portlet:namespace/>authTypeInput">Authentication Type</label></td>
                 <td>
@@ -141,11 +145,11 @@
                         <table class="lfr-table">
                             <tr id="<portlet:namespace/>userName">
                                 <td><label for="<portlet:namespace/>siteUserNameField">Field Name</label></td>
-                                <td><label for="<portlet:namespace/>siteUser">Value</label></td>
+                                <%--<td><label for="<portlet:namespace/>siteUser">Value</label></td>--%>
                             </tr>
                             <tr>
                                 <td><form:input path="siteUserNameField" id="${ns}siteUserNameField" /></td>
-                                <td><form:input path="siteUser" id="${ns}siteUser" /></td>
+                                <%--<td><form:input path="siteUser" id="${ns}siteUser" /></td>--%>
                             </tr>
                         </table>
                     </td>
@@ -156,11 +160,11 @@
                         <table class="lfr-table">
                             <tr id="<portlet:namespace/>password">
                                 <td><label for="<portlet:namespace/>sitePasswordField">Field Name</label></td>
-                                <td><label for="<portlet:namespace/>sitePassword">Value</label></td>
+                                <%--<td><label for="<portlet:namespace/>sitePassword">Value</label></td>--%>
                             </tr>
                             <tr>
                                 <td><form:input path="sitePasswordField" id="${ns}sitePasswordField" /></td>
-                                <td><form:password showPassword="true" path="sitePassword" id="${ns}sitePassword" /></td>
+                                <%--<td><form:password showPassword="true" path="sitePassword" id="${ns}sitePassword" /></td>--%>
                             </tr>
                         </table>
                     </td>
