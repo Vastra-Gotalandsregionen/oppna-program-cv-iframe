@@ -1,6 +1,8 @@
 package se.vgregion.portal.iframe.model;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+import org.springframework.core.style.ToStringStyler;
 
 import javax.portlet.PortletPreferences;
 import javax.portlet.ReadOnlyException;
@@ -16,8 +18,7 @@ import java.io.Serializable;
  */
 
 public class Credential implements Serializable {
-    private String siteUser = "";
-    private String sitePassword = "";
+    private String siteKey;
 
     private String src;
     private boolean relative;
@@ -36,14 +37,13 @@ public class Credential implements Serializable {
     public static Credential getInstance(PortletPreferences prefs) {
         Credential credential = new Credential();
 
+        credential.setSiteKey(prefs.getValue("site-key", ""));
         credential.setSrc(prefs.getValue("src", ""));
         credential.setRelative(Boolean.valueOf(prefs.getValue("relative", "false")));
         credential.setAuth(Boolean.valueOf(prefs.getValue("auth", "false")));
         credential.setAuthType(prefs.getValue("auth-type", ""));
         credential.setFormMethod(prefs.getValue("form-method", ""));
-        credential.setSiteUser(prefs.getValue("user-name", ""));
         credential.setSiteUserNameField(prefs.getValue("user-name-field", ""));
-        credential.setSitePassword(prefs.getValue("password", ""));
         credential.setSitePasswordField(prefs.getValue("password-field", ""));
         credential.setHiddenVariables(prefs.getValue("hidden-variables", ""));
         credential.setHtmlAttributes(prefs.getValue("html-attributes", ""));
@@ -53,14 +53,13 @@ public class Credential implements Serializable {
 
     public void store(PortletPreferences prefs) throws ValidatorException, IOException {
         try {
+            prefs.setValue("site-key", getSiteKey());
             prefs.setValue("src", getSrc());
             prefs.setValue("relative", String.valueOf(isRelative()));
             prefs.setValue("auth", String.valueOf(isAuth()));
             prefs.setValue("auth-type", getAuthType());
             prefs.setValue("form-method", getFormMethod());
-            prefs.setValue("user-name", getSiteUser());
             prefs.setValue("user-name-field", getSiteUserNameField());
-            prefs.setValue("password", getSitePassword());
             prefs.setValue("password-field", getSitePasswordField());
             prefs.setValue("hidden-variables", getHiddenVariables());
             prefs.setValue("html-attributes", getHtmlAttributes());
@@ -83,20 +82,13 @@ public class Credential implements Serializable {
         }
     }
 
-    public String getSiteUser() {
-        return siteUser;
+
+    public void setSiteKey(String siteKey) {
+        this.siteKey = siteKey;
     }
 
-    public void setSiteUser(String siteUser) {
-        this.siteUser = siteUser;
-    }
-
-    public String getSitePassword() {
-        return sitePassword;
-    }
-
-    public void setSitePassword(String sitePassword) {
-        this.sitePassword = sitePassword;
+    public String getSiteKey() {
+        return siteKey;
     }
 
     public String getSrc() {
@@ -173,8 +165,8 @@ public class Credential implements Serializable {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).
-                append("siteUser", siteUser).
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).
+                append("siteKey", siteKey).
                 append("src", src).
                 append("relative", relative).
                 append("auth", auth).
@@ -184,7 +176,6 @@ public class Credential implements Serializable {
                 append("sitePasswordField", sitePasswordField).
                 append("hiddenVariables", hiddenVariables).
                 append("htmlAttributes", htmlAttributes).
-                append("password", sitePassword).
                 toString();
     }
 }
