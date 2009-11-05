@@ -25,7 +25,7 @@
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
 
 <portlet:defineObjects />
-This is the <b>Sample JSP Portlet</b>. AABBCCDDEEFF Use this as a quick way to include JSPs. And more.
+This is the <b>Sample JSP Portlet</b>. Use this as a quick way to include JSPs. And more.
 
 <%--
   Created by IntelliJ IDEA.
@@ -34,33 +34,37 @@ This is the <b>Sample JSP Portlet</b>. AABBCCDDEEFF Use this as a quick way to i
   Time: 1:42:33 PM
 --%>
 
-<%@ include file="/WEB-INF/jsp/iFrame/init.jsp" %>
+<%--<%@ include file="/WEB-INF/jsp/iFrame/init.jsp" %>--%>
 
-<%
-    String iframeSrc = StringPool.BLANK;
+<%--<%--%>
+    <%--String iframeSrc = StringPool.BLANK;--%>
 
-    if (relative) {
-        iframeSrc = themeDisplay.getPathContext();
-    }
+    <%--if (relative) {--%>
+        <%--iframeSrc = themeDisplay.getPathContext();--%>
+    <%--}--%>
 
-    iframeSrc += (String) request.getAttribute(WebKeys.IFRAME_SRC);
+    <%--iframeSrc += (String) request.getAttribute(WebKeys.IFRAME_SRC);--%>
 
-    String iframeHeight = heightNormal;
+    <%--String iframeHeight = heightNormal;--%>
 
-    if (windowState.equals(WindowState.MAXIMIZED)) {
-        iframeHeight = heightMaximized;
-    }
-%>
-
+    <%--if (windowState.equals(WindowState.MAXIMIZED)) {--%>
+        <%--iframeHeight = heightMaximized;--%>
+    <%--}--%>
+<%--%>--%>
+<br />
 <a href="${IFRAME_SRC}">Proxy Link [${IFRAME_SRC}]</a>
-<iframe border="<%= border %>"
-        bordercolor="<%= bordercolor %>"
-        frameborder="<%= frameborder %>"
-        height="<%= iframeHeight %>"
-        hspace="<%= hspace %>"
-        name="<portlet:namespace />iframe"
-        scrolling="<%= scrolling %>"
-        src="${IFRAME_SRC}"
-        vspace="<%= vspace %>"
-        width="<%= width %>">
-</iframe>
+<br />
+<%--<iframe border="<%= border %>"--%>
+        <%--bordercolor="<%= bordercolor %>"--%>
+        <%--frameborder="<%= frameborder %>"--%>
+        <%--height="<%= iframeHeight %>"--%>
+        <%--hspace="<%= hspace %>"--%>
+        <%--name="<portlet:namespace />iframe"--%>
+        <%--scrolling="<%= scrolling %>"--%>
+        <%--src="${IFRAME_SRC}"--%>
+        <%--vspace="<%= vspace %>"--%>
+        <%--width="<%= width %>">--%>
+<%--</iframe>--%>
+
+<iframe src="${IFRAME_SRC}"
+        name="<portlet:namespace />iframe"/>
