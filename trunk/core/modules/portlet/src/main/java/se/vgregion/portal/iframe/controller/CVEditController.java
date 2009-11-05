@@ -1,13 +1,13 @@
 /**
  * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
  */
-package se.vgregion.portal.iframe;
+package se.vgregion.portal.iframe.controller;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
+
+import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.ModelMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
