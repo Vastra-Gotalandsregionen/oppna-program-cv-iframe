@@ -1,0 +1,16 @@
+-- Table: usersitecredential
+
+-- DROP TABLE usersitecredential;
+
+CREATE TABLE usersitecredential
+(
+  uid character varying(20) NOT NULL,
+  sitekey character varying(50) NOT NULL,
+  siteuser character varying(256),
+  sitepassword character varying(20),
+  CONSTRAINT vaultkey PRIMARY KEY (uid, sitekey)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE usersitecredential OWNER TO liferay;

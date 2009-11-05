@@ -14,7 +14,7 @@
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>
-            classpath*:/applicationContext.xml /*-portlet.xml
+            classpath*:/applicationContext.xml /WEB-INF/**-portlet.xml
         </param-value>
     </context-param>
 

@@ -48,12 +48,12 @@
 <form action="${credential.src}" method="${credential.formMethod}" name="fm" id="fm">
     <h1>Hej Proxy</h1>
 
-    <h1>User: ${credential.siteUser}</h1>
-    <input name="${credential.siteUserNameField}" type="hidden" value="${credential.siteUser}"/>
+    <h1>User: ${siteCredential.siteUser}</h1>
+    <input name="${credential.siteUserNameField}" type="hidden" value="${siteCredential.siteUser}"/>
 
 
-    <h1>PW: ${credential.sitePassword}</h1>
-    <input name="${credential.sitePasswordField}" type="hidden" value="${credential.sitePassword}"/>
+    <h1>PW: ${siteCredential.sitePassword}</h1>
+    <input name="${credential.sitePasswordField}" type="hidden" value="${siteCredential.sitePassword}"/>
 
 
 </form>
