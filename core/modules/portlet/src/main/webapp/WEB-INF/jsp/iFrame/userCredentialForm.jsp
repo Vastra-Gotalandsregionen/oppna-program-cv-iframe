@@ -7,6 +7,8 @@
 <portlet:actionURL var="formAction" />
 
 <form:form method="post" action="${formAction}" commandName="siteCredential">
+    
+
     <label for="siteUser">Användarnamn</label>
     <form:input path="siteUser" id="siteUser" />
     

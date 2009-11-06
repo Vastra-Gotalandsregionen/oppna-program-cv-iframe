@@ -1,19 +1,14 @@
 package se.vgregion.portal.iframe.util;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.FileReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-import java.security.NoSuchAlgorithmException;
-import java.util.Properties;
-import java.util.Scanner;
-
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import java.io.*;
+import java.security.GeneralSecurityException;
+import java.security.NoSuchAlgorithmException;
+import java.util.Properties;
+import java.util.Scanner;
 
 /**
  * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
@@ -30,7 +25,6 @@ public class CryptoUtils {
      * @throws IOException
      */
     public static String encrypt(String value, File keyFile) throws GeneralSecurityException, IOException {
-        System.out.println("Key File: "+keyFile.getAbsolutePath());
         if (!keyFile.exists()) {
             KeyGenerator keyGen = KeyGenerator.getInstance(AES);
             keyGen.init(128);
@@ -39,7 +33,6 @@ public class CryptoUtils {
             fw.write(byteArrayToHexString(sk.getEncoded()));
             fw.flush();
             fw.close();
-            System.out.println("Key File: "+keyFile.getAbsolutePath());
         }
 
         SecretKeySpec sks = getSecretKeySpec(keyFile);
@@ -56,12 +49,12 @@ public class CryptoUtils {
      * @throws IOException
      */
     public static String decrypt(String message, File keyFile) throws GeneralSecurityException, IOException {
-        System.out.println("Key File: "+keyFile.getAbsolutePath());
-
         SecretKeySpec sks = getSecretKeySpec(keyFile);
         Cipher cipher = Cipher.getInstance(AES);
         cipher.init(Cipher.DECRYPT_MODE, sks);
-        byte[] decrypted = cipher.doFinal(hexStringToByteArray(message));
+        byte[] cipherBytes = hexStringToByteArray(message);
+        byte[] decrypted = cipher.doFinal(cipherBytes);
+
         return new String(decrypted);
     }
 
@@ -107,11 +100,11 @@ public class CryptoUtils {
         final String KEY_FILE = "./howto.key";
         final String PWD_FILE = "./howto.properties";
 
-        String clearPwd = "my password is hello world";
+        String clearPwd = "hittheroad";
 
         Properties p1 = new Properties();
 
-        p1.put("user", "Real");
+        p1.put("user", "liferay");
         String encryptedPwd = encrypt(clearPwd, new File(KEY_FILE));
         p1.put("pwd", encryptedPwd);
         p1.store(new FileWriter(PWD_FILE), "");

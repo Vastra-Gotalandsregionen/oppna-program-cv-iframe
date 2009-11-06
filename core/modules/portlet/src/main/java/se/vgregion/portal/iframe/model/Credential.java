@@ -9,6 +9,8 @@ import javax.portlet.ReadOnlyException;
 import javax.portlet.ValidatorException;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Map;
+import java.util.HashMap;
 
 
 /**
@@ -30,6 +32,7 @@ public class Credential implements Serializable {
     private String hiddenVariables;
     private String htmlAttributes;
 
+    private Map<String,String> htmlAttributeMap = new HashMap<String,String>();
 
     public Credential() {
     }
@@ -64,24 +67,16 @@ public class Credential implements Serializable {
             prefs.setValue("hidden-variables", getHiddenVariables());
             prefs.setValue("html-attributes", getHtmlAttributes());
 
-            String[] htmlAttributes = getHtmlAttributes().split("\n");
-            for (String attrib : htmlAttributes) {
-                int pos = attrib.indexOf("=");
-
-                if (pos != -1) {
-                    String key = attrib.substring(0, pos);
-                    String value = attrib.substring(pos + 1, attrib.length());
-
-                    prefs.setValue(key, value);
-                }
-            }
-
             prefs.store();
         } catch (ReadOnlyException e) {
             e.printStackTrace();
         }
     }
 
+    public String getHtmlAttribute(String attribute, String defaultValue) {
+        String value = htmlAttributeMap.get(attribute);
+        return (value == null || value.length() < 1) ? defaultValue : value;
+    }
 
     public void setSiteKey(String siteKey) {
         this.siteKey = siteKey;
@@ -161,6 +156,19 @@ public class Credential implements Serializable {
 
     public void setHtmlAttributes(String htmlAttributes) {
         this.htmlAttributes = htmlAttributes;
+
+        htmlAttributeMap.clear();
+        String[] attribs = getHtmlAttributes().split("\n");
+        for (String attrib : attribs) {
+            int pos = attrib.indexOf("=");
+
+            if (pos != -1) {
+                String key = attrib.substring(0, pos);
+                String value = attrib.substring(pos + 1, attrib.length());
+
+                htmlAttributeMap.put(key, value);
+            }
+        }
     }
 
     @Override

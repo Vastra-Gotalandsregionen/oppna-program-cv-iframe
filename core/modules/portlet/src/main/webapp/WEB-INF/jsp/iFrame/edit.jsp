@@ -9,7 +9,7 @@
 
 <%@ taglib prefix="portlet" uri="http://java.sun.com/portlet_2_0" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="liferay-ui" uri="http://liferay.com/tld/ui" %>
+<%--<%@ taglib prefix="liferay-ui" uri="http://liferay.com/tld/ui" %>--%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 
@@ -145,11 +145,9 @@
                         <table class="lfr-table">
                             <tr id="<portlet:namespace/>userName">
                                 <td><label for="<portlet:namespace/>siteUserNameField">Field Name</label></td>
-                                <%--<td><label for="<portlet:namespace/>siteUser">Value</label></td>--%>
                             </tr>
                             <tr>
                                 <td><form:input path="siteUserNameField" id="${ns}siteUserNameField" /></td>
-                                <%--<td><form:input path="siteUser" id="${ns}siteUser" /></td>--%>
                             </tr>
                         </table>
                     </td>
@@ -160,11 +158,9 @@
                         <table class="lfr-table">
                             <tr id="<portlet:namespace/>password">
                                 <td><label for="<portlet:namespace/>sitePasswordField">Field Name</label></td>
-                                <%--<td><label for="<portlet:namespace/>sitePassword">Value</label></td>--%>
                             </tr>
                             <tr>
                                 <td><form:input path="sitePasswordField" id="${ns}sitePasswordField" /></td>
-                                <%--<td><form:password showPassword="true" path="sitePassword" id="${ns}sitePassword" /></td>--%>
                             </tr>
                         </table>
                     </td>

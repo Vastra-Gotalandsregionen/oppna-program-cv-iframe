@@ -82,7 +82,6 @@ public class UserSiteCredential {
                 append("uid", uid).
                 append("siteKey", siteKey).
                 append("siteUser", siteUser).
-                append("sitePassword", sitePassword).
                 toString();
     }
 }
