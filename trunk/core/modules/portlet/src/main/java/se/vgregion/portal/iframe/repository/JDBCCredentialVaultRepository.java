@@ -18,7 +18,10 @@ import javax.sql.DataSource;
 import java.lang.reflect.InvocationTargetException;
 import java.io.File;
 import java.io.IOException;
+import java.io.FileWriter;
+import java.io.FileReader;
 import java.security.GeneralSecurityException;
+import java.util.Properties;
 
 /**
  * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
@@ -26,6 +29,7 @@ import java.security.GeneralSecurityException;
 public class JDBCCredentialVaultRepository extends SimpleJdbcDaoSupport implements CredentialVaultRepository {
     private static Logger log = LoggerFactory.getLogger(JDBCCredentialVaultRepository.class);
     private static String CREDENTIAL_VAULT_KEY_FILE = "/Users/david/AppServer/liferay-portal-5.2.3/tomcat-6.0.18/webapps/cv-iframe-portlet/WEB-INF/cv.key";
+    private static String DB_CREDENTIAL_FILE = "/Users/david/AppServer/liferay-portal-5.2.3/tomcat-6.0.18/webapps/cv-iframe-portlet/WEB-INF/db_credentials.properties";
 
 
     public UserSiteCredential getUserSiteCredential(String uid, String siteKey) {
@@ -40,9 +44,9 @@ public class JDBCCredentialVaultRepository extends SimpleJdbcDaoSupport implemen
             log.info("Exception is leagal");
             return null;
         } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         } catch (GeneralSecurityException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         }
         log.debug("User site credentials fetched from database: {}", creds);
         return creds;
@@ -93,16 +97,43 @@ public class JDBCCredentialVaultRepository extends SimpleJdbcDaoSupport implemen
 
     @Override
     protected JdbcTemplate createJdbcTemplate(DataSource dataSource) {
-        Base64 base64 = new Base64();
-        byte[] bytesArray = base64.decode("aGl0dGhlcm9hZA==".getBytes());
+        Properties dbCredentials = new Properties();
         try {
-            BeanUtils.setProperty(dataSource, "password", new String(bytesArray));
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            dbCredentials.load(new FileReader(DB_CREDENTIAL_FILE));
+        } catch (IOException e) {
+            // RuntimeException will be thrown
+            dbCredentialFileNotConfigured(dbCredentials);
         }
 
-        return super.createJdbcTemplate(dataSource);    //To change body of overridden methods use File | Settings | File Templates.
+        setDbUserCredential(dataSource, dbCredentials);
+
+        return super.createJdbcTemplate(dataSource);
+    }
+
+    private void setDbUserCredential(DataSource dataSource, Properties dbCredentials) {
+        String user = dbCredentials.getProperty("user");
+        String encryptedPwd = dbCredentials.getProperty("pwd");
+
+        String clearPwd = null;
+        try {
+            clearPwd = CryptoUtils.decrypt(encryptedPwd, new File(CREDENTIAL_VAULT_KEY_FILE));
+
+            BeanUtils.setProperty(dataSource, "username", user);
+            BeanUtils.setProperty(dataSource, "password", clearPwd);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("The db-credential has to be configured", e);
+        }
+    }
+
+    private void dbCredentialFileNotConfigured(Properties dbCredentials) {
+        dbCredentials.setProperty("user", "<db-username>");
+        dbCredentials.setProperty("password", "<encrypted db-password> - use your cv.key to encrypt the password");
+        try {
+            dbCredentials.store(new FileWriter(DB_CREDENTIAL_FILE), "");
+        } catch (IOException e1) {
+            log.error("Could not access db-credential properties file {}", DB_CREDENTIAL_FILE);
+        }
+        throw new RuntimeException("The db-credential properties file has to be configured");
     }
 }
