@@ -47,7 +47,7 @@ public class CVEditController {
                 !src.startsWith("https://") &&
                 !src.startsWith("mhtml://")) {
 
-            credential.setSrc(actionRequest.isSecure() ? "https" : "http" + "://" + src);
+            credential.setSrc((actionRequest.isSecure() ? "https" : "http") + "://" + src);
         }
 
         log.debug("savePreferences 2: {}", credential);
