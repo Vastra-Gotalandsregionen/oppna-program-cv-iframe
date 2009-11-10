@@ -3,12 +3,14 @@ package se.vgregion.portal.iframe.model;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
+import java.io.Serializable;
+
 /**
  * This action do that and that, if it has something special it is.
  *
  * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
  */
-public class UserSiteCredential {
+public class UserSiteCredential implements Serializable {
 
     private String uid;
     private String siteKey;

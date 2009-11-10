@@ -5,6 +5,7 @@
   Time: 1:42:33 PM
 --%>
 
+<%@page pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
 
 <portlet:defineObjects />
@@ -143,9 +144,10 @@
 	);
 </script>
 
-<br />
-<a href="${iFrameSrc}">Proxy Link [${iFrameSrc}]</a>
-<br />
+<portlet:renderURL var="changeCredentials" >
+    <portlet:param name="action" value="changeVaultCredentials" />
+</portlet:renderURL>
+
 <iframe src="${iFrameSrc}"
         name="<portlet:namespace />iframe"
         border="${bordercolor}"
@@ -156,3 +158,5 @@
         vspace="${vspace}"
         width="${width}">
 </iframe>
+<br />
+<a href="${changeCredentials}">Ändra dina sparade inloggningsuppgifter</a>
