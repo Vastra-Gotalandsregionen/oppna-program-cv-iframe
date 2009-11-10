@@ -1,4 +1,4 @@
-package se.vgregion.portal.iframe.repository;
+package se.vgregion.portal.repository;
 
 import se.vgregion.portal.iframe.model.UserSiteCredential;
 
