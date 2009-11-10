@@ -7,7 +7,8 @@
 <portlet:actionURL var="formAction" />
 
 <form:form method="post" action="${formAction}" commandName="siteCredential">
-    
+    SiteKey
+    <br />
 
     <label for="siteUser">Användarnamn</label>
     <form:input path="siteUser" id="siteUser" />
@@ -15,5 +16,5 @@
     <label for="sitePassword">Lösenord</label>
     <form:password path="sitePassword" id="sitePassword" />
     
-    <input type="submit" value="Logga in" />
+    <input type="submit" value="Spara" />
 </form:form>
