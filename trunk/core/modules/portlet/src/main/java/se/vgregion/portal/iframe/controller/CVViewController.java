@@ -16,7 +16,7 @@ import javax.portlet.*;
 
 import se.vgregion.portal.iframe.model.Credential;
 import se.vgregion.portal.iframe.model.UserSiteCredential;
-import se.vgregion.portal.iframe.repository.CredentialVaultRepository;
+import se.vgregion.portal.repository.CredentialVaultRepository;
 
 import java.util.Map;
 import java.io.IOException;
@@ -77,6 +77,16 @@ public class CVViewController {
         model.addAttribute("width", credential.getHtmlAttribute("width", "100%"));
 
         return "view";
+    }
+
+    @RenderMapping(params = "action=changeVaultCredentials")
+    public String changeVaultCredentials(PortletPreferences prefs, RenderRequest req, ModelMap model) {
+        Credential credential = Credential.getInstance(prefs);
+        model.addAttribute("credential", credential);
+        UserSiteCredential siteCredential = null;
+        credentialsAvailable(req, model, credential, siteCredential);
+
+        return "userCredentialForm";
     }
 
     /**

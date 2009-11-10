@@ -167,7 +167,7 @@ Generation time : 2009-10-28 12:45:52 CET
   </dependencies>
 
 
-<!-- Used by "mvn deploy" to deploy artefacts to a central maven repository. Use settings.xml to set username and password for this repository, see wagon-svn for more information -->
+<!-- Used by "mvn deploy" to deploy artefacts to a central maven se.vgregion.portal.iframe.repository. Use settings.xml to set username and password for this se.vgregion.portal.iframe.repository, see wagon-svn for more information -->
   <distributionManagement>
      <repository>
       <uniqueVersion>false</uniqueVersion>
@@ -188,7 +188,7 @@ Generation time : 2009-10-28 12:45:52 CET
       </releases>
     </repository>
     <repository>
-      <id>atlassian-m1-repository</id>
+      <id>atlassian-m1-se.vgregion.portal.iframe.repository</id>
       <url>https://maven.atlassian.com/maven1</url>
       <layout>legacy</layout>
     </repository>
