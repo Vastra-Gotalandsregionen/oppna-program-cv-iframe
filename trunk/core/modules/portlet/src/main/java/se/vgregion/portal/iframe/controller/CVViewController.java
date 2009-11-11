@@ -28,7 +28,6 @@ import java.io.IOException;
  */
 @Controller
 @RequestMapping("VIEW")
-@SessionAttributes("siteCredential")
 public class CVViewController {
     private Logger log = LoggerFactory.getLogger(CVViewController.class);
 
@@ -55,7 +54,7 @@ public class CVViewController {
         model.addAttribute("credential", credential);
         log.debug("Creds: {}", credential);
 
-        UserSiteCredential siteCredential = null;
+        UserSiteCredential siteCredential = new UserSiteCredential();
         if (!credentialsAvailable(req, model, credential, siteCredential)) return "userCredentialForm";
 
         String iFrameSrc = prepareView(resp, credential, siteCredential);
@@ -83,7 +82,9 @@ public class CVViewController {
     public String changeVaultCredentials(PortletPreferences prefs, RenderRequest req, ModelMap model) {
         Credential credential = Credential.getInstance(prefs);
         model.addAttribute("credential", credential);
-        UserSiteCredential siteCredential = null;
+        if (!credential.isAuth()) return "view";
+
+        UserSiteCredential siteCredential = new UserSiteCredential();
         credentialsAvailable(req, model, credential, siteCredential);
 
         return "userCredentialForm";
@@ -97,9 +98,13 @@ public class CVViewController {
      * @return
      */
     @ResourceMapping
-    public String showProxyForm(ModelMap model, PortletPreferences prefs) {
+    public String showProxyForm(PortletPreferences prefs, ResourceRequest req, ModelMap model) {
         final Credential credential = Credential.getInstance(prefs);
         model.addAttribute("credential", credential);
+        if (!credential.isAuth() || !"form".equals(credential.getAuthType())) return "view";
+
+        UserSiteCredential siteCredential = new UserSiteCredential();
+        credentialsAvailable(req, model, credential, siteCredential);
 
         return "proxyLoginForm";
     }
@@ -150,22 +155,26 @@ public class CVViewController {
         return "http://vgregion.se";
     }
 
-    private boolean credentialsAvailable(RenderRequest req, ModelMap model, Credential credential, UserSiteCredential siteCredential) {
+    private boolean credentialsAvailable(PortletRequest req, ModelMap model, Credential credential, UserSiteCredential returnSiteCredential) {
+        boolean userSiteCredentialExist = true;
         if (credential.isAuth()) {
             String uid = lookupUid(req);
-            siteCredential = credentialVaultRepository.getUserSiteCredential(uid, credential.getSiteKey());
-            model.addAttribute("siteCredential", siteCredential);
+            returnSiteCredential.setUid(uid);
+            returnSiteCredential.setSiteKey(credential.getSiteKey());
 
-            if (siteCredential == null) {
-                siteCredential = new UserSiteCredential(uid, credential.getSiteKey());
-                model.addAttribute("siteCredential", siteCredential);
-                return false;
+            UserSiteCredential siteCredential = credentialVaultRepository.getUserSiteCredential(uid, credential.getSiteKey());
+            if (siteCredential != null) {
+                returnSiteCredential.setSiteUser(siteCredential.getSiteUser());
+                returnSiteCredential.setSitePassword(siteCredential.getSitePassword());
+            } else {
+                userSiteCredentialExist = false;
             }
+            model.addAttribute("siteCredential", returnSiteCredential);
         }
-        return true;
+        return userSiteCredentialExist;
     }
 
-    private String lookupUid(RenderRequest req) {
+    private String lookupUid(PortletRequest req) {
         Map<String, ?> userInfo = (Map<String, ?>) req.getAttribute(PortletRequest.USER_INFO);
         String userId = (String) ((userInfo != null) ? userInfo.get(PortletRequest.P3PUserInfos.USER_LOGIN_ID.toString()) : "");
         return userId;
@@ -182,7 +191,7 @@ public class CVViewController {
 
     private String getIFrameHeight(RenderRequest req, Credential credential) {
         WindowState windowState = req.getWindowState();
-        String iFrameHeight = (windowState.equals(WindowState.MAXIMIZED)) ? credential.getHtmlAttribute("height-normal", "300") : credential.getHtmlAttribute("height-maximized", "600");
+        String iFrameHeight = (windowState.equals(WindowState.NORMAL) ? credential.getHtmlAttribute("height-normal", "300") : credential.getHtmlAttribute("height-maximized", "600"));
         return iFrameHeight;
     }
 }

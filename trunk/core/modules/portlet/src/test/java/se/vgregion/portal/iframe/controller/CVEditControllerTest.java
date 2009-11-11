@@ -13,6 +13,7 @@ import org.springframework.ui.ModelMap;
 
 import javax.portlet.ReadOnlyException;
 import javax.portlet.ValidatorException;
+import javax.portlet.PortletPreferences;
 
 import se.vgregion.portal.iframe.model.Credential;
 
@@ -25,23 +26,14 @@ import java.io.IOException;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @TestExecutionListeners({})
-public class CVEditControllerTest {
+public class CVEditControllerTest extends BaseControllerTest {
     TestMockPortletPreferences prefs;
     ModelMap model = new ModelMap();
 
     @Before
     public void setup() throws ReadOnlyException {
         prefs = new TestMockPortletPreferences();
-        prefs.setValue("site-key", "test-key");
-        prefs.setValue("src", "test-src");
-        prefs.setValue("relative", "false");
-        prefs.setValue("auth", "true");
-        prefs.setValue("auth-type", "form"); // basic or form
-        prefs.setValue("form-method", "post"); // get or post
-        prefs.setValue("user-name-field", "username");
-        prefs.setValue("password-field", "password");
-        prefs.setValue("hidden-variables", "test1=hidden1;test2=hidden2");
-        prefs.setValue("html-attributes", "html1=apa\nhtml2=bepa");
+        initPortletPreferences(prefs);
     }
 
     @Test
