@@ -9,7 +9,19 @@ import se.vgregion.portal.iframe.model.UserSiteCredential;
  */
 public interface CredentialVaultRepository {
 
-    public UserSiteCredential getUserSiteCredential(String uid, String siteKey);
+    /**
+     * Retrive credental.
+     *
+     * @param uid - user identifier
+     * @param siteKey - site identifier
+     * @return credentail
+     */
+    UserSiteCredential getUserSiteCredential(String uid, String siteKey);
 
+    /**
+     * Store credental.
+     *
+     * @param siteCredential - siteCredential
+     */
     void addUserSiteCredential(UserSiteCredential siteCredential);
 }

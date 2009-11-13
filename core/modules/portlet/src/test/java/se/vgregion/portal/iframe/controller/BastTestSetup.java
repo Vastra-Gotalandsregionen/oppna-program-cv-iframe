@@ -8,7 +8,7 @@ import javax.portlet.ReadOnlyException;
  *
  * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
  */
-public class BaseControllerTest {
+public class BastTestSetup {
     protected void initPortletPreferences(PortletPreferences prefs) throws ReadOnlyException {
         prefs.setValue("site-key", "test-key");
         prefs.setValue("src", "test-src");

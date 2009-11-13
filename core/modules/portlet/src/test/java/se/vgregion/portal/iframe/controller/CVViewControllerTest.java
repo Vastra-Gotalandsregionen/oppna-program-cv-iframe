@@ -6,8 +6,8 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import org.springframework.mock.web.portlet.*;
 import org.springframework.ui.ModelMap;
-import se.vgregion.portal.iframe.model.UserSiteCredential;
-import se.vgregion.portal.iframe.model.Credential;
+import se.vgregion.portal.iframe.model.PortletConfig;
+import se.vgregion.portal.iframe.model.*;
 import se.vgregion.portal.repository.CredentialVaultRepository;
 
 import javax.portlet.*;
@@ -19,7 +19,8 @@ import java.util.HashMap;
  *
  * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
  */
-public class CVViewControllerTest extends BaseControllerTest {
+public class CVViewControllerTest extends BastTestSetup {
+    
     CVViewController controller;
 
     @Before
@@ -231,18 +232,18 @@ public class CVViewControllerTest extends BaseControllerTest {
         String response = controller.changeVaultCredentials(prefs, req, model);
         assertEquals("userCredentialForm", response);
 
-        Credential credential = (Credential) model.get("credential");
-        assertNotNull(credential);
-        assertEquals("test-key", credential.getSiteKey());
-        assertEquals("test-src", credential.getSrc());
-        assertEquals(Boolean.FALSE, credential.isRelative());
-        assertEquals(Boolean.TRUE, credential.isAuth());
-        assertEquals("form", credential.getAuthType());
-        assertEquals("post", credential.getFormMethod());
-        assertEquals("username", credential.getSiteUserNameField());
-        assertEquals("password", credential.getSitePasswordField());
-        assertEquals("test1=hidden1;test2=hidden2", credential.getHiddenVariables());
-        assertEquals("html1=apa\nhtml2=bepa", credential.getHtmlAttributes());
+        PortletConfig portletConfig = (se.vgregion.portal.iframe.model.PortletConfig) model.get("portletConfig");
+        assertNotNull(portletConfig);
+        assertEquals("test-key", portletConfig.getSiteKey());
+        assertEquals("test-src", portletConfig.getSrc());
+        assertEquals(Boolean.FALSE, portletConfig.isRelative());
+        assertEquals(Boolean.TRUE, portletConfig.isAuth());
+        assertEquals("form", portletConfig.getAuthType());
+        assertEquals("post", portletConfig.getFormMethod());
+        assertEquals("username", portletConfig.getSiteUserNameField());
+        assertEquals("password", portletConfig.getSitePasswordField());
+        assertEquals("test1=hidden1;test2=hidden2", portletConfig.getHiddenVariables());
+        assertEquals("html1=apa\nhtml2=bepa", portletConfig.getHtmlAttributes());
 
         UserSiteCredential siteCredential = (UserSiteCredential) model.get("siteCredential");
         assertNotNull(siteCredential);
@@ -262,12 +263,12 @@ public class CVViewControllerTest extends BaseControllerTest {
         String response = controller.changeVaultCredentials(prefs, req, model);
         assertEquals("view", response);
 
-        Credential credential = (Credential) model.get("credential");
-        assertNotNull(credential);
-        assertEquals("test-src", credential.getSrc());
-        assertEquals(Boolean.FALSE, credential.isRelative());
-        assertEquals(Boolean.FALSE, credential.isAuth());
-        assertEquals("html1=apa\nhtml2=bepa", credential.getHtmlAttributes());
+        PortletConfig portletConfig = (PortletConfig) model.get("portletConfig");
+        assertNotNull(portletConfig);
+        assertEquals("test-src", portletConfig.getSrc());
+        assertEquals(Boolean.FALSE, portletConfig.isRelative());
+        assertEquals(Boolean.FALSE, portletConfig.isAuth());
+        assertEquals("html1=apa\nhtml2=bepa", portletConfig.getHtmlAttributes());
     }
 
     @Test
@@ -284,8 +285,8 @@ public class CVViewControllerTest extends BaseControllerTest {
 
         assertEquals("proxyLoginForm", result);
 
-        Credential credential = (Credential) model.get("credential");
-        assertNotNull(credential);
+        PortletConfig portletConfig = (PortletConfig) model.get("portletConfig");
+        assertNotNull(portletConfig);
 
         UserSiteCredential siteCredential = (UserSiteCredential)model.get("siteCredential");
         assertNotNull(siteCredential);
@@ -346,7 +347,7 @@ public class CVViewControllerTest extends BaseControllerTest {
     }
 
     class TestStubCredentialVaultRepository implements CredentialVaultRepository {
-
+       
         public UserSiteCredential getUserSiteCredential(String uid, String siteKey) {
             if ("test-user".equals(uid) && "test-site-key".equals(siteKey)) {
                 UserSiteCredential siteCredential = new UserSiteCredential("test-user", "test-site-key");
