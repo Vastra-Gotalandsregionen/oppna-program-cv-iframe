@@ -17,10 +17,17 @@ public class UserSiteCredential implements Serializable {
     private String siteUser;
     private String sitePassword;
 
-    public UserSiteCredential(){
-        
-    }
+    /**
+     * Default constructor - used by Spring MCV.
+     */
+    public UserSiteCredential() {}
 
+    /**
+     * Minimal constructor for creating a valid credental.
+     *
+     * @param uid - user identifier
+     * @param siteKey - site identifier
+     */
     public UserSiteCredential(String uid, String siteKey) {
         this.uid = uid;
         this.siteKey = siteKey;
@@ -60,13 +67,21 @@ public class UserSiteCredential implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof UserSiteCredential)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof UserSiteCredential)) {
+            return false;
+        }
 
         UserSiteCredential that = (UserSiteCredential) o;
 
-        if (!siteKey.equals(that.siteKey)) return false;
-        if (!uid.equals(that.uid)) return false;
+        if (!siteKey.equals(that.siteKey)) {
+            return false;
+        }
+        if (!uid.equals(that.uid)) {
+            return false;
+        }
 
         return true;
     }

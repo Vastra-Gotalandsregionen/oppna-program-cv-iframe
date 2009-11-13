@@ -2,7 +2,6 @@ package se.vgregion.portal.iframe.model;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
-import org.springframework.core.style.ToStringStyler;
 
 import javax.portlet.PortletPreferences;
 import javax.portlet.ReadOnlyException;
@@ -19,7 +18,7 @@ import java.util.HashMap;
  * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
  */
 
-public class Credential implements Serializable {
+public class PortletConfig implements Serializable {
     private String siteKey;
 
     private String src;
@@ -34,27 +33,42 @@ public class Credential implements Serializable {
 
     private Map<String,String> htmlAttributeMap = new HashMap<String,String>();
 
-    public Credential() {
+    /**
+     * Default constructor - used by Spring MCV.
+     */
+    public PortletConfig() {
     }
 
-    public static Credential getInstance(PortletPreferences prefs) {
-        Credential credential = new Credential();
+    /**
+     * Factory for creating portlet configuration.
+     *
+     * @param prefs - PortletPreferences to synch with
+     * @return configuration parameters
+     */
+    public static PortletConfig getInstance(PortletPreferences prefs) {
+        PortletConfig portletConfig = new PortletConfig();
 
-        credential.setSiteKey(prefs.getValue("site-key", ""));
-        credential.setSrc(prefs.getValue("src", ""));
-        credential.setRelative(Boolean.valueOf(prefs.getValue("relative", "false")));
-        credential.setAuth(Boolean.valueOf(prefs.getValue("auth", "false")));
-        credential.setAuthType(prefs.getValue("auth-type", ""));
-        credential.setFormMethod(prefs.getValue("form-method", ""));
-        credential.setSiteUserNameField(prefs.getValue("user-name-field", ""));
-        credential.setSitePasswordField(prefs.getValue("password-field", ""));
-        credential.setHiddenVariables(prefs.getValue("hidden-variables", ""));
-        credential.setHtmlAttributes(prefs.getValue("html-attributes", ""));
+        portletConfig.setSiteKey(prefs.getValue("site-key", ""));
+        portletConfig.setSrc(prefs.getValue("src", ""));
+        portletConfig.setRelative(Boolean.valueOf(prefs.getValue("relative", "false")));
+        portletConfig.setAuth(Boolean.valueOf(prefs.getValue("auth", "false")));
+        portletConfig.setAuthType(prefs.getValue("auth-type", ""));
+        portletConfig.setFormMethod(prefs.getValue("form-method", ""));
+        portletConfig.setSiteUserNameField(prefs.getValue("user-name-field", ""));
+        portletConfig.setSitePasswordField(prefs.getValue("password-field", ""));
+        portletConfig.setHiddenVariables(prefs.getValue("hidden-variables", ""));
+        portletConfig.setHtmlAttributes(prefs.getValue("html-attributes", ""));
 
-        return credential;
+        return portletConfig;
     }
 
-    public void store(PortletPreferences prefs) throws ValidatorException, IOException {
+    /**
+     * Store configuration in PortlerPreferences.
+     *
+     * @param prefs - PortlerPreferences
+     * @throws ValidatorException - property validation exception
+     */
+    public void store(PortletPreferences prefs) throws ValidatorException {
         try {
             prefs.setValue("site-key", getSiteKey());
             prefs.setValue("src", getSrc());
@@ -70,12 +84,26 @@ public class Credential implements Serializable {
             prefs.store();
         } catch (ReadOnlyException e) {
             e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
+    /**
+     * Convienience method to access html-attribute.
+     *
+     * @param attribute - attribute name
+     * @param defaultValue - default value if attribute not found
+     * @return attribute value
+     */
     public String getHtmlAttribute(String attribute, String defaultValue) {
         String value = htmlAttributeMap.get(attribute);
-        return (value == null || value.length() < 1) ? defaultValue : value;
+
+        if (value == null || value.length() < 1) {
+            return defaultValue;
+        } else {
+            return value;
+        }
     }
 
     public void setSiteKey(String siteKey) {
@@ -154,6 +182,11 @@ public class Credential implements Serializable {
         return htmlAttributes;
     }
 
+    /**
+     * Set html attributes.
+     *
+     * @param htmlAttributes - new line ('\n') separated list of html attributes
+     */
     public void setHtmlAttributes(String htmlAttributes) {
         this.htmlAttributes = htmlAttributes;
 
