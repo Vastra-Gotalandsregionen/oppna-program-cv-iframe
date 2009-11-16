@@ -215,6 +215,10 @@ Generation time : 2009-10-28 12:45:52 CET
             <id>oppna-program-repo</id>
             <url>http://oppna-program.googlecode.com/svn/maven</url>
         </repository>
+        <repository>
+            <id>springframework</id>
+            <url>http://maven.springframework.org/milestone</url>
+        </repository>
     </repositories>
 
     <pluginRepositories>
