@@ -40,5 +40,35 @@ public class CryptoUtilImplTest {
         // decrypt
         String decrypted = cryptoUtil.decrypt(encrypted);
         assertEquals(value, decrypted);
+
+        // encrypt again
+        String encrypted2 = cryptoUtil.encrypt(value);
+        assertEquals("not reencrypyed", encrypted, encrypted2);
+    }
+
+    @Test
+    public void testEncrypt2() throws GeneralSecurityException {
+        String value = "test-encrypt-string";
+
+        // encrypt
+        String encrypted = cryptoUtil.encrypt(value);
+        assertFalse("value not encrypted", value.equals(encrypted));
+
+        // encrypt again
+        String encrypted2 = cryptoUtil.encrypt(value);
+        assertEquals("not reencrypted", encrypted, encrypted2);
+    }
+
+    @Test
+    public void testDecryptNoKeyfile() throws GeneralSecurityException {
+        String value = "test-encrypt-string";
+
+        // decrypt
+        try {
+            String encrypted = cryptoUtil.decrypt(value);
+            fail("exception shold be thrown");
+        } catch (Exception ex) {
+            // OK
+        }
     }
 }
