@@ -37,7 +37,7 @@ public class CSViewController {
     private CredentialStoreRepository credentialStoreRepository;
 
     @Autowired
-    public void setCredentialVaultRepository(CredentialStoreRepository credentialStoreRepository) {
+    public void setCredentialStoreRepository(CredentialStoreRepository credentialStoreRepository) {
         this.credentialStoreRepository = credentialStoreRepository;
     }
 

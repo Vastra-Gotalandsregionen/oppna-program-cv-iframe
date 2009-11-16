@@ -33,7 +33,8 @@ public class CSEditController {
      * @return view
      */
     @RenderMapping
-    public String editPreferences(final ModelMap model, final PortletPreferences prefs) {
+    public final String editPreferences(final ModelMap model,
+                                        final PortletPreferences prefs) {
         PortletConfig portletConfig = PortletConfig.getInstance(prefs);
         log.debug("editPreferences: {}", portletConfig);
 
@@ -49,17 +50,18 @@ public class CSEditController {
      * @param portletConfig - request parameter
      */
     @ActionMapping
-    public void savePreferences(ActionRequest actionRequest,
-                                PortletPreferences prefs,
-                                @ModelAttribute("credential") PortletConfig portletConfig) {
+    public final void savePreferences(final ActionRequest actionRequest,
+                                final PortletPreferences prefs,
+                                @ModelAttribute("credential")
+                                final PortletConfig portletConfig) {
 
         log.debug("savePreferences 1: {}", portletConfig);
 
         String src = portletConfig.getSrc();
-        if (!src.startsWith("/") &&
-                !src.startsWith("http://") &&
-                !src.startsWith("https://") &&
-                !src.startsWith("mhtml://")) {
+        if (!src.startsWith("/")
+            && !src.startsWith("http://")
+            && !src.startsWith("https://")
+            && !src.startsWith("mhtml://")) {
 
             if (actionRequest.isSecure()) {
                 src =  "https://" + src;
