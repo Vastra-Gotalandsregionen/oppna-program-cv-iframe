@@ -26,7 +26,7 @@ public class CSViewControllerTest extends BastTestSetup {
     @Before
     public void setUp() {
         controller = new CSViewController();
-        controller.setCredentialVaultRepository(new TestStubCredentialStoreRepository());
+        controller.setCredentialStoreRepository(new TestStubCredentialStoreRepository());
     }
 
     @After
