@@ -37,7 +37,7 @@ public class CSViewController {
     private CredentialStoreRepository credentialStoreRepository;
 
     @Autowired
-    public void setCredentialStoreRepository(CredentialStoreRepository credentialStoreRepository) {
+    public final void setCredentialStoreRepository(final CredentialStoreRepository credentialStoreRepository) {
         this.credentialStoreRepository = credentialStoreRepository;
     }
 
@@ -52,7 +52,10 @@ public class CSViewController {
      * @return view
      */
     @RenderMapping
-    public String showView(PortletPreferences prefs, RenderRequest req, RenderResponse resp, ModelMap model) {
+    public final String showView(final PortletPreferences prefs,
+                           final RenderRequest req,
+                           final RenderResponse resp,
+                           final ModelMap model) {
         PortletConfig portletConfig = PortletConfig.getInstance(prefs);
         model.addAttribute("portletConfig", portletConfig);
         log.debug("Creds: {}", portletConfig);
@@ -92,7 +95,9 @@ public class CSViewController {
      * @return view
      */
     @RenderMapping(params = "action=changeVaultCredentials")
-    public String changeVaultCredentials(PortletPreferences prefs, RenderRequest req, ModelMap model) {
+    public final String changeVaultCredentials(final PortletPreferences prefs,
+                                         final RenderRequest req,
+                                         final ModelMap model) {
         PortletConfig portletConfig = PortletConfig.getInstance(prefs);
         model.addAttribute("portletConfig", portletConfig);
         if (!portletConfig.isAuth()) {
@@ -114,8 +119,10 @@ public class CSViewController {
      * @return view
      */
     @ResourceMapping
-    public String showProxyForm(PortletPreferences prefs, ResourceRequest req, ModelMap model) {
-        final PortletConfig portletConfig = se.vgregion.portal.iframe.model.PortletConfig.getInstance(prefs);
+    public final String showProxyForm(final PortletPreferences prefs,
+                                final ResourceRequest req,
+                                final ModelMap model) {
+        PortletConfig portletConfig = se.vgregion.portal.iframe.model.PortletConfig.getInstance(prefs);
         model.addAttribute("portletConfig", portletConfig);
         if (!portletConfig.isAuth() || !"form".equals(portletConfig.getAuthType())) {
             return "view";
@@ -134,12 +141,15 @@ public class CSViewController {
      * @param siteCredential - credential
      */
     @ActionMapping
-    public void storeUserCredential(@ModelAttribute("siteCredential") UserSiteCredential siteCredential) {
+    public final void storeUserCredential(@ModelAttribute("siteCredential")
+                                    final UserSiteCredential siteCredential) {
         credentialStoreRepository.addUserSiteCredential(siteCredential);
         log.debug("storeUserCredential: {}", siteCredential);
     }
 
-    private String prepareView(RenderResponse resp, PortletConfig portletConfig, UserSiteCredential siteCredential) {
+    private String prepareView(final RenderResponse resp,
+                               final PortletConfig portletConfig,
+                               final UserSiteCredential siteCredential) {
         String iFrameSrc = getDefaultTarget();
 
         String src = portletConfig.getSrc();
@@ -170,7 +180,10 @@ public class CSViewController {
         return "http://vgregion.se";
     }
 
-    private boolean credentialsAvailable(PortletRequest req, ModelMap model, PortletConfig portletConfig, UserSiteCredential returnSiteCredential) {
+    private boolean credentialsAvailable(final PortletRequest req,
+                                         final ModelMap model,
+                                         final PortletConfig portletConfig,
+                                         final UserSiteCredential returnSiteCredential) {
         boolean userSiteCredentialExist = true;
         if (portletConfig.isAuth()) {
             String uid = lookupUid(req);
@@ -189,7 +202,7 @@ public class CSViewController {
         return userSiteCredentialExist;
     }
 
-    private String lookupUid(PortletRequest req) {
+    private String lookupUid(final PortletRequest req) {
         Map<String, ?> userInfo = (Map<String, ?>) req.getAttribute(PortletRequest.USER_INFO);
         String userId;
         if (userInfo != null) {
@@ -200,7 +213,7 @@ public class CSViewController {
         return userId;
     }
 
-    private String getBaseSrc(String iFrameSrc) {
+    private String getBaseSrc(final String iFrameSrc) {
         String baseSrc = iFrameSrc;
         int lastSlashPos = iFrameSrc.substring(7).lastIndexOf("/");
         if (lastSlashPos != -1) {
@@ -209,7 +222,8 @@ public class CSViewController {
         return baseSrc;
     }
 
-    private String getIFrameHeight(RenderRequest req, PortletConfig portletConfig) {
+    private String getIFrameHeight(final RenderRequest req,
+                                   final PortletConfig portletConfig) {
         WindowState windowState = req.getWindowState();
         String iFrameHeight;
         if (windowState.equals(WindowState.NORMAL)) {
