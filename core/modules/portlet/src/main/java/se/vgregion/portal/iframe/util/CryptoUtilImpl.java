@@ -19,27 +19,32 @@ import java.util.Scanner;
 /**
  * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
  */
-public final class CryptoUtils {
+public final class CryptoUtilImpl implements CryptoUtil {
 
     private static final String AES = "AES";
+
+    private File keyFile;
 
     /**
      * Do not create any instance of this class.
      */
-    private CryptoUtils() { }
+    public CryptoUtilImpl() {
+    }
+
+    public void setKeyFile(File keyFile) {
+        this.keyFile = keyFile;
+    }
 
     /**
      * Encrypt a value and generate a keyfile.
      * if the keyfile is not found then a new one is created
      *
      * @param value - value to be encrypted
-     * @param keyFile - secret key file
      * @throws GeneralSecurityException - security exception
      * @throws FileNotFoundException - keyFile not found
      * @return Encrypted value
      */
-    public static String encrypt(final String value, final File keyFile)
-            throws GeneralSecurityException, FileNotFoundException {
+    public String encrypt(String value) throws GeneralSecurityException {
         if (!keyFile.exists()) {
             KeyGenerator keyGen = KeyGenerator.getInstance(AES);
             keyGen.init(128);
@@ -60,7 +65,7 @@ public final class CryptoUtils {
             }
         }
 
-        SecretKeySpec sks = getSecretKeySpec(keyFile);
+        SecretKeySpec sks = getSecretKeySpec();
 
         Cipher cipher = Cipher.getInstance(AES);
         cipher.init(Cipher.ENCRYPT_MODE, sks, cipher.getParameters());
@@ -71,39 +76,43 @@ public final class CryptoUtils {
     /**
      * decrypt a value.
      *
-     * @param message - value to be decrypted
-     * @param keyFile - secret key file
+     * @param value - value to be decrypted
      * @throws GeneralSecurityException - decrypt failed
      * @throws FileNotFoundException - keyfile not found
      * @return decrypted value
      */
-    public static String decrypt(String message, final File keyFile) throws GeneralSecurityException, FileNotFoundException {
-        SecretKeySpec sks = getSecretKeySpec(keyFile);
+    public String decrypt(String value) throws GeneralSecurityException {
+        SecretKeySpec sks = getSecretKeySpec();
         Cipher cipher = Cipher.getInstance(AES);
         cipher.init(Cipher.DECRYPT_MODE, sks);
-        byte[] cipherBytes = hexStringToByteArray(message);
+        byte[] cipherBytes = hexStringToByteArray(value);
         byte[] decrypted = cipher.doFinal(cipherBytes);
 
         return new String(decrypted);
     }
 
 
-    private static SecretKeySpec getSecretKeySpec(final File keyFile)
-            throws NoSuchAlgorithmException, FileNotFoundException {
-        byte[] key = readKeyFile(keyFile);
+    private SecretKeySpec getSecretKeySpec() throws NoSuchAlgorithmException {
+        byte[] key = readKeyFile();
         SecretKeySpec sks = new SecretKeySpec(key, AES);
         return sks;
     }
 
-    private static byte[] readKeyFile(File keyFile) throws FileNotFoundException {
-        Scanner scanner = new Scanner(keyFile).useDelimiter("\\Z");
-        String keyValue = scanner.next();
-        scanner.close();
-        return hexStringToByteArray(keyValue);
+    private byte[] readKeyFile() {
+        Scanner scanner = null;
+        try {
+            scanner = new Scanner(keyFile).useDelimiter("\\Z");
+            String keyValue = scanner.next();
+            scanner.close();
+            return hexStringToByteArray(keyValue);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 
-    private static String byteArrayToHexString(final byte[] b) {
+    private static String byteArrayToHexString(byte[] b) {
         StringBuffer sb = new StringBuffer(b.length * 2);
         for (int i = 0; i < b.length; i++) {
             int v = b[i] & 0xff;
@@ -134,13 +143,16 @@ public final class CryptoUtils {
         final String KEY_FILE = "./howto.key";
         final String PWD_FILE = "./howto.properties";
 
+        CryptoUtilImpl cryptoUtils = new CryptoUtilImpl();
+        cryptoUtils.setKeyFile(new File(KEY_FILE));
+
         String clearPwd = "hittheroad";
 
         Properties p1 = new Properties();
         Writer w = null;
         try {
             p1.put("user", "liferay");
-            String encryptedPwd = encrypt(clearPwd, new File(KEY_FILE));
+            String encryptedPwd = cryptoUtils.encrypt(clearPwd);
             p1.put("pwd", encryptedPwd);
             w = new FileWriter(PWD_FILE);
             p1.store(w, "");
@@ -166,7 +178,7 @@ public final class CryptoUtils {
             p2.load(r);
             String encryptedPwd = p2.getProperty("pwd");
             System.out.println(encryptedPwd);
-            System.out.println(decrypt(encryptedPwd, new File(KEY_FILE)));
+            System.out.println(cryptoUtils.decrypt(encryptedPwd));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
