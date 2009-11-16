@@ -11,10 +11,9 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 import org.apache.commons.beanutils.BeanUtils;
 import se.vgregion.portal.iframe.model.UserSiteCredential;
-import se.vgregion.portal.iframe.util.CryptoUtils;
+import se.vgregion.portal.iframe.util.CryptoUtil;
 
 import javax.sql.DataSource;
-import java.io.File;
 import java.io.IOException;
 import java.io.FileWriter;
 import java.security.GeneralSecurityException;
@@ -26,16 +25,13 @@ import java.lang.reflect.InvocationTargetException;
  */
 public class JDBCCredentialVaultRepository extends SimpleJdbcDaoSupport implements CredentialVaultRepository {
     private static Logger log = LoggerFactory.getLogger(JDBCCredentialVaultRepository.class);
-    private String credentialVaultKeyFile;
+
     private String dbCredentialFile;
-    private File cvKeyFile;
 
-    public void setCvKeyFile(File cvKeyFile) {
-        this.cvKeyFile = cvKeyFile;
-    }
+    private CryptoUtil cryptoUtils;
 
-    public void setCredentialVaultKeyFile(String credentialVaultKeyFile) {
-        this.credentialVaultKeyFile = credentialVaultKeyFile;
+    public void setCryptoUtils(CryptoUtil cryptoUtils) {
+       this.cryptoUtils = cryptoUtils;
     }
 
     public void setDbCredentialFile(String dbCredentialFile) {
@@ -75,10 +71,11 @@ public class JDBCCredentialVaultRepository extends SimpleJdbcDaoSupport implemen
      * @param siteCredential - credental to be stored
      */
     public void addUserSiteCredential(UserSiteCredential siteCredential) {
-        encryptSitePwd(siteCredential);
+        UserSiteCredential copy = siteCredential.copy();
+        encryptSitePwd(copy);
 
-        String sql = insertOrUpdateSql(siteCredential);
-        SqlParameterSource parameterSource = new BeanPropertySqlParameterSource(siteCredential);
+        String sql = insertOrUpdateSql(copy);
+        SqlParameterSource parameterSource = new BeanPropertySqlParameterSource(copy);
 
         getSimpleJdbcTemplate().update(sql, parameterSource);
     }
@@ -86,24 +83,16 @@ public class JDBCCredentialVaultRepository extends SimpleJdbcDaoSupport implemen
     private void decryptSitePwd(UserSiteCredential creds) throws GeneralSecurityException {
         String encryptedPwd = creds.getSitePassword();
         String clearPwd = null;
-        try {
-            clearPwd = CryptoUtils.decrypt(encryptedPwd, cvKeyFile);
-        } catch (IOException e) {
-            log.error("Portlet configuration error: Cannot access key file");
-            e.printStackTrace();
-        }
-        log.debug("cvKeyFile path {}", cvKeyFile.getAbsolutePath());
+        clearPwd = cryptoUtils.decrypt(encryptedPwd);
         creds.setSitePassword(clearPwd);
     }
 
     private void encryptSitePwd(UserSiteCredential siteCredential) {
         try {
             String clearPwd = siteCredential.getSitePassword();
-            String encryptedPwd = CryptoUtils.encrypt(clearPwd, cvKeyFile);
+            String encryptedPwd = cryptoUtils.encrypt(clearPwd);
             siteCredential.setSitePassword(encryptedPwd);
         } catch (GeneralSecurityException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -156,7 +145,7 @@ public class JDBCCredentialVaultRepository extends SimpleJdbcDaoSupport implemen
 
         String clearPwd = null;
         try {
-            clearPwd = CryptoUtils.decrypt(encryptedPwd, new File(credentialVaultKeyFile));
+            clearPwd = cryptoUtils.decrypt(encryptedPwd);
 
             BeanUtils.setProperty(dataSource, "username", user);
             BeanUtils.setProperty(dataSource, "password", clearPwd);
@@ -164,8 +153,6 @@ public class JDBCCredentialVaultRepository extends SimpleJdbcDaoSupport implemen
             e.printStackTrace();
             throw new RuntimeException("The database login-credential has to be configured", e);
         } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
             e.printStackTrace();
