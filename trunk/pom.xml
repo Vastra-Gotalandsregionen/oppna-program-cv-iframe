@@ -131,6 +131,16 @@ Generation time : 2009-10-28 12:45:52 CET
                     </formats>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>2.4-atlassian-2-SNAPSHOT</version>
+                <configuration>
+                    <configLocation>${basedir}/src/test/resources/checkstyle/checkstyle.xml</configLocation>
+                    <suppressionsLocation>${basedir}/src/test/resources/checkstyle/checkstyle-suppressions.xml</suppressionsLocation>
+                    <propertyExpansion>project_loc=${basedir}</propertyExpansion>
+                </configuration>
+            </plugin>
         </plugins>
     </reporting>
     <dependencies>
