@@ -41,7 +41,6 @@ public final class CryptoUtilImpl implements CryptoUtil {
      *
      * @param value - value to be encrypted
      * @throws GeneralSecurityException - security exception
-     * @throws FileNotFoundException - keyFile not found
      * @return Encrypted value
      */
     public String encrypt(String value) throws GeneralSecurityException {
@@ -78,7 +77,6 @@ public final class CryptoUtilImpl implements CryptoUtil {
      *
      * @param value - value to be decrypted
      * @throws GeneralSecurityException - decrypt failed
-     * @throws FileNotFoundException - keyfile not found
      * @return decrypted value
      */
     public String decrypt(String value) throws GeneralSecurityException {

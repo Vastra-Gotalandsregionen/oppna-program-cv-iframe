@@ -7,7 +7,7 @@ import se.vgregion.portal.iframe.model.UserSiteCredential;
  *
  * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
  */
-public interface CredentialVaultRepository {
+public interface CredentialStoreRepository {
 
     /**
      * Retrive credental.

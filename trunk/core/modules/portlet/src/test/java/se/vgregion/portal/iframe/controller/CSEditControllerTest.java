@@ -20,7 +20,7 @@ import java.io.IOException;
  *
  * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
  */
-public class CVEditControllerTest extends BastTestSetup {
+public class CSEditControllerTest extends BastTestSetup {
     TestMockPortletPreferences prefs;
     ModelMap model = new ModelMap();
 
@@ -32,7 +32,7 @@ public class CVEditControllerTest extends BastTestSetup {
 
     @Test
     public void testEditPreferences() {
-        CVEditController controller = new CVEditController();
+        CSEditController controller = new CSEditController();
         String result = controller.editPreferences(model, prefs);
         assertEquals("edit", result);
 
@@ -60,7 +60,7 @@ public class CVEditControllerTest extends BastTestSetup {
         MockActionRequest actionRequest = new MockActionRequest();
         actionRequest.setSecure(true);
 
-        CVEditController controller = new CVEditController();
+        CSEditController controller = new CSEditController();
         controller.savePreferences(actionRequest, prefs, portletConfig);
 
         assertEquals(1, prefs.getStoreCalled());
@@ -78,7 +78,7 @@ public class CVEditControllerTest extends BastTestSetup {
         MockActionRequest actionRequest = new MockActionRequest();
         actionRequest.setSecure(false);
 
-        CVEditController controller = new CVEditController();
+        CSEditController controller = new CSEditController();
         controller.savePreferences(actionRequest, prefs, portletConfig);
 
         assertEquals(1, prefs.getStoreCalled());
@@ -97,7 +97,7 @@ public class CVEditControllerTest extends BastTestSetup {
         MockActionRequest actionRequest = new MockActionRequest();
         actionRequest.setSecure(false);
 
-        CVEditController controller = new CVEditController();
+        CSEditController controller = new CSEditController();
         controller.savePreferences(actionRequest, prefs, portletConfig);
 
         assertEquals(1, prefs.getStoreCalled());

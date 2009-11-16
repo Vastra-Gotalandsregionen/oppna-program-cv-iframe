@@ -22,8 +22,8 @@ import javax.portlet.ActionRequest;
  */
 @Controller
 @RequestMapping("EDIT")
-public class CVEditController {
-    private static Logger log = LoggerFactory.getLogger(CVEditController.class);
+public class CSEditController {
+    private static Logger log = LoggerFactory.getLogger(CSEditController.class);
 
     /**
      * RenderMapping for edit page.

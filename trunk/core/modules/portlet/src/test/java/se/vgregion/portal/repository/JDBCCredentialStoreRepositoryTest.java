@@ -18,10 +18,10 @@ import java.security.GeneralSecurityException;
  */
 @ContextConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
-public class JDBCCredentialVaultRepositoryTest {
+public class JDBCCredentialStoreRepositoryTest {
 
     @Autowired
-    private JDBCCredentialVaultRepository repo;
+    private JDBCCredentialStoreRepository repo;
 
     @Before
     public void setup() {

@@ -87,7 +87,7 @@
 <portlet:actionURL var="formAction" />
 <c:set var="ns"><portlet:namespace /></c:set>
 
-<form:form method="post" action="${formAction}" commandName="credential">
+<form:form method="post" action="${formAction}" commandName="portletConfig">
     <fieldset>
         <legend>General</legend>
         <table class="lfr-table">
