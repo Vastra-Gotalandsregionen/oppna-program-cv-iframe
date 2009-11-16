@@ -131,7 +131,7 @@ Generation time : 2009-10-28 12:45:52 CET
         <dependency>
             <groupId>hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
-            <version>1.8.0.2</version>
+            <version>1.8.0.1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
