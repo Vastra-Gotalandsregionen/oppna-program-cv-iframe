@@ -8,7 +8,7 @@ import org.springframework.mock.web.portlet.*;
 import org.springframework.ui.ModelMap;
 import se.vgregion.portal.iframe.model.PortletConfig;
 import se.vgregion.portal.iframe.model.*;
-import se.vgregion.portal.repository.CredentialVaultRepository;
+import se.vgregion.portal.repository.CredentialStoreRepository;
 
 import javax.portlet.*;
 import java.util.Map;
@@ -19,14 +19,14 @@ import java.util.HashMap;
  *
  * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
  */
-public class CVViewControllerTest extends BastTestSetup {
+public class CSViewControllerTest extends BastTestSetup {
     
-    CVViewController controller;
+    CSViewController controller;
 
     @Before
     public void setUp() {
-        controller = new CVViewController();
-        controller.setCredentialVaultRepository(new TestStubCredentialVaultRepository());
+        controller = new CSViewController();
+        controller.setCredentialVaultRepository(new TestStubCredentialStoreRepository());
     }
 
     @After
@@ -346,7 +346,7 @@ public class CVViewControllerTest extends BastTestSetup {
         // TODO: How test this?
     }
 
-    class TestStubCredentialVaultRepository implements CredentialVaultRepository {
+    class TestStubCredentialStoreRepository implements CredentialStoreRepository {
        
         public UserSiteCredential getUserSiteCredential(String uid, String siteKey) {
             if ("test-user".equals(uid) && "test-site-key".equals(siteKey)) {

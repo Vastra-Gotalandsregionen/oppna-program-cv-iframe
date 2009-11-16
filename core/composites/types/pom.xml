@@ -10,12 +10,12 @@ Generation time : 2009-10-28 12:45:52 CET
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>se.vgregion.cv-iframe</groupId>
-    <artifactId>cv-iframe-core</artifactId>
+    <groupId>se.vgregion.cs-iframe</groupId>
+    <artifactId>cs-iframe-core</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
-  <groupId>se.vgregion.cv-iframe</groupId>
-  <artifactId>cv-iframe-core-composite-types</artifactId>
+  <groupId>se.vgregion.cs-iframe</groupId>
+  <artifactId>cs-iframe-core-composite-types</artifactId>
   <packaging>jar</packaging>
   <name>${project.artifactId}</name>
 </project>

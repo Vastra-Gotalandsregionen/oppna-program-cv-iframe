@@ -20,7 +20,7 @@ import javax.portlet.WindowState;
 
 import se.vgregion.portal.iframe.model.PortletConfig;
 import se.vgregion.portal.iframe.model.UserSiteCredential;
-import se.vgregion.portal.repository.CredentialVaultRepository;
+import se.vgregion.portal.repository.CredentialStoreRepository;
 
 import java.util.Map;
 
@@ -31,14 +31,14 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("VIEW")
-public class CVViewController {
-    private Logger log = LoggerFactory.getLogger(CVViewController.class);
+public class CSViewController {
+    private Logger log = LoggerFactory.getLogger(CSViewController.class);
 
-    private CredentialVaultRepository credentialVaultRepository;
+    private CredentialStoreRepository credentialStoreRepository;
 
     @Autowired
-    public void setCredentialVaultRepository(CredentialVaultRepository credentialVaultRepository) {
-        this.credentialVaultRepository = credentialVaultRepository;
+    public void setCredentialVaultRepository(CredentialStoreRepository credentialStoreRepository) {
+        this.credentialStoreRepository = credentialStoreRepository;
     }
 
     /**
@@ -135,7 +135,7 @@ public class CVViewController {
      */
     @ActionMapping
     public void storeUserCredential(@ModelAttribute("siteCredential") UserSiteCredential siteCredential) {
-        credentialVaultRepository.addUserSiteCredential(siteCredential);
+        credentialStoreRepository.addUserSiteCredential(siteCredential);
         log.debug("storeUserCredential: {}", siteCredential);
     }
 
@@ -177,7 +177,7 @@ public class CVViewController {
             returnSiteCredential.setUid(uid);
             returnSiteCredential.setSiteKey(portletConfig.getSiteKey());
 
-            UserSiteCredential siteCredential = credentialVaultRepository.getUserSiteCredential(uid, portletConfig.getSiteKey());
+            UserSiteCredential siteCredential = credentialStoreRepository.getUserSiteCredential(uid, portletConfig.getSiteKey());
             if (siteCredential != null) {
                 returnSiteCredential.setSiteUser(siteCredential.getSiteUser());
                 returnSiteCredential.setSitePassword(siteCredential.getSitePassword());

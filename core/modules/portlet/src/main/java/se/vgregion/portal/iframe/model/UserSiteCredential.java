@@ -102,6 +102,11 @@ public class UserSiteCredential implements Serializable {
                 toString();
     }
 
+    /**
+     * Copy the UserSiteCredential object.
+     *
+     * @return new userSiteCredental object
+     */
     public UserSiteCredential copy() {
         UserSiteCredential copy = new UserSiteCredential(uid, siteKey);
         copy.setSiteUser(siteUser);

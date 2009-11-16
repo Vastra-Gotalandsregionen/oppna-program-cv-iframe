@@ -23,8 +23,8 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
  */
-public class JDBCCredentialVaultRepository extends SimpleJdbcDaoSupport implements CredentialVaultRepository {
-    private static Logger log = LoggerFactory.getLogger(JDBCCredentialVaultRepository.class);
+public class JDBCCredentialStoreRepository extends SimpleJdbcDaoSupport implements CredentialStoreRepository {
+    private static Logger log = LoggerFactory.getLogger(JDBCCredentialStoreRepository.class);
 
     private String dbCredentialFile;
 

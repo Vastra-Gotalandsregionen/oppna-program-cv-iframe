@@ -11,15 +11,15 @@
 
 <body onLoad="setTimeout('document.fm.submit()', 100);">
 
-<form action="${credential.src}" method="${credential.formMethod}" name="fm" id="fm">
+<form action="${portletConfig.src}" method="${portletConfig.formMethod}" name="fm" id="fm">
     <h1>Hej Proxy</h1>
 
     <h1>User: ${siteCredential.siteUser}</h1>
-    <input name="${credential.siteUserNameField}" type="hidden" value="${siteCredential.siteUser}"/>
+    <input name="${portletConfig.siteUserNameField}" type="hidden" value="${siteCredential.siteUser}"/>
 
 
     <h1>PW: ${siteCredential.sitePassword}</h1>
-    <input name="${credential.sitePasswordField}" type="hidden" value="${siteCredential.sitePassword}"/>
+    <input name="${portletConfig.sitePasswordField}" type="hidden" value="${siteCredential.sitePassword}"/>
 
 
 </form>

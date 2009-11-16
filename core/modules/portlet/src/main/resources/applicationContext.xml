@@ -4,20 +4,14 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="driverClassName" value="org.postgresql.DriverXX" />
+        <property name="driverClassName" value="org.postgresql.Driver" />
         <property name="url" value="jdbc:postgresql://antonio.vgregion.se:5432/lportal" />
         <property name="username" value="liferay" />
     </bean>
 
-    <bean name="credentialVaultRepository" class="se.vgregion.portal.repository.JDBCCredentialVaultRepository">
+    <bean name="credentialStoreRepository" class="se.vgregion.portal.repository.JDBCCredentialStoreRepository">
         <property name="dataSource" ref="dataSource" />
         <property name="cryptoUtils" ref="cryptoUtils" />
-        <!--<property name="dbCredentialFile" value="/Users/david/AppServer/liferay-portal-5.2.3/tomcat-6.0.18/webapps/cv-iframe-portlet/WEB-INF/db_credentials.properties" />-->
-        <!--<property name="credentialVaultKeyFile" value="/Users/david/AppServer/liferay-portal-5.2.3/tomcat-6.0.18/webapps/cv-iframe-portlet/WEB-INF/cv.key" />-->
-        <!--<property name="dbCredentialFile" value="/zfs/liferay/tomcat-6.0.18/webapps/cv-iframe-portlet/WEB-INF/db_credentials.properties" />-->
-        <!--<property name="credentialVaultKeyFile" value="/zfs/liferay/tomcat-6.0.18/webapps/cv-iframe-portlet/WEB-INF/cv.key" />-->
-        <!--<property name="dbCredentialFile" value="WEB-INF/db_credentials.properties" />-->
-        <!--<property name="credentialVaultKeyFile" value="classpath:WEB-INF/cv.key" />-->
     </bean>
 
     <bean name="cryptoUtils" class="se.vgregion.portal.iframe.util.CryptoUtilImpl">
