@@ -242,6 +242,11 @@ Generation time : 2009-10-28 12:45:52 CET
                 <enabled>true</enabled>
             </releases>
         </pluginRepository>
+        <pluginRepository>
+            <id>oppnaprogram</id>
+            <name>oppna program repo</name>
+            <url>http://oppna-program.googlecode.com/svn/maven</url>
+        </pluginRepository>
     </pluginRepositories>
 
     <profiles>
