@@ -134,7 +134,7 @@ Generation time : 2009-10-28 12:45:52 CET
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>2.4-atlassian-2-SNAPSHOT</version>
+                <version>2.2</version>
                 <configuration>
                     <configLocation>${basedir}/src/test/resources/checkstyle/checkstyle.xml</configLocation>
                     <suppressionsLocation>${basedir}/src/test/resources/checkstyle/checkstyle-suppressions.xml</suppressionsLocation>
