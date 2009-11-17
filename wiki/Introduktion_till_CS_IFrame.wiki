@@ -21,3 +21,22 @@ Vart formuläret skall skickas behöver också konfigureras och om det skall ski
 Inloggningsuppgifterna sparas per inloggad användare och en nyckel för typ av inloggnings uppgift (SiteKey). En siteKey kan återanvändas av flera CS-IFrame portlets om de externa webbplatserna använder samma inloggningsuppgifter (även om inloggningsformuläret ser olika ut).
 
 == Lagring av inloggningsuppgifter ==
+
+Inloggningsuppgifterna sparas i en databas, i tabellen usersitecredentail: 
+
+CREATE TABLE usersitecredential
+(
+  uid character varying(20) NOT NULL,
+  sitekey character varying(50) NOT NULL,
+  siteuser character varying(256),
+  sitepassword character varying(20),
+  CONSTRAINT vaultkey PRIMARY KEY (uid, sitekey)
+);
+
+Inloggningsuppgifterna till databasen sparas i Spring konfigurations filen "datasource.properties".
+
+Lösenorden i usersitecredential krypteras med en reverserbar algoritm (AES). För att det skall fungera behöver man en nyckel - filen "cv.key".
+Denna nyckelfil skall finnas på classpath för att krypteringen skall fungera.
+Nyckelfilen kan skapas med CryptoUtilImpl som finns med i koden genom att köra CryptoUtilImpl som ett fristående program.
+
+Filen cv.key MÅSTE hanteras konfidenciellt eftersom alla sparade lösenord kan återskapas om man har tillgång till den.
