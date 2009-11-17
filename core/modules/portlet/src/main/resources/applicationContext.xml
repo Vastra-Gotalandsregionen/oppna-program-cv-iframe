@@ -8,9 +8,10 @@
     </bean>
 
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="driverClassName" value="org.postgresql.Driver" />
-        <property name="url" value="jdbc:postgresql://antonio.vgregion.se:5432/lportal" />
-        <property name="username" value="liferay" />
+        <property name="driverClassName" value="${database.driver}" />
+        <property name="url" value="${database.url}" />
+        <property name="username" value="${database.user}" />
+        <property name="password" value="${database.password}" />
     </bean>
 
     <bean name="credentialStoreRepository" class="se.vgregion.portal.repository.JDBCCredentialStoreRepository">
