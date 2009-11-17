@@ -100,9 +100,13 @@ public class JDBCCredentialStoreRepository extends SimpleJdbcDaoSupport implemen
     private String insertOrUpdateSql(UserSiteCredential siteCredential) {
         String sql;
         if(siteUserExists(siteCredential)) {
-            sql = "UPDATE USERSITECREDENTIAL SET SITEUSER = :siteUser,  SITEPASSWORD = :sitePassword WHERE UID = :uid AND SITEKEY = :siteKey";
+            sql = "UPDATE USERSITECREDENTIAL "
+                    + "SET SITEUSER = :siteUser,  SITEPASSWORD = :sitePassword "
+                    + "WHERE UID = :uid AND SITEKEY = :siteKey";
         } else {
-            sql = "INSERT INTO USERSITECREDENTIAL (UID, SITEKEY, SITEUSER, SITEPASSWORD) VALUES(:uid, :siteKey, :siteUser, :sitePassword)";
+            sql = "INSERT INTO USERSITECREDENTIAL "
+                    + "(UID, SITEKEY, SITEUSER, SITEPASSWORD) "
+                    + "VALUES(:uid, :siteKey, :siteUser, :sitePassword)";
         }
         return sql;
     }

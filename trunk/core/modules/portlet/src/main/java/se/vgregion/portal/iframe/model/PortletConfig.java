@@ -31,7 +31,7 @@ public class PortletConfig implements Serializable {
     private String hiddenVariables;
     private String htmlAttributes;
 
-    private Map<String,String> htmlAttributeMap = new HashMap<String,String>();
+    private Map<String, String> htmlAttributeMap = new HashMap<String, String>();
 
     /**
      * Default constructor - used by Spring MCV.

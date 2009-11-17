@@ -19,7 +19,7 @@ import java.util.Scanner;
 /**
  * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
  */
-public final class CryptoUtilImpl implements CryptoUtil {
+public class CryptoUtilImpl implements CryptoUtil {
 
     private static final String AES = "AES";
 
@@ -37,7 +37,7 @@ public final class CryptoUtilImpl implements CryptoUtil {
      * @throws GeneralSecurityException - security exception
      * @return Encrypted value
      */
-    public String encrypt(final String value) throws GeneralSecurityException {
+    public String encrypt(String value) throws GeneralSecurityException {
         if (!keyFile.exists()) {
             KeyGenerator keyGen = KeyGenerator.getInstance(AES);
             keyGen.init(128);
@@ -73,7 +73,7 @@ public final class CryptoUtilImpl implements CryptoUtil {
      * @throws GeneralSecurityException - decrypt failed
      * @return decrypted value
      */
-    public String decrypt(final String value) throws GeneralSecurityException {
+    public String decrypt(String value) throws GeneralSecurityException {
         SecretKeySpec sks = getSecretKeySpec();
         Cipher cipher = Cipher.getInstance(AES);
         cipher.init(Cipher.DECRYPT_MODE, sks);
@@ -104,7 +104,7 @@ public final class CryptoUtilImpl implements CryptoUtil {
     }
 
 
-    private String byteArrayToHexString(final byte[] b) {
+    private String byteArrayToHexString(byte[] b) {
         StringBuffer sb = new StringBuffer(b.length * 2);
         for (int i = 0; i < b.length; i++) {
             int v = b[i] & 0xff;
@@ -116,7 +116,7 @@ public final class CryptoUtilImpl implements CryptoUtil {
         return sb.toString().toUpperCase();
     }
 
-    private byte[] hexStringToByteArray(final String s) {
+    private byte[] hexStringToByteArray(String s) {
         byte[] b = new byte[s.length() / 2];
         for (int i = 0; i < b.length; i++) {
             int index = i * 2;

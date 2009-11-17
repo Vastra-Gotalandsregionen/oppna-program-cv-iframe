@@ -33,8 +33,8 @@ public class CSEditController {
      * @return view
      */
     @RenderMapping
-    public final String editPreferences(final ModelMap model,
-                                        final PortletPreferences prefs) {
+    public String editPreferences(ModelMap model,
+                                        PortletPreferences prefs) {
         PortletConfig portletConfig = PortletConfig.getInstance(prefs);
         log.debug("editPreferences: {}", portletConfig);
 
@@ -50,10 +50,10 @@ public class CSEditController {
      * @param portletConfig - request parameter
      */
     @ActionMapping
-    public final void savePreferences(final ActionRequest actionRequest,
-                                final PortletPreferences prefs,
-                                @ModelAttribute("credential")
-                                final PortletConfig portletConfig) {
+    public void savePreferences(ActionRequest actionRequest,
+                                      PortletPreferences prefs,
+                                      @ModelAttribute("credential")
+                                      PortletConfig portletConfig) {
 
         log.debug("savePreferences 1: {}", portletConfig);
 
