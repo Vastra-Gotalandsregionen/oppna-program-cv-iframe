@@ -26,14 +26,14 @@ Inloggningsuppgifterna sparas i en databas, i tabellen usersitecredentail:
 
 CREATE TABLE usersitecredential
 (
-  uid character varying(20) NOT NULL,
-  sitekey character varying(50) NOT NULL,
-  siteuser character varying(256),
-  sitepassword character varying(20),
-  CONSTRAINT vaultkey PRIMARY KEY (uid, sitekey)
+   uid character varying(20) NOT NULL,
+   sitekey character varying(50) NOT NULL,
+   siteuser character varying(256),
+   sitepassword character varying(20),
+   CONSTRAINT vaultkey PRIMARY KEY (uid, sitekey)
 );
 
-Inloggningsuppgifterna till databasen sparas i Spring konfigurations filen "datasource.properties".
+Inloggningsuppgifterna till databasen sparas i Spring konfigurationsfilen "datasource.properties".
 
 Lösenorden i usersitecredential krypteras med en reverserbar algoritm (AES). För att det skall fungera behöver man en nyckel - filen "cv.key".
 Denna nyckelfil skall finnas på classpath för att krypteringen skall fungera.
