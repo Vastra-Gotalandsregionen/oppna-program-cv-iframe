@@ -20,7 +20,7 @@ public class UserSiteCredential implements Serializable {
     /**
      * Default constructor - used by Spring MCV.
      */
-    public UserSiteCredential() {}
+    public UserSiteCredential() { }
 
     /**
      * Minimal constructor for creating a valid credental.
