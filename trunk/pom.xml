@@ -119,6 +119,7 @@ Generation time : 2009-10-28 12:45:52 CET
             </extension>
         </extensions>
     </build>
+
     <reporting>
         <plugins>
             <plugin>
@@ -134,13 +135,23 @@ Generation time : 2009-10-28 12:45:52 CET
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>2.4-atlassian-2-SNAPSHOT</version>
+                <version>2.3</version>
                 <configuration>
-                    <configLocation>http://oppna-program.googlecode.com/svn/dev-environment/checkstyle/sun_checks_vgr.xml</configLocation>
+                    <configLocation>
+                        http://oppna-program.googlecode.com/svn/dev-environment/checkstyle/sun_checks_vgr.xml
+                    </configLocation>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <configuration>
+                    <findbugsXmlOutput>true</findbugsXmlOutput>
                 </configuration>
             </plugin>
         </plugins>
     </reporting>
+
     <dependencies>
         <dependency>
             <groupId>log4j</groupId>
