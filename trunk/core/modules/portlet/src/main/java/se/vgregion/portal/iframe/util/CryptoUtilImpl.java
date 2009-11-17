@@ -1,5 +1,7 @@
 package se.vgregion.portal.iframe.util;
 
+import com.sun.deploy.cache.LocalApplicationProperties;
+
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
@@ -15,6 +17,7 @@ import java.security.GeneralSecurityException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Properties;
 import java.util.Scanner;
+import java.util.Locale;
 
 /**
  * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
@@ -113,7 +116,7 @@ public class CryptoUtilImpl implements CryptoUtil {
             }
             sb.append(Integer.toHexString(v));
         }
-        return sb.toString().toUpperCase();
+        return sb.toString().toUpperCase(Locale.US);
     }
 
     private byte[] hexStringToByteArray(String s) {

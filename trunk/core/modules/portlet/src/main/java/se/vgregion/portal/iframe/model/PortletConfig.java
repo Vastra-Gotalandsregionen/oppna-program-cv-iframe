@@ -19,6 +19,8 @@ import java.util.HashMap;
  */
 
 public class PortletConfig implements Serializable {
+    private static final long serialVersionUID = 526915899524612688L;
+
     private String siteKey;
 
     private String src;

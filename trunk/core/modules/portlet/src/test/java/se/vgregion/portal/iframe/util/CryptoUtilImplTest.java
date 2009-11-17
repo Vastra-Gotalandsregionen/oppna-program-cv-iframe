@@ -66,7 +66,7 @@ public class CryptoUtilImplTest {
         // decrypt
         try {
             String encrypted = cryptoUtil.decrypt(value);
-            fail("exception shold be thrown");
+            fail("exception should be thrown");
         } catch (Exception ex) {
             // OK
         }
