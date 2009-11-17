@@ -8,7 +8,9 @@ IFrame tekniken används för komma åt en existerande extern webbplats. Dessa e
 = Användning =
 
 Första gången man går in på portleten kommer man till "Credential" skärmen där man skriver in användarnamn och lösenord för den externa webplatsen.
-Om det finns en sparad inloggningsuppgift så används dessa och ett försök att logga in görs automatiskt. Om inloggningen misslyckas tar den externa webbplatsens normala beteende över och man blir vanligtvis hänvisad till inloggningssidan igen. Dock, denna gång är det den externa webbplatsens egna inloggningssida och det går inte längre att spara undan inloggnings uppgifterna, så om en felaktiga inloggningsuppgift angivits, eller om inloggningsuppgifterna ändrats måste man gå in på "Credential" skärmen och ändra för att få automatiken att fungera. 
+Om det finns en sparad inloggningsuppgift så används dessa och en inloggning görs automatiskt. 
+
+Om inloggningen misslyckas tar den externa webbplatsens normala beteende över och man blir vanligtvis hänvisad till inloggningssidan igen. Dock, denna gång är det den externa webbplatsens egna inloggningssida och det går inte att spara undan inloggnings uppgifterna. Så om felaktiga inloggningsuppgift angivits, eller om inloggningsuppgifterna ändrats måste man själv gå in på "Credential" skärmen och ändra till korrekta uppgifter för att få automatiken att fungera. 
 
 = Portlet konfiguration =
 
