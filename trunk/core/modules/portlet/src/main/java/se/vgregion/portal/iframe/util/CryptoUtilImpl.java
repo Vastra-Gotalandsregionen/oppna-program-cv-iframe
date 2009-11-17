@@ -1,7 +1,5 @@
 package se.vgregion.portal.iframe.util;
 
-import com.sun.deploy.cache.LocalApplicationProperties;
-
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
