@@ -5,6 +5,11 @@
 CS-IFrame portlet är en iFrame portlet i grunden, som har utökats med möjligheten att spara inloggnings uppgifter för användare i en databas.
 IFrame tekniken används för komma åt en existerande extern webbplats. Dessa externa webbtjänster kräver ofta en inloggning för att presentera en personaliserad vy av informationen. CS-IFrame klarar av basic-authentication och enklare formulär baserad inloggning. Inloggnings informationen sparas efter första användningen i en databas. 
 
+= Användning =
+
+Första gången man går in på portleten kommer man till "Credential" skärmen där man skriver in användarnamn och lösenord för den externa webplatsen.
+Om det finns en sparad inloggningsuppgift så används dessa och ett försök att logga in görs automatiskt. Om inloggningen misslyckas tar den externa webbplatsens normala beteende över och man blir vanligtvis hänvisad till inloggningssidan igen. Dock, denna gång är det den externa webbplatsens egna inloggningssida och det går inte längre att spara undan inloggnings uppgifterna, så om en felaktiga inloggningsuppgift angivits, eller om inloggningsuppgifterna ändrats måste man gå in på "Credential" skärmen och ändra för att få automatiken att fungera. 
+
 = Portlet konfiguration =
 
 == Formulärbaserad inloggning ==
@@ -13,9 +18,6 @@ CS-IFrame skapar ett eget inloggnings formulär, det är därför viktigt att ef
 Det enda dynamiska innehåll man kan påverka är användarnamn och lösenord så namnen på dessa formulär parametrar måste konfigureras.
 Vart formuläret skall skickas behöver också konfigureras och om det skall skickas som ett GET eller POST anrop.
 
-Inloggningsuppgifterna sparas sedan per inloggad användare och en nyckel för typ av inloggnings uppgift (SiteKey). En siteKey kan återanvändas av flera CS-IFrame portlets om de externa webbplatserna använder samma inloggningsuppgifter.
+Inloggningsuppgifterna sparas per inloggad användare och en nyckel för typ av inloggnings uppgift (SiteKey). En siteKey kan återanvändas av flera CS-IFrame portlets om de externa webbplatserna använder samma inloggningsuppgifter (även om inloggningsformuläret ser olika ut).
 
-Första gången man går in på portleten kommer man till "Credential" skärmen där man skriver in användarnamn och lösenord för den externa webplatsen.
-Om det finns en sparad inloggningsuppgift så används dessa och ett försök att logga in görs automatiskt. Om inloggningen misslyckas tar den externa webbplatsens normala beteende över och man blir vanligtvis hänvisad till inloggningssidan igen. Dock, denna gång är det den externa webbplatsens egna inloggningssida och det går inte längre att spara undan inloggnings uppgifterna, så om en felaktiga inloggningsuppgift angivits, eller om inloggningsuppgifterna ändrats måste man gå in på "Credential" skärmen och ändra för att få automatiken att fungera. 
-
-= Lagring av inloggningsuppgifter =
+== Lagring av inloggningsuppgifter ==
