@@ -11,6 +11,7 @@ import java.io.Serializable;
  * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
  */
 public class UserSiteCredential implements Serializable {
+    private static final long serialVersionUID = -6165345481054332483L;
 
     private String uid;
     private String siteKey;

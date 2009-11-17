@@ -16,6 +16,7 @@ import se.vgregion.portal.iframe.util.CryptoUtil;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.FileWriter;
+import java.io.Writer;
 import java.security.GeneralSecurityException;
 import java.util.Properties;
 import java.lang.reflect.InvocationTargetException;
@@ -115,62 +116,5 @@ public class JDBCCredentialStoreRepository extends SimpleJdbcDaoSupport implemen
         String sql = "select count(*) from usersitecredential where uid = ? and sitekey = ?";
 
         return getSimpleJdbcTemplate().queryForInt(sql, siteCredential.getUid(), siteCredential.getSiteKey()) > 0;
-    }
-
-    @Override
-    protected JdbcTemplate createJdbcTemplate(DataSource dataSource) {
-        try {
-            log.debug("username: {}",BeanUtils.getProperty(dataSource, "username"));
-            log.debug("password: {}",BeanUtils.getProperty(dataSource, "password"));
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        }
-        return super.createJdbcTemplate(dataSource);
-//        Properties dbCredentials = new Properties();
-//        try {
-//            dbCredentials.load(new FileReader(dbCredentialFile));
-//        } catch (IOException e) {
-//            // RuntimeException will be thrown
-//            dbCredentialFileNotConfigured(dbCredentials);
-//        }
-//
-//        setDbUserCredential(dataSource, dbCredentials);
-//
-//        return super.createJdbcTemplate(dataSource);
-    }
-
-    private void setDbUserCredential(DataSource dataSource, Properties dbCredentials) {
-        String user = dbCredentials.getProperty("user");
-        String encryptedPwd = dbCredentials.getProperty("pwd");
-
-        String clearPwd = null;
-        try {
-            clearPwd = cryptoUtils.decrypt(encryptedPwd);
-
-            BeanUtils.setProperty(dataSource, "username", user);
-            BeanUtils.setProperty(dataSource, "password", clearPwd);
-        } catch (GeneralSecurityException e) {
-            e.printStackTrace();
-            throw new RuntimeException("The database login-credential has to be configured", e);
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void dbCredentialFileNotConfigured(Properties dbCredentials) {
-        dbCredentials.setProperty("user", "<db-username>");
-        dbCredentials.setProperty("password", "<encrypted db-password> - use your cv.key to encrypt the password");
-        try {
-            dbCredentials.store(new FileWriter(dbCredentialFile), "");
-        } catch (IOException e1) {
-            log.error("Could not access database login-credential properties file {}", dbCredentialFile);
-        }
-        throw new RuntimeException("The database login-credential properties file has to be configured");
     }
 }
