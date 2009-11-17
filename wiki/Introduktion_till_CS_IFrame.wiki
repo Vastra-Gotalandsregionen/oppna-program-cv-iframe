@@ -1,0 +1,14 @@
+#summary Utvecklar dokumentation för konfiguration och användning av CS-IFrame portlet.
+
+= Introduktion =
+
+CS-IFrame portlet är en iFrame portlet i grunden, som har utökats med möjligheten att spara inloggnings uppgifter för användare i en databas.
+IFrame tekniken används för komma åt en existerande extern webplats. Dessa externa webtjänster kräver ofta en inloggning för att presentera en personaliserad vy av informationen.
+
+
+= Details =
+
+Add your content here.  Format your content with:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
