@@ -5,21 +5,13 @@ import org.springframework.jdbc.core.simple.ParameterizedBeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.dao.DataAccessException;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
-import org.apache.commons.beanutils.BeanUtils;
 import se.vgregion.portal.iframe.model.UserSiteCredential;
 import se.vgregion.portal.iframe.util.CryptoUtil;
 
-import javax.sql.DataSource;
-import java.io.IOException;
-import java.io.FileWriter;
-import java.io.Writer;
 import java.security.GeneralSecurityException;
-import java.util.Properties;
-import java.lang.reflect.InvocationTargetException;
 
 /**
  * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
@@ -50,7 +42,8 @@ public class JDBCCredentialStoreRepository extends SimpleJdbcDaoSupport implemen
     public UserSiteCredential getUserSiteCredential(String uid, String siteKey) {
         String sql = "select * from usersitecredential where uid = ? and sitekey = ?";
 
-        RowMapper<UserSiteCredential> rowMapper = ParameterizedBeanPropertyRowMapper.newInstance(UserSiteCredential.class);
+        RowMapper<UserSiteCredential> rowMapper =
+                ParameterizedBeanPropertyRowMapper.newInstance(UserSiteCredential.class);
         UserSiteCredential creds = null;
         try {
             creds = getSimpleJdbcTemplate().queryForObject(sql, rowMapper, uid, siteKey);
@@ -100,7 +93,7 @@ public class JDBCCredentialStoreRepository extends SimpleJdbcDaoSupport implemen
 
     private String insertOrUpdateSql(UserSiteCredential siteCredential) {
         String sql;
-        if(siteUserExists(siteCredential)) {
+        if (siteUserExists(siteCredential)) {
             sql = "UPDATE USERSITECREDENTIAL "
                     + "SET SITEUSER = :siteUser,  SITEPASSWORD = :sitePassword "
                     + "WHERE UID = :uid AND SITEKEY = :siteKey";
