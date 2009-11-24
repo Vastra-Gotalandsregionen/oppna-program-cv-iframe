@@ -148,6 +148,10 @@
     <portlet:param name="action" value="changeVaultCredentials" />
 </portlet:renderURL>
 
+<a class="express_login" href="${changeCredentials}">
+    Ändra dina sparade inloggningsuppgifter
+</a>
+<br />
 <iframe src="${iFrameSrc}"
         name="<portlet:namespace />iframe"
         border="${bordercolor}"
@@ -158,5 +162,3 @@
         vspace="${vspace}"
         width="${width}">
 </iframe>
-<br />
-<a href="${changeCredentials}">Ändra dina sparade inloggningsuppgifter</a>

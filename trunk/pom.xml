@@ -13,13 +13,7 @@ Generation time : 2009-10-28 12:45:52 CET
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <!-- TODO: define common props in JAVG-parent-POM
-      <parent>
-        <groupId>JAVG_PARENT_POM</groupId>
-        <artifactId>JAVG_PARENT_POM</artifactId>
-        <version>1.1-RC1</version>
-      </parent>
-    -->
+
     <groupId>se.vgregion.cs-iframe</groupId>
     <artifactId>cs-iframe-system</artifactId>
     <packaging>pom</packaging>
@@ -78,36 +72,6 @@ Generation time : 2009-10-28 12:45:52 CET
                     </additionalProjectnatures>
                 </configuration>
             </plugin>
-            <!--plugin>
-              <groupId>com.google.code.maven-license-plugin</groupId>
-              <artifactId>maven-license-plugin</artifactId>
-              <configuration>
-                <header>header.txt</header>
-                <excludes>
-                  <exclude>target/**</exclude>
-                  <exclude>**/NOTICES.txt</exclude>
-                  <exclude>thirdpartylicenses/**</exclude>
-                  <exclude>**/LICENSE.rtf</exclude>
-                  <exclude>**/context.xml</exclude>
-                </excludes>
-              </configuration>
-              <executions>
-                <execution>
-                  <id>format</id>
-                  <phase>process-sources</phase>
-                  <goals>
-                    <goal>format</goal>
-                  </goals>
-                </execution>
-                <execution>
-                  <id>check</id>
-                  <phase>compile</phase>
-                  <goals>
-                    <goal>check</goal>
-                  </goals>
-                </execution>
-              </executions>
-            </plugin-->
         </plugins>
 
         <!-- needed for SVN-deployment -->
