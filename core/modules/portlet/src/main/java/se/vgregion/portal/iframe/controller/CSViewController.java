@@ -1,27 +1,21 @@
 package se.vgregion.portal.iframe.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
-import org.springframework.web.portlet.bind.annotation.ActionMapping;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.ModelMap;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
-
-import javax.portlet.PortletPreferences;
-import javax.portlet.PortletRequest;
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
-import javax.portlet.ResourceRequest;
-import javax.portlet.WindowState;
-
 import se.vgregion.portal.iframe.model.PortletConfig;
 import se.vgregion.portal.iframe.model.UserSiteCredential;
 import se.vgregion.portal.repository.CredentialStoreRepository;
 
+import javax.portlet.*;
+import java.util.Enumeration;
 import java.util.Map;
 
 /**
@@ -51,8 +45,8 @@ public class CSViewController {
      * Handling of user-sitecredential availability and iFrame source linking
      *
      * @param prefs - protlet preferences
-     * @param req  - request
-     * @param resp - response
+     * @param req   - request
+     * @param resp  - response
      * @param model - model
      * @return view
      */
@@ -95,7 +89,7 @@ public class CSViewController {
      * Credential view handleing.
      *
      * @param prefs - portlet preferences
-     * @param req - request
+     * @param req   - request
      * @param model - model
      * @return view
      */
@@ -119,7 +113,7 @@ public class CSViewController {
      * Prepare proxyLoginForm.jsp for form-based authentication.
      *
      * @param model - model
-     * @param req - request
+     * @param req   - request
      * @param prefs - portlet preferences
      * @return view
      */
@@ -136,6 +130,22 @@ public class CSViewController {
         UserSiteCredential siteCredential = new UserSiteCredential();
         credentialsAvailable(req, model, portletConfig, siteCredential);
 
+        if (log.isDebugEnabled()) {
+            log.debug("Request attributes");
+            Enumeration attrs = req.getAttributeNames();
+            while (attrs.hasMoreElements()) {
+                String attr = attrs.nextElement().toString();
+                log.debug("Request attribute: {} : {}", attr, req.getAttribute(attr));
+            }
+
+            log.debug("Request parameters");
+            Enumeration params = req.getParameterNames();
+            while (params.hasMoreElements()) {
+                String param = params.nextElement().toString();
+                log.debug("Request parameters: {} : {}", param, req.getParameterValues(param));
+            }
+        }
+
         return "proxyLoginForm";
     }
 
@@ -147,7 +157,7 @@ public class CSViewController {
      */
     @ActionMapping
     public void storeUserCredential(@ModelAttribute("siteCredential")
-                                    UserSiteCredential siteCredential) {
+    UserSiteCredential siteCredential) {
         credentialStoreRepository.addUserSiteCredential(siteCredential);
         log.debug("storeUserCredential: {}", siteCredential);
     }
