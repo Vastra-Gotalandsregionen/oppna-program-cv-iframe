@@ -8,8 +8,8 @@ import javax.portlet.ReadOnlyException;
 import javax.portlet.ValidatorException;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -94,7 +94,7 @@ public class PortletConfig implements Serializable {
     /**
      * Convienience method to access html-attribute.
      *
-     * @param attribute - attribute name
+     * @param attribute    - attribute name
      * @param defaultValue - default value if attribute not found
      * @return attribute value
      */
@@ -182,6 +182,24 @@ public class PortletConfig implements Serializable {
 
     public String getHtmlAttributes() {
         return htmlAttributes;
+    }
+
+    public Map<String, String> getHiddenVarialbleMap() {
+        Map<String, String> staticHiddenMap = new HashMap<String, String>();
+
+        String[] variables = hiddenVariables.split("&");
+        for (String variable : variables) {
+            String[] nameValue = variable.split("=");
+            if (nameValue.length > 2) {
+                continue;
+            } else if (nameValue.length > 1) {
+                staticHiddenMap.put(nameValue[0], nameValue[1]);
+            } else if (nameValue.length > 0) {
+                staticHiddenMap.put(nameValue[0], "");
+            }
+        }
+
+        return staticHiddenMap;
     }
 
     /**
