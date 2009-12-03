@@ -10,9 +10,12 @@ import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.ui.ModelMap;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.vgregion.portal.iframe.model.PortletConfig;
+import se.vgregion.portal.iframe.util.LoginScreenScraper;
+
 import javax.portlet.PortletPreferences;
 import javax.portlet.ValidatorException;
 import javax.portlet.ActionRequest;
@@ -24,6 +27,9 @@ import javax.portlet.ActionRequest;
 @RequestMapping("EDIT")
 public class CSEditController {
     private static Logger log = LoggerFactory.getLogger(CSEditController.class);
+
+    @Autowired
+    private LoginScreenScraper loginScreenScraper;
 
     /**
      * RenderMapping for edit page.
@@ -39,6 +45,8 @@ public class CSEditController {
         log.debug("editPreferences: {}", portletConfig);
 
         model.addAttribute("portletConfig", portletConfig);
+
+        loginScreenScraper.advancedScraping(portletConfig);
 
         return "edit";
     }

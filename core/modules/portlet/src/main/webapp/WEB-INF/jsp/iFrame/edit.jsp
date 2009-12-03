@@ -93,7 +93,7 @@
         <table class="lfr-table">
             <tr>
                 <td><label for="<portlet:namespace/>src">External Source URL</label></td>
-                <td><form:input path="src" id="${ns}src" /></td>
+                <td><form:input path="src" id="${ns}src" size="80" /></td>
             </tr>
             <tr>
                 <td><label for="<portlet:namespace/>relative">Relativ to Context Path</label></td>
@@ -117,7 +117,7 @@
             </tr>
             <tr id="<portlet:namespace/>siteKey">
                 <td><label for="<portlet:namespace/>siteKey">Site Key</label></td>
-                <td><form:input path="siteKey" id="${ns}siteKey" /></td>
+                <td><form:input path="siteKey" id="${ns}siteKey" size="40" /></td>
             </tr>
             <tr id="<portlet:namespace/>authType">
                 <td><label for="<portlet:namespace/>authTypeInput">Authentication Type</label></td>
@@ -147,7 +147,7 @@
                                 <td><label for="<portlet:namespace/>siteUserNameField">Field Name</label></td>
                             </tr>
                             <tr>
-                                <td><form:input path="siteUserNameField" id="${ns}siteUserNameField" /></td>
+                                <td><form:input path="siteUserNameField" id="${ns}siteUserNameField" size="80" /></td>
                             </tr>
                         </table>
                     </td>
@@ -160,14 +160,14 @@
                                 <td><label for="<portlet:namespace/>sitePasswordField">Field Name</label></td>
                             </tr>
                             <tr>
-                                <td><form:input path="sitePasswordField" id="${ns}sitePasswordField" /></td>
+                                <td><form:input path="sitePasswordField" id="${ns}sitePasswordField" size="80" /></td>
                             </tr>
                         </table>
                     </td>
                 </tr>
                 <tr>
                     <td><label for="<portlet:namespace/>hiddenVariables">Hidden Variables</label></td>
-                    <td><form:input path="hiddenVariables" id="${ns}hiddenVariables"/></td>
+                    <td><form:input path="hiddenVariables" id="${ns}hiddenVariables" size="80" /></td>
                 </tr>
             </tbody>
         </table>

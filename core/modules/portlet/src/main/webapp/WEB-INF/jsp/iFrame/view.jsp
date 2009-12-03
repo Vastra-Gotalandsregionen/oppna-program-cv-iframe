@@ -8,150 +8,152 @@
 <%@page pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
 
-<portlet:defineObjects />
+<portlet:defineObjects/>
 <script type="text/javascript">
-	function <portlet:namespace />init() {
-		var hash = document.location.hash;
+    function <portlet:namespace />init() {
+        var hash = document.location.hash;
 
-		if ((hash != '#') && (hash != '')) {
-			var src = '';
+        if ((hash != '#') && (hash != '')) {
+            var src = '';
 
-			var path = hash.substring(1);
+            var path = hash.substring(1);
 
-			if (path.indexOf('http://') != 0) {
-				src = '${baseSrc}';
-			}
+            if (path.indexOf('http://') != 0) {
+                src = '${baseSrc}';
+            }
 
-			src += path;
+            src += path;
 
-			var iframe = jQuery('#<portlet:namespace />iframe');
+            var iframe = jQuery('#<portlet:namespace />iframe');
 
-			iframe.attr('src', src);
-		}
-	}
+            iframe.attr('src', src);
+        }
+    }
 
-	function <portlet:namespace />maximizeIframe(iframe) {
-		var winHeight = 0;
+    function <portlet:namespace />maximizeIframe(iframe) {
+        var winHeight = 0;
 
-		if (typeof(window.innerWidth) == 'number') {
+        if (typeof(window.innerWidth) == 'number') {
 
-			// Non-IE
+            // Non-IE
 
-			winHeight = window.innerHeight;
-		}
-		else if ((document.documentElement) &&
-				 (document.documentElement.clientWidth || document.documentElement.clientHeight)) {
+            winHeight = window.innerHeight;
+        }
+        else if ((document.documentElement) &&
+                 (document.documentElement.clientWidth || document.documentElement.clientHeight)) {
 
-			// IE 6+
+            // IE 6+
 
-			winHeight = document.documentElement.clientHeight;
-		}
-		else if ((document.body) &&
-				 (document.body.clientWidth || document.body.clientHeight)) {
+            winHeight = document.documentElement.clientHeight;
+        }
+        else if ((document.body) &&
+                 (document.body.clientWidth || document.body.clientHeight)) {
 
-			// IE 4 compatible
+                // IE 4 compatible
 
-			winHeight = document.body.clientHeight;
-		}
+                winHeight = document.body.clientHeight;
+            }
 
-		// The value 139 here is derived (tab_height * num_tab_levels) +
-		// height_of_banner + bottom_spacer. 139 just happend to work in
-		// this instance in IE and Firefox at the time.
+        // The value 139 here is derived (tab_height * num_tab_levels) +
+        // height_of_banner + bottom_spacer. 139 just happend to work in
+        // this instance in IE and Firefox at the time.
 
-		iframe.height = (winHeight - 139);
-	}
+        iframe.height = (winHeight - 139);
+    }
 
-	function <portlet:namespace />monitorIframe() {
-		var url = null;
+    function <portlet:namespace />monitorIframe() {
+        var url = null;
 
-		try {
-			var iframe = document.getElementById('<portlet:namespace />iframe');
+        try {
+            var iframe = document.getElementById('<portlet:namespace />iframe');
 
-			url = iframe.contentWindow.document.location.href;
-		}
-		catch (e) {
-			return true;
-		}
+            url = iframe.contentWindow.document.location.href;
+        }
+        catch (e) {
+            return true;
+        }
 
-		var baseSrc = '${baseSrc}';
-		var iframeSrc = '${iFrameSrc}';
+        var baseSrc = '${baseSrc}';
+        var iframeSrc = '${iFrameSrc}';
 
-		if ((url == iframeSrc) || (url == iframeSrc + '/')) {
-		}
-		else if (Liferay.Util.startsWith(url, baseSrc)) {
-			url = url.substring(baseSrc.length);
+        if ((url == iframeSrc) || (url == iframeSrc + '/')) {
+        }
+        else if (Liferay.Util.startsWith(url, baseSrc)) {
+            url = url.substring(baseSrc.length);
 
-			<portlet:namespace />updateHash(url);
-		}
-		else {
-			<portlet:namespace />updateHash(url);
-		}
+            <portlet:namespace />updateHash(url);
+        }
+        else {
+            <portlet:namespace />updateHash(url);
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	function <portlet:namespace />resizeIframe() {
-		var iframe = document.getElementById('<portlet:namespace />iframe');
+    function <portlet:namespace />resizeIframe() {
+        var iframe = document.getElementById('<portlet:namespace />iframe');
 
-		var height = null;
+        var height = null;
 
-		try {
-			height = iframe.contentWindow.document.body.scrollHeight;
-		}
-		catch (e) {
-			<portlet:namespace />maximizeIframe(iframe);
+        try {
+            height = iframe.contentWindow.document.body.scrollHeight;
+        }
+        catch (e) {
+            <portlet:namespace />maximizeIframe(iframe);
 
-			return true;
-		}
+            return true;
+        }
 
-		iframe.height = height + 50;
+        iframe.height = height + 50;
 
-		return true;
-	}
+        return true;
+    }
 
-	function <portlet:namespace />updateHash(url) {
-		document.location.hash = url;
+    function <portlet:namespace />updateHash(url) {
+        document.location.hash = url;
 
-		var maximize = jQuery('#p_p_id<portlet:namespace /> .portlet-maximize-icon a');
+        var maximize = jQuery('#p_p_id<portlet:namespace /> .portlet-maximize-icon a');
 
-		if (maximize.length != 0) {
-			var href = maximize.attr('href');
+        if (maximize.length != 0) {
+            var href = maximize.attr('href');
 
-			if (href.indexOf('#') != -1) {
-				href = href.substring(0, href.indexOf('#'));
-			}
+            if (href.indexOf('#') != -1) {
+                href = href.substring(0, href.indexOf('#'));
+            }
 
-			maximize.attr('href', href + '#' + url);
-		}
+            maximize.attr('href', href + '#' + url);
+        }
 
-		var restore = jQuery('#p_p_id<portlet:namespace /> a.portlet-icon-back');
+        var restore = jQuery('#p_p_id<portlet:namespace /> a.portlet-icon-back');
 
-		if (restore.length != 0) {
-			var href = restore.attr('href');
+        if (restore.length != 0) {
+            var href = restore.attr('href');
 
-			if (href.indexOf('#') != -1) {
-				href = href.substring(0, href.indexOf('#'));
-			}
+            if (href.indexOf('#') != -1) {
+                href = href.substring(0, href.indexOf('#'));
+            }
 
-			restore.attr('href', href + '#' + url);
-		}
-	}
+            restore.attr('href', href + '#' + url);
+        }
+    }
 
-	jQuery(
-		function() {
-			<portlet:namespace />init();
-		}
-	);
+    jQuery(
+            function() {
+                <portlet:namespace />init();
+            }
+            );
 </script>
 
-<portlet:renderURL var="changeCredentials" >
-    <portlet:param name="action" value="changeVaultCredentials" />
+<portlet:renderURL var="changeCredentials">
+    <portlet:param name="action" value="changeVaultCredentials"/>
 </portlet:renderURL>
 
-<a class="express_login" href="${changeCredentials}">
-    Ändra dina sparade inloggningsuppgifter
-</a>
-<br />
+<div style="${link_display}">
+    <a class="express_login" href="${changeCredentials}">
+        Ändra dina sparade inloggningsuppgifter
+    </a>
+    <br/>
+</div>
 <iframe src="${iFrameSrc}"
         name="<portlet:namespace />iframe"
         border="${bordercolor}"

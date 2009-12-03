@@ -22,5 +22,7 @@
     <bean name="cryptoUtils" class="se.vgregion.portal.iframe.util.CryptoUtilImpl">
         <property name="keyFile" value="classpath:cv.key" />
     </bean>
+
+    <bean name="loginScreenScraper" class="se.vgregion.portal.iframe.util.LoginScreenScraper" />
     
 </beans>
