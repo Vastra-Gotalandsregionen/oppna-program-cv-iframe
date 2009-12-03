@@ -189,7 +189,7 @@ public class PortletConfig implements Serializable {
 
         String[] variables = hiddenVariables.split("&");
         for (String variable : variables) {
-            String[] nameValue = variable.split("=");
+            String[] nameValue = variable.split("=", 2);
             if (nameValue.length > 2) {
                 continue;
             } else if (nameValue.length > 1) {

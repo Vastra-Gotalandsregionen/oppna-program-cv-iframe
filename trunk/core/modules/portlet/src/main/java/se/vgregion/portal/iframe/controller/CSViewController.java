@@ -81,6 +81,8 @@ public class CSViewController {
         model.addAttribute("scrolling", portletConfig.getHtmlAttribute("scrolling", "auto"));
         model.addAttribute("vspace", portletConfig.getHtmlAttribute("vspace", "0"));
         model.addAttribute("width", portletConfig.getHtmlAttribute("width", "100%"));
+        String linkDisplay = portletConfig.isAuth() ? "display:block;" : "display:none;";
+        model.addAttribute("link_display", linkDisplay);
 
         return "view";
     }
