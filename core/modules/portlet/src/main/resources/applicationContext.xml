@@ -23,6 +23,6 @@
         <property name="keyFile" value="classpath:cv.key" />
     </bean>
 
-    <bean name="loginScreenScraper" class="se.vgregion.portal.iframe.util.LoginScreenScraper" />
+    <bean name="loginScreenScraper" class="se.vgregion.portal.iframe.util.LoginScreenScraperImpl" />
     
 </beans>

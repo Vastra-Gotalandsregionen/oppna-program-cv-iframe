@@ -28,6 +28,7 @@ public class PortletConfig implements Serializable {
     private boolean auth;
     private String authType;
     private String formMethod;
+    private String formAction;
     private String siteUserNameField;
     private String sitePasswordField;
     private String hiddenVariables;
@@ -55,6 +56,7 @@ public class PortletConfig implements Serializable {
         portletConfig.setRelative(Boolean.valueOf(prefs.getValue("relative", "false")));
         portletConfig.setAuth(Boolean.valueOf(prefs.getValue("auth", "false")));
         portletConfig.setAuthType(prefs.getValue("auth-type", ""));
+        portletConfig.setFormAction(prefs.getValue("form-action", ""));
         portletConfig.setFormMethod(prefs.getValue("form-method", ""));
         portletConfig.setSiteUserNameField(prefs.getValue("user-name-field", ""));
         portletConfig.setSitePasswordField(prefs.getValue("password-field", ""));
@@ -77,6 +79,7 @@ public class PortletConfig implements Serializable {
             prefs.setValue("relative", String.valueOf(isRelative()));
             prefs.setValue("auth", String.valueOf(isAuth()));
             prefs.setValue("auth-type", getAuthType());
+            prefs.setValue("form-action", getFormAction());
             prefs.setValue("form-method", getFormMethod());
             prefs.setValue("user-name-field", getSiteUserNameField());
             prefs.setValue("password-field", getSitePasswordField());
@@ -146,6 +149,14 @@ public class PortletConfig implements Serializable {
 
     public void setAuthType(String authType) {
         this.authType = authType;
+    }
+
+    public String getFormAction() {
+        return formAction;
+    }
+
+    public void setFormAction(String formAction) {
+        this.formAction = formAction;
     }
 
     public String getFormMethod() {
@@ -232,6 +243,7 @@ public class PortletConfig implements Serializable {
                 append("relative", relative).
                 append("auth", auth).
                 append("authType", authType).
+                append("formAction", formAction).
                 append("formMethod", formMethod).
                 append("siteUserNameField", siteUserNameField).
                 append("sitePasswordField", sitePasswordField).

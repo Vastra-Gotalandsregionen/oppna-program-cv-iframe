@@ -17,6 +17,8 @@ import se.vgregion.portal.repository.CredentialStoreRepository;
 import javax.portlet.*;
 import java.util.Enumeration;
 import java.util.Map;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 /**
  * This action do that and that, if it has something special it is.
@@ -122,7 +124,7 @@ public class CSViewController {
     @ResourceMapping
     public String showProxyForm(PortletPreferences prefs,
                                 ResourceRequest req,
-                                ModelMap model) {
+                                ModelMap model) throws URISyntaxException {
         PortletConfig portletConfig = se.vgregion.portal.iframe.model.PortletConfig.getInstance(prefs);
         model.addAttribute("portletConfig", portletConfig);
         if (!portletConfig.isAuth() || !"form".equals(portletConfig.getAuthType())) {
@@ -131,6 +133,18 @@ public class CSViewController {
 
         UserSiteCredential siteCredential = new UserSiteCredential();
         credentialsAvailable(req, model, portletConfig, siteCredential);
+
+        URI src = new URI(portletConfig.getSrc());
+
+        String proxyFormAction;
+        if (portletConfig.getFormAction() == null || portletConfig.getFormAction().length() < 1) {
+            proxyFormAction = src.toString();
+        } else {
+            proxyFormAction = src.resolve(portletConfig.getFormAction()).toString();
+        }
+
+        model.addAttribute("proxyFormAction", proxyFormAction);
+        log.debug("ProxyFormAction: {}", proxyFormAction);
 
         if (log.isDebugEnabled()) {
             log.debug("Request attributes");

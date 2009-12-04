@@ -12,7 +12,7 @@
 
 <body onLoad="setTimeout('document.fm.submit()', 100);">
 
-<form action="${portletConfig.src}" method="${portletConfig.formMethod}" name="fm" id="fm">
+<form action="${proxyFormAction}" method="${portletConfig.formMethod}" name="fm" id="fm">
     <h1>Autologin</h1>
 
     <p>
@@ -25,6 +25,8 @@
     <c:forEach var="entry" items="${portletConfig.hiddenVarialbleMap}">
         <input name="${entry.key}" value="${entry.value}" type="hidden"/>
     </c:forEach>
+
+    <!-- input type="submit" / -->
 </form>
 
 </body>

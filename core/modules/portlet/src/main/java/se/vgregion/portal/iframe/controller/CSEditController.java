@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.vgregion.portal.iframe.model.PortletConfig;
+import se.vgregion.portal.iframe.util.LoginScreenScraperImpl;
 import se.vgregion.portal.iframe.util.LoginScreenScraper;
 
 import javax.portlet.PortletPreferences;
@@ -31,6 +32,9 @@ public class CSEditController {
     @Autowired
     private LoginScreenScraper loginScreenScraper;
 
+    public void setLoginScreenScraper(LoginScreenScraper loginScreenScraper) {
+        this.loginScreenScraper = loginScreenScraper;
+    }
     /**
      * RenderMapping for edit page.
      *

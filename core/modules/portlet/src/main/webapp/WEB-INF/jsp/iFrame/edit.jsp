@@ -11,6 +11,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%--<%@ taglib prefix="liferay-ui" uri="http://liferay.com/tld/ui" %>--%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="liferay-ui" uri="http://liferay.com/tld/ui" %>
 
 
 <style type="text/css">
@@ -92,13 +93,13 @@
         <legend>General</legend>
         <table class="lfr-table">
             <tr>
-                <td><label for="<portlet:namespace/>src">External Source URL</label></td>
+                <td><label for="<portlet:namespace/>src">IFrame Source URL</label></td>
                 <td><form:input path="src" id="${ns}src" size="80" /></td>
             </tr>
-            <tr>
+            <!--tr>
                 <td><label for="<portlet:namespace/>relative">Relativ to Context Path</label></td>
                 <td><form:checkbox path="relative" id="${ns}relative" /></td>
-            </tr>
+            </tr-->
         </table>
     </fieldset>
 
@@ -140,30 +141,16 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>User Name</td>
-                    <td>
-                        <table class="lfr-table">
-                            <tr id="<portlet:namespace/>userName">
-                                <td><label for="<portlet:namespace/>siteUserNameField">Field Name</label></td>
-                            </tr>
-                            <tr>
-                                <td><form:input path="siteUserNameField" id="${ns}siteUserNameField" size="80" /></td>
-                            </tr>
-                        </table>
-                    </td>
+                    <td><label for="<portlet:namespace/>formActionField">Authentication Form Action</label></td>
+                    <td><form:input path="formAction" id="${ns}formActionField" size="80" /></td>
                 </tr>
                 <tr>
-                    <td>Password</td>
-                    <td>
-                        <table class="lfr-table">
-                            <tr id="<portlet:namespace/>password">
-                                <td><label for="<portlet:namespace/>sitePasswordField">Field Name</label></td>
-                            </tr>
-                            <tr>
-                                <td><form:input path="sitePasswordField" id="${ns}sitePasswordField" size="80" /></td>
-                            </tr>
-                        </table>
-                    </td>
+                    <td><label for="<portlet:namespace/>siteUserNameField">User Field Name</label></td>
+                    <td><form:input path="siteUserNameField" id="${ns}siteUserNameField" size="80" /></td>
+                </tr>
+                <tr>
+                    <td><label for="<portlet:namespace/>sitePasswordField">Password Field Name</label></td>
+                    <td><form:input path="sitePasswordField" id="${ns}sitePasswordField" size="80" /></td>
                 </tr>
                 <tr>
                     <td><label for="<portlet:namespace/>hiddenVariables">Hidden Variables</label></td>
