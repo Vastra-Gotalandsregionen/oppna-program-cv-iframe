@@ -13,6 +13,7 @@ import se.vgregion.portal.repository.CredentialStoreRepository;
 import javax.portlet.*;
 import java.util.Map;
 import java.util.HashMap;
+import java.net.URISyntaxException;
 
 /**
  * This action do that and that, if it has something special it is.
@@ -272,7 +273,7 @@ public class CSViewControllerTest extends BastTestSetup {
     }
 
     @Test
-    public void testShowProxyForm_AuthForm() throws ReadOnlyException {
+    public void testShowProxyForm_AuthForm() throws ReadOnlyException, URISyntaxException {
         PortletPreferences prefs = new MockPortletPreferences();
         initPortletPreferences(prefs);
 
@@ -293,7 +294,7 @@ public class CSViewControllerTest extends BastTestSetup {
     }
 
     @Test
-    public void testShowProxyForm_NoAuthForm() throws ReadOnlyException {
+    public void testShowProxyForm_NoAuthForm() throws ReadOnlyException, URISyntaxException {
         PortletPreferences prefs = new MockPortletPreferences();
         initPortletPreferences(prefs);
         prefs.setValue("auth", "false");
@@ -309,7 +310,7 @@ public class CSViewControllerTest extends BastTestSetup {
     }
 
     @Test
-    public void testShowProxyForm_AuthNoForm() throws ReadOnlyException {
+    public void testShowProxyForm_AuthNoForm() throws ReadOnlyException, URISyntaxException {
         PortletPreferences prefs = new MockPortletPreferences();
         initPortletPreferences(prefs);
         prefs.setValue("auth-type", "basic");
@@ -325,7 +326,7 @@ public class CSViewControllerTest extends BastTestSetup {
     }
 
     @Test
-    public void testShowProxyForm_NoAuthNoForm() throws ReadOnlyException {
+    public void testShowProxyForm_NoAuthNoForm() throws ReadOnlyException, URISyntaxException {
         PortletPreferences prefs = new MockPortletPreferences();
         initPortletPreferences(prefs);
         prefs.setValue("auth", "false");
