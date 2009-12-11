@@ -29,6 +29,8 @@ public class PortletConfig implements Serializable {
     private String authType;
     private String formMethod;
     private String formAction;
+    private boolean screenNameOnly;
+    private boolean suggestScreenName = true;
     private String siteUserNameField;
     private String sitePasswordField;
     private String hiddenVariables;
@@ -58,6 +60,8 @@ public class PortletConfig implements Serializable {
         portletConfig.setAuthType(prefs.getValue("auth-type", ""));
         portletConfig.setFormAction(prefs.getValue("form-action", ""));
         portletConfig.setFormMethod(prefs.getValue("form-method", ""));
+        portletConfig.setScreenNameOnly(Boolean.valueOf(prefs.getValue("screenNameOnly", "false")));
+        portletConfig.setSuggestScreenName(Boolean.valueOf(prefs.getValue("suggestScreenName", "true")));
         portletConfig.setSiteUserNameField(prefs.getValue("user-name-field", ""));
         portletConfig.setSitePasswordField(prefs.getValue("password-field", ""));
         portletConfig.setHiddenVariables(prefs.getValue("hidden-variables", ""));
@@ -81,6 +85,8 @@ public class PortletConfig implements Serializable {
             prefs.setValue("auth-type", getAuthType());
             prefs.setValue("form-action", getFormAction());
             prefs.setValue("form-method", getFormMethod());
+            prefs.setValue("screenNameOnly", String.valueOf(isScreenNameOnly()));
+            prefs.setValue("suggestScreenName", String.valueOf(isSuggestScreenName()));
             prefs.setValue("user-name-field", getSiteUserNameField());
             prefs.setValue("password-field", getSitePasswordField());
             prefs.setValue("hidden-variables", getHiddenVariables());
@@ -167,6 +173,22 @@ public class PortletConfig implements Serializable {
         this.formMethod = formMethod;
     }
 
+    public boolean isScreenNameOnly() {
+        return screenNameOnly;
+    }
+
+    public void setScreenNameOnly(boolean screenNameOnly) {
+        this.screenNameOnly = screenNameOnly;
+    }
+
+    public boolean isSuggestScreenName() {
+        return suggestScreenName;
+    }
+
+    public void setSuggestScreenName(boolean suggestScreenName) {
+        this.suggestScreenName = suggestScreenName;
+    }
+
     public String getSiteUserNameField() {
         return siteUserNameField;
     }
@@ -245,6 +267,8 @@ public class PortletConfig implements Serializable {
                 append("authType", authType).
                 append("formAction", formAction).
                 append("formMethod", formMethod).
+                append("screenNameOnly", screenNameOnly).
+                append("suggestScreenName", suggestScreenName).
                 append("siteUserNameField", siteUserNameField).
                 append("sitePasswordField", sitePasswordField).
                 append("hiddenVariables", hiddenVariables).

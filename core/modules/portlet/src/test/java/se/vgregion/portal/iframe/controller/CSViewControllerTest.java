@@ -248,7 +248,79 @@ public class CSViewControllerTest extends BastTestSetup {
 
         UserSiteCredential siteCredential = (UserSiteCredential) model.get("siteCredential");
         assertNotNull(siteCredential);
+        assertEquals("test-user", siteCredential.getUid());
+        assertEquals("test-key", siteCredential.getSiteKey());
+        assertEquals("test-user", siteCredential.getSiteUser());
+        assertNull(siteCredential.getSitePassword());
+    }
 
+    @Test
+    public void testChangeVaultCredentials_NoUserSiteCredential_NotSuggestScreenName() throws ReadOnlyException {
+        PortletPreferences prefs = new MockPortletPreferences();
+        initPortletPreferences(prefs);
+        prefs.setValue("suggestScreenName", "false");
+
+        MockRenderRequest mockReq = new MockRenderRequest(PortletMode.VIEW);
+        RenderRequest req = (RenderRequest)initPortletRequest(mockReq);
+        ModelMap model = new ModelMap();
+
+        String response = controller.changeVaultCredentials(prefs, req, model);
+        assertEquals("userCredentialForm", response);
+
+        PortletConfig portletConfig = (se.vgregion.portal.iframe.model.PortletConfig) model.get("portletConfig");
+        assertNotNull(portletConfig);
+        assertEquals("test-key", portletConfig.getSiteKey());
+        assertEquals("test-src", portletConfig.getSrc());
+        assertEquals(Boolean.FALSE, portletConfig.isRelative());
+        assertEquals(Boolean.TRUE, portletConfig.isAuth());
+        assertEquals("form", portletConfig.getAuthType());
+        assertEquals("post", portletConfig.getFormMethod());
+        assertEquals("username", portletConfig.getSiteUserNameField());
+        assertEquals("password", portletConfig.getSitePasswordField());
+        assertEquals("test1=hidden1;test2=hidden2", portletConfig.getHiddenVariables());
+        assertEquals("html1=apa\nhtml2=bepa", portletConfig.getHtmlAttributes());
+
+        UserSiteCredential siteCredential = (UserSiteCredential) model.get("siteCredential");
+        assertNotNull(siteCredential);
+        assertEquals("test-user", siteCredential.getUid());
+        assertEquals("test-key", siteCredential.getSiteKey());
+        assertNull(siteCredential.getSiteUser());
+        assertNull(siteCredential.getSitePassword());
+    }
+
+    @Test
+    public void testChangeVaultCredentials_NoUserSiteCredential_ScreenNameOnly() throws ReadOnlyException {
+        PortletPreferences prefs = new MockPortletPreferences();
+        initPortletPreferences(prefs);
+        prefs.setValue("suggestScreenName", "false");
+        prefs.setValue("screenNameOnly", "true");
+
+        MockRenderRequest mockReq = new MockRenderRequest(PortletMode.VIEW);
+        RenderRequest req = (RenderRequest)initPortletRequest(mockReq);
+        ModelMap model = new ModelMap();
+
+        String response = controller.changeVaultCredentials(prefs, req, model);
+        assertEquals("userCredentialForm", response);
+
+        PortletConfig portletConfig = (se.vgregion.portal.iframe.model.PortletConfig) model.get("portletConfig");
+        assertNotNull(portletConfig);
+        assertEquals("test-key", portletConfig.getSiteKey());
+        assertEquals("test-src", portletConfig.getSrc());
+        assertEquals(Boolean.FALSE, portletConfig.isRelative());
+        assertEquals(Boolean.TRUE, portletConfig.isAuth());
+        assertEquals("form", portletConfig.getAuthType());
+        assertEquals("post", portletConfig.getFormMethod());
+        assertEquals("username", portletConfig.getSiteUserNameField());
+        assertEquals("password", portletConfig.getSitePasswordField());
+        assertEquals("test1=hidden1;test2=hidden2", portletConfig.getHiddenVariables());
+        assertEquals("html1=apa\nhtml2=bepa", portletConfig.getHtmlAttributes());
+
+        UserSiteCredential siteCredential = (UserSiteCredential) model.get("siteCredential");
+        assertNotNull(siteCredential);
+        assertEquals("test-user", siteCredential.getUid());
+        assertEquals("test-key", siteCredential.getSiteKey());
+        assertEquals("test-user", siteCredential.getSiteUser());
+        assertNull(siteCredential.getSitePassword());
     }
 
     @Test
@@ -276,6 +348,7 @@ public class CSViewControllerTest extends BastTestSetup {
     public void testShowProxyForm_AuthForm() throws ReadOnlyException, URISyntaxException {
         PortletPreferences prefs = new MockPortletPreferences();
         initPortletPreferences(prefs);
+        prefs.setValue("site-key", "test-site-key");
 
         ResourceRequest mockReq = new MockResourceRequest();
         ResourceRequest req = (ResourceRequest) initPortletRequest(mockReq);
@@ -291,6 +364,37 @@ public class CSViewControllerTest extends BastTestSetup {
 
         UserSiteCredential siteCredential = (UserSiteCredential)model.get("siteCredential");
         assertNotNull(siteCredential);
+        assertEquals("test-user", siteCredential.getUid());
+        assertEquals("test-site-key", siteCredential.getSiteKey());
+        assertEquals("test-site-user", siteCredential.getSiteUser());
+        assertEquals("test-site-password", siteCredential.getSitePassword());
+    }
+
+    @Test
+    public void testShowProxyForm_AuthFormScreenNameOnly() throws ReadOnlyException, URISyntaxException {
+        PortletPreferences prefs = new MockPortletPreferences();
+        initPortletPreferences(prefs);
+        prefs.setValue("site-key", "test-site-key");
+        prefs.setValue("screenNameOnly", "true");
+
+        ResourceRequest mockReq = new MockResourceRequest();
+        ResourceRequest req = (ResourceRequest) initPortletRequest(mockReq);
+
+        ModelMap model = new ModelMap();
+
+        String result = controller.showProxyForm(prefs, req, model);
+
+        assertEquals("proxyLoginForm", result);
+
+        PortletConfig portletConfig = (PortletConfig) model.get("portletConfig");
+        assertNotNull(portletConfig);
+
+        UserSiteCredential siteCredential = (UserSiteCredential)model.get("siteCredential");
+        assertNotNull(siteCredential);
+        assertEquals("test-user", siteCredential.getUid());
+        assertEquals("test-site-key", siteCredential.getSiteKey());
+        assertEquals("test-user", siteCredential.getSiteUser());
+        assertEquals("test-site-password", siteCredential.getSitePassword());
     }
 
     @Test
