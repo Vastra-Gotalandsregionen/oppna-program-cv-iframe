@@ -12,10 +12,11 @@
     <form:hidden path="siteKey" />
 
     <label for="siteUser">Användarnamn</label>
-    <form:input path="siteUser" id="siteUser" />
+    <form:input path="siteUser" id="siteUser" disabled="${portletConfig.screenNameOnly}"/>
     
     <label for="sitePassword">Lösenord</label>
-    <form:password path="sitePassword" id="sitePassword" />
+    <form:password path="sitePassword" id="sitePassword" showPassword="true" />
     
     <input type="submit" value="Spara" />
+    <input type="submit" value="Avbryt" name="_cancel" />
 </form:form>

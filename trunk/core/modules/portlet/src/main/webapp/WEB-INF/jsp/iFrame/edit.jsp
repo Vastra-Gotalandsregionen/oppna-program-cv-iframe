@@ -145,6 +145,14 @@
                     <td><form:input path="formAction" id="${ns}formActionField" size="80" /></td>
                 </tr>
                 <tr>
+                    <td><label for="<portlet:namespace/>suggestScreenNameField">Suggest ScreenName</label></td>
+                    <td><form:checkbox path="suggestScreenName" id="${ns}suggestScreenName" /></td>
+                </tr>
+                <tr>
+                    <td><label for="<portlet:namespace/>screenNameOnlyField">ScreenName Only</label></td>
+                    <td><form:checkbox path="screenNameOnly" id="${ns}screenNameOnly" /></td>
+                </tr>
+                <tr>
                     <td><label for="<portlet:namespace/>siteUserNameField">User Field Name</label></td>
                     <td><form:input path="siteUserNameField" id="${ns}siteUserNameField" size="80" /></td>
                 </tr>

@@ -10,15 +10,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
+import org.springframework.web.portlet.util.PortletUtils;
 import se.vgregion.portal.iframe.model.PortletConfig;
 import se.vgregion.portal.iframe.model.UserSiteCredential;
 import se.vgregion.portal.repository.CredentialStoreRepository;
 
 import javax.portlet.*;
-import java.util.Enumeration;
-import java.util.Map;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Enumeration;
+import java.util.Map;
 
 /**
  * This action do that and that, if it has something special it is.
@@ -173,9 +174,11 @@ public class CSViewController {
      */
     @ActionMapping
     public void storeUserCredential(@ModelAttribute("siteCredential")
-    UserSiteCredential siteCredential) {
-        credentialStoreRepository.addUserSiteCredential(siteCredential);
-        log.debug("storeUserCredential: {}", siteCredential);
+    UserSiteCredential siteCredential, ActionRequest req) {
+        if (!PortletUtils.hasSubmitParameter(req, "_cancel")) {
+            credentialStoreRepository.addUserSiteCredential(siteCredential);
+            log.debug("storeUserCredential: {}", siteCredential);
+        }
     }
 
     private String prepareView(RenderResponse resp,
@@ -220,11 +223,16 @@ public class CSViewController {
             String uid = lookupUid(req);
             returnSiteCredential.setUid(uid);
             returnSiteCredential.setSiteKey(portletConfig.getSiteKey());
+            if (portletConfig.isScreenNameOnly() || portletConfig.isSuggestScreenName()) {
+                returnSiteCredential.setSiteUser(uid);
+            }
 
             UserSiteCredential siteCredential =
                     credentialStoreRepository.getUserSiteCredential(uid, portletConfig.getSiteKey());
             if (siteCredential != null) {
-                returnSiteCredential.setSiteUser(siteCredential.getSiteUser());
+                if (!portletConfig.isScreenNameOnly()) {
+                    returnSiteCredential.setSiteUser(siteCredential.getSiteUser());
+                }
                 returnSiteCredential.setSitePassword(siteCredential.getSitePassword());
             } else {
                 userSiteCredentialExist = false;
