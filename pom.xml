@@ -27,6 +27,7 @@ Generation time : 2009-10-28 12:45:52 CET
         <apache.cxf.version>2.1.1</apache.cxf.version>
         <portlet-api.version>2.0</portlet-api.version>
         <jstl.version>1.2</jstl.version>
+        <compileSource>1.5</compileSource>
     </properties>
 
     <modules>
@@ -34,18 +35,68 @@ Generation time : 2009-10-28 12:45:52 CET
     </modules>
 
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>2.0.2</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>2.1.1</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-eclipse-plugin</artifactId>
+                    <version>2.7</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-scm-plugin</artifactId>
+                    <version>1.2</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-checkstyle-plugin</artifactId>
+                    <version>2.4</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-jxr-plugin</artifactId>
+                    <version>2.1</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>2.6.1</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-pmd-plugin</artifactId>
+                    <version>2.4</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>findbugs-maven-plugin</artifactId>
+                    <version>2.0.1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>failsafe-maven-plugin</artifactId>
+                    <version>2.4.3-alpha-1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>cobertura-maven-plugin</artifactId>
+                    <version>2.3</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
+                    <source>${compileSource}</source>
+                    <target>${compileSource}</target>
                     <optimize>false</optimize>
                     <debug>true</debug>
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
                 <executions>
                     <execution>
@@ -58,10 +109,29 @@ Generation time : 2009-10-28 12:45:52 CET
                 </executions>
             </plugin>
             <plugin>
-                <!--
-                  Configure eclipse plug-in to generate a context root that does not have the version number on it
-                -->
-                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>failsafe-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <artifactId>maven-eclipse-plugin</artifactId>
                 <configuration>
                     <wtpversion>1.5</wtpversion>
@@ -70,6 +140,12 @@ Generation time : 2009-10-28 12:45:52 CET
                     <additionalProjectnatures>
                         <projectnature>org.springframework.ide.eclipse.core.springnature</projectnature>
                     </additionalProjectnatures>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-scm-plugin</artifactId>
+                <configuration>
+                    <connectionType>developerConnection</connectionType>
                 </configuration>
             </plugin>
         </plugins>
@@ -104,6 +180,21 @@ Generation time : 2009-10-28 12:45:52 CET
                     <configLocation>
                         http://oppna-program.googlecode.com/svn/dev-environment/checkstyle/sun_checks_vgr.xml
                     </configLocation>
+                    <suppressionsLocation>
+                        http://oppna-program.googlecode.com/svn/dev-environment/checkstyle/sun_checks_vgr_suppressions.xml
+                    </suppressionsLocation>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-jxr-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <artifactId>maven-javadoc-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <configuration>
+                    <targetJdk>${compileSource}</targetJdk>
                 </configuration>
             </plugin>
             <plugin>
@@ -111,6 +202,8 @@ Generation time : 2009-10-28 12:45:52 CET
                 <artifactId>findbugs-maven-plugin</artifactId>
                 <configuration>
                     <findbugsXmlOutput>true</findbugsXmlOutput>
+                    <findbugsXmlWithMessages>true</findbugsXmlWithMessages>
+                    <xmlOutput>true</xmlOutput>
                 </configuration>
             </plugin>
         </plugins>
