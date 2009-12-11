@@ -1,19 +1,19 @@
 package se.vgregion.portal.iframe.controller;
 
 import org.junit.After;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
 import org.springframework.mock.web.portlet.*;
 import org.springframework.ui.ModelMap;
 import se.vgregion.portal.iframe.model.PortletConfig;
-import se.vgregion.portal.iframe.model.*;
+import se.vgregion.portal.iframe.model.UserSiteCredential;
 import se.vgregion.portal.repository.CredentialStoreRepository;
 
 import javax.portlet.*;
-import java.util.Map;
-import java.util.HashMap;
 import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This action do that and that, if it has something special it is.
@@ -21,7 +21,7 @@ import java.net.URISyntaxException;
  * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
  */
 public class CSViewControllerTest extends BastTestSetup {
-    
+
     CSViewController controller;
 
     @Before
@@ -132,8 +132,8 @@ public class CSViewControllerTest extends BastTestSetup {
         assertEquals("test-site-password", siteCredential.getSitePassword());
 
         // Test model
-        assertEquals("http://"+siteCredential.getSiteUser()+":"+siteCredential.getSitePassword()+"@www.google.com", model.get("iFrameSrc"));
-        assertEquals("http://"+siteCredential.getSiteUser()+":"+siteCredential.getSitePassword()+"@www.google.com", model.get("baseSrc"));
+        assertEquals("http://" + siteCredential.getSiteUser() + ":" + siteCredential.getSitePassword() + "@www.google.com", model.get("iFrameSrc"));
+        assertEquals("http://" + siteCredential.getSiteUser() + ":" + siteCredential.getSitePassword() + "@www.google.com", model.get("baseSrc"));
         assertEquals("300", model.get("iFrameHeight"));
         assertEquals("0", model.get("border"));
         assertEquals("#000000", model.get("bordercolor"));
@@ -196,7 +196,7 @@ public class CSViewControllerTest extends BastTestSetup {
         prefs.setValue("site-key", "test-site-key");
 
         MockRenderRequest mockReq = new MockRenderRequest(PortletMode.VIEW);
-        mockReq = (MockRenderRequest)initPortletRequest(mockReq);
+        mockReq = (MockRenderRequest) initPortletRequest(mockReq);
 
         MockRenderResponse mockResp = new TestStubMockRenderResponse();
         mockResp.createResourceURL();
@@ -227,7 +227,7 @@ public class CSViewControllerTest extends BastTestSetup {
         initPortletPreferences(prefs);
 
         MockRenderRequest mockReq = new MockRenderRequest(PortletMode.VIEW);
-        RenderRequest req = (RenderRequest)initPortletRequest(mockReq);
+        RenderRequest req = (RenderRequest) initPortletRequest(mockReq);
         ModelMap model = new ModelMap();
 
         String response = controller.changeVaultCredentials(prefs, req, model);
@@ -261,7 +261,7 @@ public class CSViewControllerTest extends BastTestSetup {
         prefs.setValue("suggestScreenName", "false");
 
         MockRenderRequest mockReq = new MockRenderRequest(PortletMode.VIEW);
-        RenderRequest req = (RenderRequest)initPortletRequest(mockReq);
+        RenderRequest req = (RenderRequest) initPortletRequest(mockReq);
         ModelMap model = new ModelMap();
 
         String response = controller.changeVaultCredentials(prefs, req, model);
@@ -296,7 +296,7 @@ public class CSViewControllerTest extends BastTestSetup {
         prefs.setValue("screenNameOnly", "true");
 
         MockRenderRequest mockReq = new MockRenderRequest(PortletMode.VIEW);
-        RenderRequest req = (RenderRequest)initPortletRequest(mockReq);
+        RenderRequest req = (RenderRequest) initPortletRequest(mockReq);
         ModelMap model = new ModelMap();
 
         String response = controller.changeVaultCredentials(prefs, req, model);
@@ -330,7 +330,7 @@ public class CSViewControllerTest extends BastTestSetup {
         prefs.setValue("auth", "false");
 
         MockRenderRequest mockReq = new MockRenderRequest(PortletMode.VIEW);
-        RenderRequest req = (RenderRequest)initPortletRequest(mockReq);
+        RenderRequest req = (RenderRequest) initPortletRequest(mockReq);
         ModelMap model = new ModelMap();
 
         String response = controller.changeVaultCredentials(prefs, req, model);
@@ -362,7 +362,7 @@ public class CSViewControllerTest extends BastTestSetup {
         PortletConfig portletConfig = (PortletConfig) model.get("portletConfig");
         assertNotNull(portletConfig);
 
-        UserSiteCredential siteCredential = (UserSiteCredential)model.get("siteCredential");
+        UserSiteCredential siteCredential = (UserSiteCredential) model.get("siteCredential");
         assertNotNull(siteCredential);
         assertEquals("test-user", siteCredential.getUid());
         assertEquals("test-site-key", siteCredential.getSiteKey());
@@ -389,7 +389,7 @@ public class CSViewControllerTest extends BastTestSetup {
         PortletConfig portletConfig = (PortletConfig) model.get("portletConfig");
         assertNotNull(portletConfig);
 
-        UserSiteCredential siteCredential = (UserSiteCredential)model.get("siteCredential");
+        UserSiteCredential siteCredential = (UserSiteCredential) model.get("siteCredential");
         assertNotNull(siteCredential);
         assertEquals("test-user", siteCredential.getUid());
         assertEquals("test-site-key", siteCredential.getSiteKey());
@@ -447,12 +447,87 @@ public class CSViewControllerTest extends BastTestSetup {
     }
 
     @Test
-    public void testStoreUserCredential() {
-        // TODO: How test this?
+    public void testStoreUserCredential_StoreInvalidUid() {
+        UserSiteCredential userSiteCredential = new UserSiteCredential();
+        userSiteCredential.setSiteKey("test-key");
+        MockActionRequest request = new MockActionRequest();
+
+        try {
+            controller.storeUserCredential(userSiteCredential, request);
+            fail("No uid, exception should have been thrown.");
+        } catch (Exception ex) {
+            // OK
+        }
+
+        userSiteCredential.setUid(" ");
+        try {
+            controller.storeUserCredential(userSiteCredential, request);
+            fail("No uid, exception should have been thrown.");
+        } catch (Exception ex) {
+            // OK
+        }
+    }
+
+    @Test
+    public void testStoreUserCredential_StoreInvalidSiteKey() {
+        UserSiteCredential userSiteCredential = new UserSiteCredential();
+        userSiteCredential.setUid("test-user");
+        MockActionRequest request = new MockActionRequest();
+
+        try {
+            controller.storeUserCredential(userSiteCredential, request);
+            fail("No SiteKey, exception should have been thrown.");
+        } catch (Exception ex) {
+            // OK
+        }
+
+        userSiteCredential.setSiteKey(" ");
+        try {
+            controller.storeUserCredential(userSiteCredential, request);
+            fail("No SiteKey, exception should have been thrown.");
+        } catch (Exception ex) {
+            // OK
+        }
+    }
+
+    @Test
+    public void testStoreUserCredential_Store() {
+        UserSiteCredential userSiteCredential = new UserSiteCredential();
+        userSiteCredential.setUid("test-user");
+        userSiteCredential.setSiteKey("test-key");
+        MockActionRequest request = new MockActionRequest();
+
+        final TestStubCredentialStoreRepository storeRepository = new TestStubCredentialStoreRepository();
+        controller.setCredentialStoreRepository(storeRepository);
+
+        controller.storeUserCredential(userSiteCredential, request);
+
+        assertEquals(1, storeRepository.getStoreCalled());
+    }
+
+    @Test
+    public void testStoreUserCredential_StoreCanceled() {
+        UserSiteCredential userSiteCredential = new UserSiteCredential();
+        userSiteCredential.setUid("test-user");
+        userSiteCredential.setSiteKey("test-key");
+        MockActionRequest request = new MockActionRequest();
+        request.setParameter("_cancel", "");
+
+        final TestStubCredentialStoreRepository storeRepository = new TestStubCredentialStoreRepository();
+        controller.setCredentialStoreRepository(storeRepository);
+
+        controller.storeUserCredential(userSiteCredential, request);
+
+        assertEquals(0, storeRepository.getStoreCalled());
     }
 
     class TestStubCredentialStoreRepository implements CredentialStoreRepository {
-       
+        private int storeCalled = 0;
+
+        public int getStoreCalled() {
+            return storeCalled;
+        }
+
         public UserSiteCredential getUserSiteCredential(String uid, String siteKey) {
             if ("test-user".equals(uid) && "test-site-key".equals(siteKey)) {
                 UserSiteCredential siteCredential = new UserSiteCredential("test-user", "test-site-key");
@@ -466,7 +541,7 @@ public class CSViewControllerTest extends BastTestSetup {
         }
 
         public void addUserSiteCredential(UserSiteCredential siteCredential) {
-            //To change body of implemented methods use File | Settings | File Templates.
+            storeCalled++;
         }
     }
 

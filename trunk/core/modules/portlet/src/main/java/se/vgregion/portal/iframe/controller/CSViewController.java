@@ -175,9 +175,15 @@ public class CSViewController {
     @ActionMapping
     public void storeUserCredential(@ModelAttribute("siteCredential")
     UserSiteCredential siteCredential, ActionRequest req) {
+        if (siteCredential.getUid() == null || siteCredential.getUid().trim().length() < 1) {
+            throw new RuntimeException("ERROR: Unknown user. Cannot store credential.");
+        }
+        if (siteCredential.getSiteKey() == null || siteCredential.getSiteKey().trim().length() < 1) {
+            throw new RuntimeException("CONFIGURATION ERROR: No site-key given. Cannot store user credential.");
+        }
         if (!PortletUtils.hasSubmitParameter(req, "_cancel")) {
             credentialStoreRepository.addUserSiteCredential(siteCredential);
-            log.debug("storeUserCredential: {}", siteCredential);
+//            log.debug("storeUserCredential: {}", siteCredential);
         }
     }
 

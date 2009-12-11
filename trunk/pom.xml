@@ -23,7 +23,7 @@ Generation time : 2009-10-28 12:45:52 CET
     <!-- common library versions -->
     <properties>
         <javg.version>1.2-SNAPSHOT</javg.version>
-        <spring.fw.version>3.0.0.RC1</spring.fw.version>
+        <spring.fw.version>3.0.0.RC3</spring.fw.version>
         <apache.cxf.version>2.1.1</apache.cxf.version>
         <portlet-api.version>2.0</portlet-api.version>
         <jstl.version>1.2</jstl.version>
