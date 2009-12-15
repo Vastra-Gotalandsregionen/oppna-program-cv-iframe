@@ -13,6 +13,7 @@ import javax.portlet.ValidatorException;
 
 import se.vgregion.portal.iframe.model.PortletConfig;
 import se.vgregion.portal.iframe.util.LoginScreenScraper;
+import se.vgregion.portal.iframe.BaseTestSetup;
 
 import java.io.IOException;
 
@@ -21,7 +22,7 @@ import java.io.IOException;
  *
  * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
  */
-public class CSEditControllerTest extends BastTestSetup {
+public class CSEditControllerTest extends BaseTestSetup {
     TestMockPortletPreferences stubPrefs;
     ModelMap model = new ModelMap();
     LoginScreenScraper stubLoginScreenScraper;
@@ -53,7 +54,7 @@ public class CSEditControllerTest extends BastTestSetup {
         assertEquals("post", portletConfig.getFormMethod());
         assertEquals("username", portletConfig.getSiteUserNameField());
         assertEquals("password", portletConfig.getSitePasswordField());
-        assertEquals("test1=hidden1;test2=hidden2", portletConfig.getHiddenVariables());
+        assertEquals("test1=hidden1&test2=hidden2", portletConfig.getHiddenVariables());
         assertEquals("html1=apa\nhtml2=bepa", portletConfig.getHtmlAttributes());
 
         assertEquals("apa", portletConfig.getHtmlAttribute("html1", ""));

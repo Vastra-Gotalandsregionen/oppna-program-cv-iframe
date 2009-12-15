@@ -239,9 +239,7 @@ public class PortletConfig implements Serializable {
         String[] variables = hiddenVariables.split("&");
         for (String variable : variables) {
             String[] nameValue = variable.split("=", 2);
-            if (nameValue.length > 2) {
-                continue;
-            } else if (nameValue.length > 1) {
+            if (nameValue.length > 1) {
                 staticHiddenMap.put(nameValue[0], nameValue[1]);
             } else if (nameValue.length > 0) {
                 staticHiddenMap.put(nameValue[0], "");
