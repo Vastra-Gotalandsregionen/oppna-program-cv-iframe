@@ -171,6 +171,53 @@ public class CSViewControllerTest extends BastTestSetup {
         assertEquals("test-site-user", siteCredential.getSiteUser());
         assertEquals("test-site-password", siteCredential.getSitePassword());
 
+        assertEquals("http://localhost/mockportlet?resourceID=resourceId", model.get("iFrameSrc"));
+        assertEquals("http://localhost/mockportlet?resourceID=resourceId", model.get("preIFrameSrc"));
+
+        // Test model
+        assertEquals("http://localhost/mockportlet?resourceID=resourceId", model.get("iFrameSrc"));
+        assertEquals("http://localhost/", model.get("baseSrc"));
+        assertEquals("300", model.get("iFrameHeight"));
+        assertEquals("0", model.get("border"));
+        assertEquals("#000000", model.get("bordercolor"));
+        assertEquals("0", model.get("frameborder"));
+        assertEquals("600", model.get("height-maximized"));
+        assertEquals("300", model.get("height-normal"));
+        assertEquals("0", model.get("hspace"));
+        assertEquals("auto", model.get("scrolling"));
+        assertEquals("0", model.get("vspace"));
+        assertEquals("100%", model.get("width"));
+    }
+
+    @Test
+    public void testShowView_AuthSiteUserExistSiteKeyExistForm_PreAction() throws ReadOnlyException {
+        PortletPreferences prefs = new MockPortletPreferences();
+        initPortletPreferences(prefs);
+        prefs.setValue("pre-iframe-action", "http://localhost/mockportlet?preaction");
+        prefs.setValue("src", "http://www.google.com");
+        prefs.setValue("auth", "true");
+        prefs.setValue("auth-type", "form");
+        prefs.setValue("site-key", "test-site-key");
+
+        MockRenderRequest mockReq = new MockRenderRequest(PortletMode.VIEW);
+        RenderRequest req = (MockRenderRequest) initPortletRequest(mockReq);
+
+        MockRenderResponse resp = new TestStubMockRenderResponse();
+
+        ModelMap model = new ModelMap();
+
+        String response = controller.showView(prefs, req, resp, model);
+        assertEquals("view", response);
+
+        UserSiteCredential siteCredential = (UserSiteCredential) model.get("siteCredential");
+        assertEquals("test-user", siteCredential.getUid());
+        assertEquals("test-site-key", siteCredential.getSiteKey());
+        assertEquals("test-site-user", siteCredential.getSiteUser());
+        assertEquals("test-site-password", siteCredential.getSitePassword());
+
+        assertEquals("http://localhost/mockportlet?resourceID=resourceId", model.get("iFrameSrc"));
+        assertEquals("http://localhost/mockportlet?preaction", model.get("preIFrameSrc"));
+
         // Test model
         assertEquals("http://localhost/mockportlet?resourceID=resourceId", model.get("iFrameSrc"));
         assertEquals("http://localhost/", model.get("baseSrc"));
@@ -361,6 +408,10 @@ public class CSViewControllerTest extends BastTestSetup {
 
         PortletConfig portletConfig = (PortletConfig) model.get("portletConfig");
         assertNotNull(portletConfig);
+        assertEquals("", portletConfig.getPreIFrameAction());
+
+        String proxyFormAction = (String)model.get("proxyFormAction");
+        assertEquals("test-src", proxyFormAction);
 
         UserSiteCredential siteCredential = (UserSiteCredential) model.get("siteCredential");
         assertNotNull(siteCredential);

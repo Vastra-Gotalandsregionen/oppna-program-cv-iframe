@@ -1,5 +1,10 @@
 package se.vgregion.portal.iframe.controller;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.util.EntityUtils;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +21,7 @@ import se.vgregion.portal.iframe.model.UserSiteCredential;
 import se.vgregion.portal.repository.CredentialStoreRepository;
 
 import javax.portlet.*;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Enumeration;
@@ -68,11 +74,18 @@ public class CSViewController {
         }
 
         String iFrameSrc = prepareView(resp, portletConfig, siteCredential);
+        String preIFrameSrc;
+        if (portletConfig.getPreIFrameAction() != null && portletConfig.getPreIFrameAction().length() > 0) {
+            preIFrameSrc = portletConfig.getPreIFrameAction();
+        } else {
+            preIFrameSrc = iFrameSrc;
+        }
         String baseSrc = getBaseSrc(iFrameSrc);
 
         String iFrameHeight = getIFrameHeight(req, portletConfig);
 
         model.addAttribute("iFrameSrc", iFrameSrc);
+        model.addAttribute("preIFrameSrc", preIFrameSrc);
         model.addAttribute("baseSrc", baseSrc);
         model.addAttribute("iFrameHeight", iFrameHeight);
         model.addAttribute("border", portletConfig.getHtmlAttribute("border", "0"));
@@ -121,6 +134,7 @@ public class CSViewController {
      * @param req   - request
      * @param prefs - portlet preferences
      * @return view
+     * @throws URISyntaxException
      */
     @ResourceMapping
     public String showProxyForm(PortletPreferences prefs,
@@ -171,6 +185,7 @@ public class CSViewController {
      * Action posted from userCredentailForm.jsp
      *
      * @param siteCredential - credential
+     * @param req            - action request to handle cancel
      */
     @ActionMapping
     public void storeUserCredential(@ModelAttribute("siteCredential")

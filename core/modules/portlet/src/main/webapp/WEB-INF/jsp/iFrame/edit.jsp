@@ -164,6 +164,10 @@
                     <td><label for="<portlet:namespace/>hiddenVariables">Hidden Variables</label></td>
                     <td><form:input path="hiddenVariables" id="${ns}hiddenVariables" size="80" /></td>
                 </tr>
+                <tr>
+                    <td><label for="<portlet:namespace/>preIFrameAction">Task before iFrame (ie. logout)</label></td>
+                    <td><form:input path="preIFrameAction" id="${ns}preIFrameAction" size="80" /></td>
+                </tr>
             </tbody>
         </table>
     </fieldset>

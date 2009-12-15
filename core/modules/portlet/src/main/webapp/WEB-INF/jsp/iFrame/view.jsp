@@ -154,7 +154,7 @@
     </a>
     <br/>
 </div>
-<iframe src="${iFrameSrc}"
+<iframe src="${preIFrameSrc}"
         name="<portlet:namespace />iframe"
         border="${bordercolor}"
         frameborder="${frameborder}"
@@ -164,3 +164,10 @@
         vspace="${vspace}"
         width="${width}">
 </iframe>
+<script type="text/javascript">
+    jQuery('iframe').load(function() {
+        if (this.src != "${iFrameSrc}") {
+            this.src="${iFrameSrc}";
+        }
+    });
+</script>

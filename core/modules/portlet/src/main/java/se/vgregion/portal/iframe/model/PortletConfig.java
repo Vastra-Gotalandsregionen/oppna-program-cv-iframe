@@ -35,6 +35,7 @@ public class PortletConfig implements Serializable {
     private String sitePasswordField;
     private String hiddenVariables;
     private String htmlAttributes;
+    private String preIFrameAction;
 
     private Map<String, String> htmlAttributeMap = new HashMap<String, String>();
 
@@ -65,6 +66,7 @@ public class PortletConfig implements Serializable {
         portletConfig.setSiteUserNameField(prefs.getValue("user-name-field", ""));
         portletConfig.setSitePasswordField(prefs.getValue("password-field", ""));
         portletConfig.setHiddenVariables(prefs.getValue("hidden-variables", ""));
+        portletConfig.setPreIFrameAction(prefs.getValue("pre-iframe-action", ""));
         portletConfig.setHtmlAttributes(prefs.getValue("html-attributes", ""));
 
         return portletConfig;
@@ -90,6 +92,7 @@ public class PortletConfig implements Serializable {
             prefs.setValue("user-name-field", getSiteUserNameField());
             prefs.setValue("password-field", getSitePasswordField());
             prefs.setValue("hidden-variables", getHiddenVariables());
+            prefs.setValue("pre-iframe-action", getPreIFrameAction());
             prefs.setValue("html-attributes", getHtmlAttributes());
 
             prefs.store();
@@ -217,6 +220,19 @@ public class PortletConfig implements Serializable {
         return htmlAttributes;
     }
 
+    public String getPreIFrameAction() {
+        return preIFrameAction;
+    }
+
+    public void setPreIFrameAction(String preIFrameAction) {
+        this.preIFrameAction = preIFrameAction;
+    }
+
+    /**
+     * Convinience method for access of hidden attribures.
+     *
+     * @return Map<String, String> - name/value pair
+     */
     public Map<String, String> getHiddenVarialbleMap() {
         Map<String, String> staticHiddenMap = new HashMap<String, String>();
 
@@ -272,6 +288,7 @@ public class PortletConfig implements Serializable {
                 append("siteUserNameField", siteUserNameField).
                 append("sitePasswordField", sitePasswordField).
                 append("hiddenVariables", hiddenVariables).
+                append("preIFrameAction", preIFrameAction).
                 append("htmlAttributes", htmlAttributes).
                 toString();
     }
