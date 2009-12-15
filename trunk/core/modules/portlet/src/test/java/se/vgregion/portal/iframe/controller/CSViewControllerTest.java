@@ -8,6 +8,7 @@ import org.springframework.mock.web.portlet.*;
 import org.springframework.ui.ModelMap;
 import se.vgregion.portal.iframe.model.PortletConfig;
 import se.vgregion.portal.iframe.model.UserSiteCredential;
+import se.vgregion.portal.iframe.BaseTestSetup;
 import se.vgregion.portal.repository.CredentialStoreRepository;
 
 import javax.portlet.*;
@@ -20,7 +21,7 @@ import java.util.Map;
  *
  * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
  */
-public class CSViewControllerTest extends BastTestSetup {
+public class CSViewControllerTest extends BaseTestSetup {
 
     CSViewController controller;
 
@@ -290,7 +291,7 @@ public class CSViewControllerTest extends BastTestSetup {
         assertEquals("post", portletConfig.getFormMethod());
         assertEquals("username", portletConfig.getSiteUserNameField());
         assertEquals("password", portletConfig.getSitePasswordField());
-        assertEquals("test1=hidden1;test2=hidden2", portletConfig.getHiddenVariables());
+        assertEquals("test1=hidden1&test2=hidden2", portletConfig.getHiddenVariables());
         assertEquals("html1=apa\nhtml2=bepa", portletConfig.getHtmlAttributes());
 
         UserSiteCredential siteCredential = (UserSiteCredential) model.get("siteCredential");
@@ -324,7 +325,7 @@ public class CSViewControllerTest extends BastTestSetup {
         assertEquals("post", portletConfig.getFormMethod());
         assertEquals("username", portletConfig.getSiteUserNameField());
         assertEquals("password", portletConfig.getSitePasswordField());
-        assertEquals("test1=hidden1;test2=hidden2", portletConfig.getHiddenVariables());
+        assertEquals("test1=hidden1&test2=hidden2", portletConfig.getHiddenVariables());
         assertEquals("html1=apa\nhtml2=bepa", portletConfig.getHtmlAttributes());
 
         UserSiteCredential siteCredential = (UserSiteCredential) model.get("siteCredential");
@@ -359,7 +360,7 @@ public class CSViewControllerTest extends BastTestSetup {
         assertEquals("post", portletConfig.getFormMethod());
         assertEquals("username", portletConfig.getSiteUserNameField());
         assertEquals("password", portletConfig.getSitePasswordField());
-        assertEquals("test1=hidden1;test2=hidden2", portletConfig.getHiddenVariables());
+        assertEquals("test1=hidden1&test2=hidden2", portletConfig.getHiddenVariables());
         assertEquals("html1=apa\nhtml2=bepa", portletConfig.getHtmlAttributes());
 
         UserSiteCredential siteCredential = (UserSiteCredential) model.get("siteCredential");
