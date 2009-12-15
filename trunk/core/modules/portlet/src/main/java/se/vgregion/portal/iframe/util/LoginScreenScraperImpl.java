@@ -27,6 +27,11 @@ import org.slf4j.LoggerFactory;
 public class LoginScreenScraperImpl implements LoginScreenScraper {
     private Logger log = LoggerFactory.getLogger(CSViewController.class);
 
+    /**
+     * Utility method for accessing form information from login screens.
+     *
+     * @param portletConfig - CS-iFrame configuration to know where to look.
+     */
     public void advancedScraping(PortletConfig portletConfig) {
         try {
             if (portletConfig == null
