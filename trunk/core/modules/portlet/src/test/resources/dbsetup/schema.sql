@@ -1,10 +1,10 @@
-DROP TABLE usersitecredential if exists;
+DROP TABLE vgr_user_site_credential if exists;
 
-CREATE TABLE usersitecredential
+CREATE TABLE vgr_user_site_credential
 (
   uid character varying(20) NOT NULL,
-  sitekey character varying(50) NOT NULL,
-  siteuser character varying(256),
-  sitepassword character varying(20),
-  CONSTRAINT vaultkey PRIMARY KEY (uid, sitekey)
+  site_key character varying(50) NOT NULL,
+  site_user character varying(256),
+  site_password character varying(20),
+  CONSTRAINT vaultkey PRIMARY KEY (uid, site_key)
 );
