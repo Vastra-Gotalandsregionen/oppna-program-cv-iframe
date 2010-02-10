@@ -4,10 +4,10 @@
 
 CREATE TABLE vgr_user_site_credential
 (
-  uid character varying(20) NOT NULL,
+  uid character varying(50) NOT NULL,
   site_key character varying(50) NOT NULL,
   site_user character varying(256),
-  site_password character varying(20),
+  site_password character varying(256),
   CONSTRAINT vaultkey PRIMARY KEY (uid, site_key)
 )
 WITH (
