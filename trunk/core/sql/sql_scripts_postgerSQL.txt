@@ -2,7 +2,7 @@
 
 -- DROP TABLE vgr_user_site_credential;
 
-CREATE TABLE vgr_usersitecredential
+CREATE TABLE vgr_user_site_credential
 (
   uid character varying(20) NOT NULL,
   site_key character varying(50) NOT NULL,
