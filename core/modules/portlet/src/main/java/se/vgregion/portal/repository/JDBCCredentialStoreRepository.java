@@ -40,7 +40,7 @@ public class JDBCCredentialStoreRepository extends SimpleJdbcDaoSupport implemen
      * @return credentials
      */
     public UserSiteCredential getUserSiteCredential(String uid, String siteKey) {
-        String sql = "select * from usersitecredential where uid = ? and sitekey = ?";
+        String sql = "select * from vgr_user_site_credential where uid = ? and site_key = ?";
 
         RowMapper<UserSiteCredential> rowMapper =
                 ParameterizedBeanPropertyRowMapper.newInstance(UserSiteCredential.class);
@@ -94,19 +94,19 @@ public class JDBCCredentialStoreRepository extends SimpleJdbcDaoSupport implemen
     private String insertOrUpdateSql(UserSiteCredential siteCredential) {
         String sql;
         if (siteUserExists(siteCredential)) {
-            sql = "UPDATE USERSITECREDENTIAL "
-                    + "SET SITEUSER = :siteUser,  SITEPASSWORD = :sitePassword "
-                    + "WHERE UID = :uid AND SITEKEY = :siteKey";
+            sql = "UPDATE VGR_USER_SITE_CREDENTIAL "
+                    + "SET SITE_USER = :siteUser,  SITE_PASSWORD = :sitePassword "
+                    + "WHERE UID = :uid AND SITE_KEY = :siteKey";
         } else {
-            sql = "INSERT INTO USERSITECREDENTIAL "
-                    + "(UID, SITEKEY, SITEUSER, SITEPASSWORD) "
+            sql = "INSERT INTO VGR_USER_SITE_CREDENTIAL "
+                    + "(UID, SITE_KEY, SITE_USER, SITE_PASSWORD) "
                     + "VALUES(:uid, :siteKey, :siteUser, :sitePassword)";
         }
         return sql;
     }
 
     private boolean siteUserExists(UserSiteCredential siteCredential) {
-        String sql = "select count(*) from usersitecredential where uid = ? and sitekey = ?";
+        String sql = "select count(*) from vgr_user_site_credential where uid = ? and site_key = ?";
 
         return getSimpleJdbcTemplate().queryForInt(sql, siteCredential.getUid(), siteCredential.getSiteKey()) > 0;
     }
