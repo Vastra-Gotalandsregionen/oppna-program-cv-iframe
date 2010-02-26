@@ -23,10 +23,6 @@ Generation time : 2009-10-28 12:45:52 CET
   <modules>
     <module>composites/types</module>
     <module>composites/svc</module>
-    <module>composites/webcomp</module>
-    <module>composites/schema</module>
     <module>modules/portlet</module>
-    <module>modules/intsvc</module>
-    <module>applications/core</module>
   </modules>
 </project>
