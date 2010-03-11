@@ -19,11 +19,6 @@
 
 package se.vgregion.portal.iframe.controller;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.util.EntityUtils;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +35,6 @@ import se.vgregion.portal.iframe.model.UserSiteCredential;
 import se.vgregion.portal.repository.CredentialStoreRepository;
 
 import javax.portlet.*;
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Enumeration;

@@ -34,20 +34,20 @@
 <body onLoad="setTimeout('document.fm.submit()', 100);">
 
 <form action="${proxyFormAction}" method="${portletConfig.formMethod}" name="fm" id="fm">
-    <h1>Autologin</h1>
+    <!--h1>Autologin</h1-->
 
-    <p>
+    <!--p>
         Nyckel: ${siteCredential}<br/>
-    </p>
+    </p-->
 
     <input name="${portletConfig.siteUserNameField}" type="hidden" value="${siteCredential.siteUser}"/>
-    <input name="${portletConfig.sitePasswordField}" type="password" value="${siteCredential.sitePassword}"/>
+    <input name="${portletConfig.sitePasswordField}" type="hidden" value="${siteCredential.sitePassword}"/>
 
     <c:forEach var="entry" items="${portletConfig.hiddenVarialbleMap}">
         <input name="${entry.key}" value="${entry.value}" type="hidden"/>
     </c:forEach>
 
-    <input type="submit" />
+    <!--input type="submit" /-->
 </form>
 
 </body>

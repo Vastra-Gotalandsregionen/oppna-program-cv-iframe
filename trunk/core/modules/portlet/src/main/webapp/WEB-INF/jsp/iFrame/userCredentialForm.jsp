@@ -38,6 +38,6 @@
     <label for="sitePassword">Lösenord</label>
     <form:password path="sitePassword" id="sitePassword" showPassword="true" />
     
-    <input type="submit" value="Spara" />
+    <input type="submit" value="Fortsätt" />
     <input type="submit" value="Avbryt" name="_cancel" />
 </form:form>
