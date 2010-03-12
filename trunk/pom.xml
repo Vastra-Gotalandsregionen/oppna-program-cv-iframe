@@ -21,7 +21,7 @@ Generation time : 2009-10-28 12:45:52 CET
   <groupId>se.vgregion.cs-iframe</groupId>
   <artifactId>cs-iframe-system</artifactId>
   <packaging>pom</packaging>
-  <version>1.1</version>
+  <version>1.2-SNAPSHOT</version>
   <name>${project.artifactId}</name>
 
   <modules>
@@ -29,9 +29,9 @@ Generation time : 2009-10-28 12:45:52 CET
   </modules>
 
   <scm>
-    <developerConnection>scm:svn:https://oppna-program-cv-iframe.googlecode.com/svn/tags/cs-iframe-system-1.1
+    <developerConnection>scm:svn:https://oppna-program-cv-iframe.googlecode.com/svn/trunk
     </developerConnection>
-    <url>http://oppna-program-cv-iframe.googlecode.com/svn/tags/cs-iframe-system-1.1</url>
+    <url>http://oppna-program-cv-iframe.googlecode.com/svn/trunk</url>
   </scm>
 
   <dependencies>
