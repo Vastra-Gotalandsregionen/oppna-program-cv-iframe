@@ -1,3 +1,4 @@
+<%@ taglib prefix="portlet" uri="http://java.sun.com/portlet_2_0" %>
 <%--
 
     Copyright 2010 Västra Götalandsregionen
@@ -22,8 +23,19 @@
 
 <%@page pageEncoding="UTF-8"%>
 
-<h2>Användning</h2>
-<p>Första gången man går in får man möjlighet att spara användarnamn och lösenord för en externa webplatsen.
-Dessa uppgifer sparas krypterade och återanvänds automatiskt vid varje besök på portalen.</p>
+<portlet:renderURL portletMode="view" var="showView" />
 
-<p>Om man behöver ändra inloggninsuppgifter efter första inloggningen tryck på länken "Ändra inloggning" uppe till vänster.</p>
+<br />
+<div class="vgr-portlet-controlls-container" style="width: 600px; text-align: left;">
+    <h1>Användning</h1>
+
+    <p>Första gången man går in på sidan ges möjligheten att spara användarnamn och lösenord för en externa webplatsen.
+    Dessa uppgifer krypteras, sparas och återanvänds så att du därefter loggas in automatiskt.</p>
+
+    <p>Om du inte loggas in automatiskt eller behöver ändra inloggninsuppgifter, tryck på länken
+    "Ändra inloggning" uppe till vänster och skriv in de korrekta inloggningsuppgifterna.</p>
+
+    <span class="vgr-portlet-controlls-right">
+        <a class="vgr-portlet-view" href="${showView}">Tillbaka</a>
+    </span>
+</div>
