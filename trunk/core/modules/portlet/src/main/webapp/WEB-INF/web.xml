@@ -1,68 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
+  <!--
 
-    Copyright 2010 Västra Götalandsregionen
-
-      This library is free software; you can redistribute it and/or modify
-      it under the terms of version 2.1 of the GNU Lesser General Public
-      License as published by the Free Software Foundation.
-
-      This library is distributed in the hope that it will be useful,
-      but WITHOUT ANY WARRANTY; without even the implied warranty of
-      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-      GNU Lesser General Public License for more details.
-
-      You should have received a copy of the GNU Lesser General Public
-      License along with this library; if not, write to the
-      Free Software Foundation, Inc., 59 Temple Place, Suite 330,
-      Boston, MA 02111-1307  USA
+    Copyright 2010 Västra Götalandsregionen This library is free software; you can redistribute it and/or modify it
+    under the terms of version 2.1 of the GNU Lesser General Public License as published by the Free Software
+    Foundation. This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+    even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General
+    Public License for more details. You should have received a copy of the GNU Lesser General Public License along
+    with this library; if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+    02111-1307 USA
+  -->
 
 
--->
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd" version="2.4">
 
+  <display-name>CS-IFrame</display-name>
+  <description>CS-IFrame</description>
 
-<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
-         version="2.4">
+  <listener>
+    <listener-class>com.liferay.portal.kernel.servlet.PortletContextListener</listener-class>
+  </listener>
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
 
-    <display-name>CS-IFrame</display-name>
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>classpath*:/applicationContext.xml</param-value>
+  </context-param>
 
-    <listener>
-        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-    </listener>
+  <servlet>
+    <servlet-name>view</servlet-name>
+    <servlet-class>org.springframework.web.servlet.ViewRendererServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
 
-    <context-param>
-        <param-name>contextConfigLocation</param-name>
-        <param-value>
-            classpath*:/applicationContext.xml /WEB-INF/**-portlet.xml
-        </param-value>
-    </context-param>
+  <servlet>
+    <servlet-name>csiframe</servlet-name>
+    <servlet-class>com.liferay.portal.kernel.servlet.PortletServlet</servlet-class>
+    <init-param>
+      <param-name>portlet-class</param-name>
+      <param-value>org.springframework.web.portlet.DispatcherPortlet</param-value>
+    </init-param>
+    <load-on-startup>0</load-on-startup>
+  </servlet>
 
-    <servlet>
-        <servlet-name>view</servlet-name>
-        <servlet-class>org.springframework.web.servlet.ViewRendererServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
+  <servlet-mapping>
+    <servlet-name>csiframe</servlet-name>
+    <url-pattern>/csiframe/*</url-pattern>
+  </servlet-mapping>
 
-    <servlet-mapping>
-        <servlet-name>view</servlet-name>
-        <url-pattern>/WEB-INF/servlet/view</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>CS-IFrame</servlet-name>
-        <servlet-class>com.liferay.portal.kernel.servlet.PortletServlet</servlet-class>
-        <init-param>
-            <param-name>portlet-class</param-name>
-            <param-value>org.springframework.web.portlet.DispatcherPortlet</param-value>
-        </init-param>
-        <load-on-startup>0</load-on-startup>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>CS-IFrame</servlet-name>
-        <url-pattern>/VGRIFrame/*</url-pattern>
-    </servlet-mapping>
-
+  <servlet-mapping>
+    <servlet-name>view</servlet-name>
+    <url-pattern>/WEB-INF/servlet/view</url-pattern>
+  </servlet-mapping>
+  
 </web-app>

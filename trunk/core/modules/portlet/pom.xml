@@ -13,6 +13,7 @@ Generation time : 2009-10-28 12:45:52 CET
     <artifactId>cs-iframe-core</artifactId>
     <version>1.2-SNAPSHOT</version>
   </parent>
+  
   <groupId>se.vgregion.cs-iframe</groupId>
   <artifactId>cs-iframe-core-module-portlet</artifactId>
   <packaging>war</packaging>
@@ -23,7 +24,6 @@ Generation time : 2009-10-28 12:45:52 CET
     <plugins>
       <plugin>
         <!-- Configure eclipse plug-in to generate a context root that does not have the version number on it -->
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-eclipse-plugin</artifactId>
         <configuration>
           <wtpContextName>${project.artifactId}</wtpContextName>
@@ -31,7 +31,7 @@ Generation time : 2009-10-28 12:45:52 CET
       </plugin>
     </plugins>
   </build>
-
+  
   <dependencies>
     <dependency>
       <groupId>javax.portlet</groupId>

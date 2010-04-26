@@ -168,11 +168,15 @@
 <portlet:renderURL var="changeCredentials">
     <portlet:param name="action" value="changeVaultCredentials"/>
 </portlet:renderURL>
+<portlet:renderURL portletMode="help" var="showHelp" />
 
-<div style="${link_display}">
-    <a class="express_login" href="${changeCredentials}">
-        Ändra dina sparade inloggningsuppgifter
-    </a>
+<div class="vgr-portlet-controlls-container" style="${link_display}">
+    <span class="vgr-portlet-controlls-left">
+      <a title="Ändra inloggning" class="vgr-express-login" href="${changeCredentials}">Ändra inloggning</a>
+    </span>
+    <span class="vgr-portlet-controlls-right">
+      <a class="vgr-portlet-help" href="${showHelp}" title="Hjälp">Hjälp</a>
+    </span>
     <br/>
 </div>
 <iframe src="${preIFrameSrc}"
@@ -185,6 +189,7 @@
         vspace="${vspace}"
         width="${width}">
 </iframe>
+
 <script type="text/javascript">
     jQuery('iframe').load(function() {
         if (this.src != "${iFrameSrc}") {

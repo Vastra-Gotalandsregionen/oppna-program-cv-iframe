@@ -35,5 +35,27 @@
         <property name="suffix" value=".jsp" />
         <property name="contentType" value="text/html;charset=UTF-8" />
     </bean>
+    
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="classpath:datasource.properties" />
+    </bean>
 
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="${database.driver}" />
+        <property name="url" value="${database.url}" />
+        <property name="username" value="${database.user}" />
+        <property name="password" value="${database.password}" />
+    </bean>
+
+    <bean name="credentialStoreRepository" class="se.vgregion.portal.repository.JDBCCredentialStoreRepository">
+        <property name="dataSource" ref="dataSource" />
+        <property name="cryptoUtils" ref="cryptoUtils" />
+    </bean>
+
+    <bean name="cryptoUtils" class="se.vgregion.portal.iframe.util.CryptoUtilImpl">
+        <property name="keyFile" value="classpath:cv.key" />
+    </bean>
+
+    <bean name="loginScreenScraper" class="se.vgregion.portal.iframe.util.LoginScreenScraperImpl" />
+  
 </beans>
