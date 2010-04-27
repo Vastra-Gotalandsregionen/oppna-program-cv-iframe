@@ -34,9 +34,10 @@
     <p>Om du inte loggas in automatiskt eller behöver ändra inloggninsuppgifter, tryck på länken
     "Ändra inloggning" uppe till vänster och skriv in de korrekta inloggningsuppgifterna.</p>
 
+    <img alt="Hjälp" src="${pageContext.request.contextPath}/images/help.png" />
+    <br />
+    
     <span class="vgr-portlet-controlls-right">
         <a class="vgr-portlet-view" href="${showView}">Tillbaka</a>
     </span>
-    
-    <img alt="Hjälp" src="${pageContext.request.contextPath}/images/Question-Mark-Icon.png" />
 </div>
