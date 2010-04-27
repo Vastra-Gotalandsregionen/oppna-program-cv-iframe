@@ -24,7 +24,6 @@
 <%@page pageEncoding="UTF-8"%>
 
 <portlet:renderURL portletMode="view" var="showView" />
-
 <br />
 <div class="vgr-portlet-controlls-container" style="width: 600px; text-align: left;">
     <h1>Användning</h1>
@@ -38,4 +37,6 @@
     <span class="vgr-portlet-controlls-right">
         <a class="vgr-portlet-view" href="${showView}">Tillbaka</a>
     </span>
+    
+    <img alt="Hjälp" src="${pageContext.request.contextPath}/images/Question-Mark-Icon.png" />
 </div>
