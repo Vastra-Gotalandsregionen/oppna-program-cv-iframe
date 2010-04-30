@@ -28,10 +28,10 @@
 <div class="vgr-portlet-controlls-container" style="width: 600px; text-align: left;">
     <h1>Användning</h1>
 
-    <p>Första gången man går in på sidan ges möjligheten att spara användarnamn och lösenord för en externa webplatsen.
-    Dessa uppgifer krypteras, sparas och återanvänds så att du därefter loggas in automatiskt.</p>
+    <p>Första gången man går in på sidan ges möjligheten att spara användarnamn och lösenord för en extern webplats.
+    Dessa uppgifter krypteras, sparas och återanvänds så att du därefter loggas in automatiskt.</p>
 
-    <p>Om du inte loggas in automatiskt eller behöver ändra inloggninsuppgifter, tryck på länken
+    <p>Om du inte loggas in automatiskt eller behöver ändra inloggningsuppgifter, tryck på länken
     "Ändra inloggning" uppe till vänster och skriv in de korrekta inloggningsuppgifterna.</p>
 
     <img alt="Hjälp" src="${pageContext.request.contextPath}/images/help.png" />
