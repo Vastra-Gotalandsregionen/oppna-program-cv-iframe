@@ -29,8 +29,11 @@
 <%@page pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
 
+<script type="text/javascript" src="${pageContext.request.contextPath}/script/jquery.blockUI.js"></script>
+ 
 <portlet:defineObjects/>
-<script type="text/javascript">
+<script type="text/javascript"><!--
+
     function <portlet:namespace />init() {
         var hash = document.location.hash;
 
@@ -163,7 +166,7 @@
                 <portlet:namespace />init();
             }
             );
-</script>
+--></script>
 
 <portlet:renderURL var="changeCredentials">
     <portlet:param name="action" value="changeVaultCredentials"/>
@@ -179,18 +182,37 @@
     </span>
     <br/>
 </div>
-<iframe src="${preIFrameSrc}"
-        name="<portlet:namespace />iframe"
-        border="${bordercolor}"
-        frameborder="${frameborder}"
-        height="${iFrameHeight}"
-        hspace="${hspace}"
-        scrolling="${scrolling}"
-        vspace="${vspace}"
-        width="${width}">
-</iframe>
+
+<div id="blockMe">  
+  <iframe src="${preIFrameSrc}"
+          name="<portlet:namespace />iframe"
+          border="${bordercolor}"
+          frameborder="${frameborder}"
+          height="${iFrameHeight}"
+          hspace="${hspace}"
+          scrolling="${scrolling}"
+          vspace="${vspace}"
+          width="${width}">
+  </iframe>
+</div>
+
+<div id="blockDisplayMessage" style="display:none"> 
+  <h1>&nbsp;Laddar extern källa...&nbsp;</h1> 
+</div> 
 
 <script type="text/javascript">
+    //Display "loading" block over IFrame for two seconds
+    jQuery('#blockMe').block({ 
+        message: jQuery('#blockDisplayMessage'),
+        centerY: 0,
+        centerX: 0,
+        overlayCSS: {backgroundColor: '#EFEFEF' },
+        fadeIn: 500, 
+        fadeOut: 500, 
+        timeout: 2000
+    });
+
+    // On load for IFrame...
     jQuery('iframe').load(function() {
         if (this.src != "${iFrameSrc}") {
             this.src="${iFrameSrc}";
