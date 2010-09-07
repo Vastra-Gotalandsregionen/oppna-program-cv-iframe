@@ -19,6 +19,19 @@
 
 package se.vgregion.portal.iframe.controller;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Enumeration;
+import java.util.Map;
+
+import javax.portlet.ActionRequest;
+import javax.portlet.PortletPreferences;
+import javax.portlet.PortletRequest;
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
+import javax.portlet.ResourceRequest;
+import javax.portlet.WindowState;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,19 +43,14 @@ import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 import org.springframework.web.portlet.util.PortletUtils;
+
 import se.vgregion.portal.iframe.model.PortletConfig;
 import se.vgregion.portal.iframe.model.UserSiteCredential;
 import se.vgregion.portal.repository.CredentialStoreRepository;
 
-import javax.portlet.*;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Enumeration;
-import java.util.Map;
-
 /**
  * This action do that and that, if it has something special it is.
- *
+ * 
  * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
  */
 @Controller
@@ -54,8 +62,9 @@ public class CSViewController {
 
     /**
      * Spring configuration setter.
-     *
-     * @param credentialStoreRepository - CredentialStoreRepository implementation
+     * 
+     * @param credentialStoreRepository
+     *            - CredentialStoreRepository implementation
      */
     @Autowired
     public void setCredentialStoreRepository(CredentialStoreRepository credentialStoreRepository) {
@@ -63,20 +72,20 @@ public class CSViewController {
     }
 
     /**
-     * Main controllermethod.
-     * Handling of user-sitecredential availability and iFrame source linking
-     *
-     * @param prefs - protlet preferences
-     * @param req   - request
-     * @param resp  - response
-     * @param model - model
+     * Main controllermethod. Handling of user-sitecredential availability and iFrame source linking
+     * 
+     * @param prefs
+     *            - protlet preferences
+     * @param req
+     *            - request
+     * @param resp
+     *            - response
+     * @param model
+     *            - model
      * @return view
      */
     @RenderMapping
-    public String showView(PortletPreferences prefs,
-                           RenderRequest req,
-                           RenderResponse resp,
-                           ModelMap model) {
+    public String showView(PortletPreferences prefs, RenderRequest req, RenderResponse resp, ModelMap model) {
         PortletConfig portletConfig = PortletConfig.getInstance(prefs);
         model.addAttribute("portletConfig", portletConfig);
         log.debug("Creds: {}", portletConfig);
@@ -118,16 +127,17 @@ public class CSViewController {
 
     /**
      * Credential view handleing.
-     *
-     * @param prefs - portlet preferences
-     * @param req   - request
-     * @param model - model
+     * 
+     * @param prefs
+     *            - portlet preferences
+     * @param req
+     *            - request
+     * @param model
+     *            - model
      * @return view
      */
     @RenderMapping(params = "action=changeVaultCredentials")
-    public String changeVaultCredentials(PortletPreferences prefs,
-                                         RenderRequest req,
-                                         ModelMap model) {
+    public String changeVaultCredentials(PortletPreferences prefs, RenderRequest req, ModelMap model) {
         PortletConfig portletConfig = PortletConfig.getInstance(prefs);
         model.addAttribute("portletConfig", portletConfig);
         if (!portletConfig.isAuth()) {
@@ -142,17 +152,19 @@ public class CSViewController {
 
     /**
      * Prepare proxyLoginForm.jsp for form-based authentication.
-     *
-     * @param model - model
-     * @param req   - request
-     * @param prefs - portlet preferences
+     * 
+     * @param model
+     *            - model
+     * @param req
+     *            - request
+     * @param prefs
+     *            - portlet preferences
      * @return view
      * @throws URISyntaxException
      */
     @ResourceMapping
-    public String showProxyForm(PortletPreferences prefs,
-                                ResourceRequest req,
-                                ModelMap model) throws URISyntaxException {
+    public String showProxyForm(PortletPreferences prefs, ResourceRequest req, ModelMap model)
+            throws URISyntaxException {
         PortletConfig portletConfig = se.vgregion.portal.iframe.model.PortletConfig.getInstance(prefs);
         model.addAttribute("portletConfig", portletConfig);
         if (!portletConfig.isAuth() || !"form".equals(portletConfig.getAuthType())) {
@@ -194,15 +206,16 @@ public class CSViewController {
     }
 
     /**
-     * Store User-SiteCredentials in the Credential-Vault.
-     * Action posted from userCredentailForm.jsp
-     *
-     * @param siteCredential - credential
-     * @param req            - action request to handle cancel
+     * Store User-SiteCredentials in the Credential-Vault. Action posted from userCredentailForm.jsp
+     * 
+     * @param siteCredential
+     *            - credential
+     * @param req
+     *            - action request to handle cancel
      */
     @ActionMapping
-    public void storeUserCredential(@ModelAttribute("siteCredential")
-    UserSiteCredential siteCredential, ActionRequest req) {
+    public void storeUserCredential(@ModelAttribute("siteCredential") UserSiteCredential siteCredential,
+            ActionRequest req) {
         if (siteCredential.getUid() == null || siteCredential.getUid().trim().length() < 1) {
             throw new RuntimeException("ERROR: Unknown user. Cannot store credential.");
         }
@@ -211,13 +224,11 @@ public class CSViewController {
         }
         if (!PortletUtils.hasSubmitParameter(req, "_cancel")) {
             credentialStoreRepository.addUserSiteCredential(siteCredential);
-//            log.debug("storeUserCredential: {}", siteCredential);
+            // log.debug("storeUserCredential: {}", siteCredential);
         }
     }
 
-    private String prepareView(RenderResponse resp,
-                               PortletConfig portletConfig,
-                               UserSiteCredential siteCredential) {
+    private String prepareView(RenderResponse resp, PortletConfig portletConfig, UserSiteCredential siteCredential) {
         String iFrameSrc = getDefaultTarget();
 
         String src = portletConfig.getSrc();
@@ -245,13 +256,11 @@ public class CSViewController {
     }
 
     private String getDefaultTarget() {
-        return "http://vgregion.se";
+        return "http://vgregion.se/";
     }
 
-    private boolean credentialsAvailable(PortletRequest req,
-                                         ModelMap model,
-                                         PortletConfig portletConfig,
-                                         UserSiteCredential returnSiteCredential) {
+    private boolean credentialsAvailable(PortletRequest req, ModelMap model, PortletConfig portletConfig,
+            UserSiteCredential returnSiteCredential) {
         boolean userSiteCredentialExist = true;
         if (portletConfig.isAuth()) {
             String uid = lookupUid(req);
@@ -261,8 +270,8 @@ public class CSViewController {
                 returnSiteCredential.setSiteUser(uid);
             }
 
-            UserSiteCredential siteCredential =
-                    credentialStoreRepository.getUserSiteCredential(uid, portletConfig.getSiteKey());
+            UserSiteCredential siteCredential = credentialStoreRepository.getUserSiteCredential(uid,
+                    portletConfig.getSiteKey());
             if (siteCredential != null) {
                 if (!portletConfig.isScreenNameOnly()) {
                     returnSiteCredential.setSiteUser(siteCredential.getSiteUser());
@@ -282,7 +291,7 @@ public class CSViewController {
         if (userInfo != null) {
             userId = (String) userInfo.get(PortletRequest.P3PUserInfos.USER_LOGIN_ID.toString());
         } else {
-            userId = (String) "";
+            userId = "";
         }
         return userId;
     }
@@ -296,8 +305,7 @@ public class CSViewController {
         return baseSrc;
     }
 
-    private String getIFrameHeight(RenderRequest req,
-                                   PortletConfig portletConfig) {
+    private String getIFrameHeight(RenderRequest req, PortletConfig portletConfig) {
         WindowState windowState = req.getWindowState();
         String iFrameHeight;
         if (windowState.equals(WindowState.NORMAL)) {
