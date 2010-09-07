@@ -186,6 +186,7 @@
 <div id="blockMe">  
   <iframe src="${preIFrameSrc}"
           name="<portlet:namespace />iframe"
+          id="<portlet:namespace />iframe"
           border="${bordercolor}"
           frameborder="${frameborder}"
           height="${iFrameHeight}"
@@ -202,9 +203,9 @@
 
 <script type="text/javascript">
     //Display "loading" block over IFrame for two seconds
-    jQuery('#blockMe').block({ 
-        message: jQuery('#blockDisplayMessage'),
-        centerY: 0,
+    jQuery('#p_p_id<portlet:namespace /> #blockMe').block({ 
+        message: jQuery('#p_p_id<portlet:namespace /> #blockDisplayMessage'),
+        centerY: 50,
         centerX: 0,
         overlayCSS: {backgroundColor: '#EFEFEF' },
         fadeIn: 500, 
@@ -213,7 +214,7 @@
     });
 
     // On load for IFrame...
-    jQuery('iframe').load(function() {
+    jQuery('#<portlet:namespace />iframe').load(function() {
         if (this.src != "${iFrameSrc}") {
             this.src="${iFrameSrc}";
         }
