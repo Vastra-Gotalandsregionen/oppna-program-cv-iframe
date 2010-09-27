@@ -43,251 +43,270 @@ import java.sql.Statement;
  */
 public class DataSourceFactory implements FactoryBean {
 
-	private static Log logger = LogFactory.getLog(DataSourceFactory.class);
+    private static Log logger = LogFactory.getLog(DataSourceFactory.class);
 
-	// configurable properties
+    // configurable properties
 
-	private String testDatabaseName;
+    private String testDatabaseName;
 
-	private Resource schemaLocation;
+    private Resource schemaLocation;
 
-	private Resource testDataLocation;
-
-	/**
-	 * The object created by this factory.
-	 */
-	private DataSource dataSource;
-
-	/**
-	 * Creates a new TestDataSourceFactory for use in "bean" style. "Bean" style means the default constructor is called
-	 * and then properties are set to configure this object. "Bean" style usage is nice when this object is defined as a
-	 * Spring bean, as setter-injection can be more descriptive than constructor-injection from the point of view of a
-	 * bean definition author.
-	 * @see {@link #setTestDatabaseName(String)}
-	 * @see {@link #setSchemaLocation(Resource)}
-	 * @see {@link #setTestDataLocation(Resource)}
-	 */
-	public DataSourceFactory() {
-	}
-
-	/**
-	 * Creates a new TestDataSourceFactory fully-initialized with what it needs to work. Fully-formed constructors are
-	 * nice in a programmatic environment, as they result in more concise code and allow for a class to enforce its
-	 * required properties.
-	 * @param testDatabaseName the name of the test database to create
-	 * @param schemaLocation the location of the file containing the schema DDL to export to the database
-	 * @param testDataLocation the location of the file containing the test data to load into the database
-	 */
-	public DataSourceFactory(String testDatabaseName, Resource schemaLocation, Resource testDataLocation) {
-		setTestDatabaseName(testDatabaseName);
-		setSchemaLocation(schemaLocation);
-		setTestDataLocation(testDataLocation);
-	}
+    private Resource testDataLocation;
 
     /**
-	 * Sets the name of the test database to create.
-	 * @param testDatabaseName the name of the test database, i.e. "rewards"
-	 */
-	public void setTestDatabaseName(String testDatabaseName) {
-		this.testDatabaseName = testDatabaseName;
-	}
+     * The object created by this factory.
+     */
+    private DataSource dataSource;
 
-	/**
-	 * Sets the location of the file containing the schema DDL to export to the test database.
-	 * @param schemaLocation the location of the database schema DDL
-	 */
-	public void setSchemaLocation(Resource schemaLocation) {
-		this.schemaLocation = schemaLocation;
-	}
+    /**
+     * Creates a new TestDataSourceFactory for use in "bean" style. "Bean" style means the default constructor is
+     * called and then properties are set to configure this object. "Bean" style usage is nice when this object is
+     * defined as a Spring bean, as setter-injection can be more descriptive than constructor-injection from the
+     * point of view of a bean definition author.
+     * 
+     * @see {@link #setTestDatabaseName(String)}
+     * @see {@link #setSchemaLocation(Resource)}
+     * @see {@link #setTestDataLocation(Resource)}
+     */
+    public DataSourceFactory() {
+    }
 
-	/**
-	 * Sets the location of the file containing the test data to load into the database.
-	 * @param testDataLocation the location of the test data file
-	 */
-	public void setTestDataLocation(Resource testDataLocation) {
-		this.testDataLocation = testDataLocation;
-	}
+    /**
+     * Creates a new TestDataSourceFactory fully-initialized with what it needs to work. Fully-formed constructors
+     * are nice in a programmatic environment, as they result in more concise code and allow for a class to enforce
+     * its required properties.
+     * 
+     * @param testDatabaseName
+     *            the name of the test database to create
+     * @param schemaLocation
+     *            the location of the file containing the schema DDL to export to the database
+     * @param testDataLocation
+     *            the location of the file containing the test data to load into the database
+     */
+    public DataSourceFactory(String testDatabaseName, Resource schemaLocation, Resource testDataLocation) {
+        setTestDatabaseName(testDatabaseName);
+        setSchemaLocation(schemaLocation);
+        setTestDataLocation(testDataLocation);
+    }
 
-	// this method is automatically called by Spring after configuration to perform a dependency check and init
-	@PostConstruct
-	public void init() {
-		if (testDatabaseName == null) {
-			throw new IllegalArgumentException("The name of the test database to create is required");
-		}
-		if (schemaLocation == null) {
-			throw new IllegalArgumentException("The path to the database schema DDL is required");
-		}
-		if (testDataLocation == null) {
-			throw new IllegalArgumentException("The path to the test data set is required");
-		}
-		initDataSource();
-	}
+    /**
+     * Sets the name of the test database to create.
+     * 
+     * @param testDatabaseName
+     *            the name of the test database, i.e. "rewards"
+     */
+    public void setTestDatabaseName(String testDatabaseName) {
+        this.testDatabaseName = testDatabaseName;
+    }
 
-	// implementing FactoryBean
+    /**
+     * Sets the location of the file containing the schema DDL to export to the test database.
+     * 
+     * @param schemaLocation
+     *            the location of the database schema DDL
+     */
+    public void setSchemaLocation(Resource schemaLocation) {
+        this.schemaLocation = schemaLocation;
+    }
 
-	// this method is automatically called by Spring to expose the DataSource as a bean
-	public Object getObject() throws Exception {
-		return getDataSource();
-	}
+    /**
+     * Sets the location of the file containing the test data to load into the database.
+     * 
+     * @param testDataLocation
+     *            the location of the test data file
+     */
+    public void setTestDataLocation(Resource testDataLocation) {
+        this.testDataLocation = testDataLocation;
+    }
 
-	public Class getObjectType() {
-		return DataSource.class;
-	}
+    // this method is automatically called by Spring after configuration to perform a dependency check and init
+    @PostConstruct
+    public void init() {
+        if (testDatabaseName == null) {
+            throw new IllegalArgumentException("The name of the test database to create is required");
+        }
+        if (schemaLocation == null) {
+            throw new IllegalArgumentException("The path to the database schema DDL is required");
+        }
+        if (testDataLocation == null) {
+            throw new IllegalArgumentException("The path to the test data set is required");
+        }
+        initDataSource();
+    }
 
-	public boolean isSingleton() {
-		return true;
-	}
+    // implementing FactoryBean
 
-	// other methods
+    // this method is automatically called by Spring to expose the DataSource as a bean
+    public Object getObject() throws Exception {
+        return getDataSource();
+    }
 
-	/**
-	 * Factory method that returns the fully-initialized test data source. Useful when this class is used
-	 * programatically instead of deployed as a Spring bean.
-	 * @return the data source
-	 */
-	public DataSource getDataSource() {
-		if (dataSource == null) {
-			initDataSource();
-		}
-		return dataSource;
-	}
+    public Class getObjectType() {
+        return DataSource.class;
+    }
 
-	// static factory methods
+    public boolean isSingleton() {
+        return true;
+    }
 
-	/**
-	 * Static factory method that creates a DataSource that connects to a test database populated with test data.
-	 * @param testDatabaseName the name of the test database to create
-	 * @param schemaLocation the database schema to export
-	 * @param testDataLocation the database test data to load
-	 * @return the data source
-	 */
-	public static DataSource createDataSource(String testDatabaseName, Resource schemaLocation, Resource testDataLocation) {
-		return new DataSourceFactory(testDatabaseName, schemaLocation, testDataLocation).getDataSource();
-	}
+    // other methods
 
-	// internal helper methods
+    /**
+     * Factory method that returns the fully-initialized test data source. Useful when this class is used
+     * programatically instead of deployed as a Spring bean.
+     * 
+     * @return the data source
+     */
+    public DataSource getDataSource() {
+        if (dataSource == null) {
+            initDataSource();
+        }
+        return dataSource;
+    }
 
-	// encapsulates the steps involved in initializing the data source: creating it, and populating it
-	private void initDataSource() {
-		// create the in-memory database source first
-		this.dataSource = createDataSource();
-		if (logger.isDebugEnabled()) {
-			logger.debug("Created in-memory test database '" + testDatabaseName + "'");
-		}
-		// now populate the database by loading the schema and test data
-		populateDataSource();
-		if (logger.isDebugEnabled()) {
-			logger.debug("Exported schema in " + schemaLocation);
-		}
-		if (logger.isDebugEnabled()) {
-			logger.debug("Loaded test data in " + testDataLocation);
-		}
-	}
+    // static factory methods
 
-	private DataSource createDataSource() {
-		DriverManagerDataSource dataSource = new DriverManagerDataSource();
-		// use the HsqlDB JDBC driver
-		dataSource.setDriverClassName("org.hsqldb.jdbcDriver");
-		// have it create an in-memory database
-		dataSource.setUrl("jdbc:hsqldb:mem:" + testDatabaseName);
-		dataSource.setUsername("sa");
-		dataSource.setPassword("");
-		return dataSource;
-	}
+    /**
+     * Static factory method that creates a DataSource that connects to a test database populated with test data.
+     * 
+     * @param testDatabaseName
+     *            the name of the test database to create
+     * @param schemaLocation
+     *            the database schema to export
+     * @param testDataLocation
+     *            the database test data to load
+     * @return the data source
+     */
+    public static DataSource createDataSource(String testDatabaseName, Resource schemaLocation,
+            Resource testDataLocation) {
+        return new DataSourceFactory(testDatabaseName, schemaLocation, testDataLocation).getDataSource();
+    }
 
-	private void populateDataSource() {
-		TestDatabasePopulator populator = new TestDatabasePopulator(dataSource);
-		populator.populate();
-	}
+    // internal helper methods
 
-	/**
-	 * Populates a in memory data source with test data.
-	 */
-	private class TestDatabasePopulator {
+    // encapsulates the steps involved in initializing the data source: creating it, and populating it
+    private void initDataSource() {
+        // create the in-memory database source first
+        this.dataSource = createDataSource();
+        if (logger.isDebugEnabled()) {
+            logger.debug("Created in-memory test database '" + testDatabaseName + "'");
+        }
+        // now populate the database by loading the schema and test data
+        populateDataSource();
+        if (logger.isDebugEnabled()) {
+            logger.debug("Exported schema in " + schemaLocation);
+        }
+        if (logger.isDebugEnabled()) {
+            logger.debug("Loaded test data in " + testDataLocation);
+        }
+    }
 
-		private DataSource dataSource;
+    private DataSource createDataSource() {
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        // use the HsqlDB JDBC driver
+        dataSource.setDriverClassName("org.hsqldb.jdbcDriver");
+        // have it create an in-memory database
+        dataSource.setUrl("jdbc:hsqldb:mem:" + testDatabaseName);
+        dataSource.setUsername("sa");
+        dataSource.setPassword("");
+        return dataSource;
+    }
 
-		/**
-		 * Creates a new test database populator.
-		 * @param dataSource the test data source that will be populated.
-		 */
-		public TestDatabasePopulator(DataSource dataSource) {
-			this.dataSource = dataSource;
-		}
+    private void populateDataSource() {
+        TestDatabasePopulator populator = new TestDatabasePopulator(dataSource);
+        populator.populate();
+    }
 
-		/**
-		 * Populate the test database by creating the database schema from 'schema.sql' and inserting the test data in
-		 * 'testdata.sql'.
-		 */
-		public void populate() {
-			Connection connection = null;
-			try {
-				connection = dataSource.getConnection();
-				createDatabaseSchema(connection);
-				insertTestData(connection);
-			} catch (SQLException e) {
-				throw new RuntimeException("SQL exception occurred acquiring connection", e);
-			} finally {
-				if (connection != null) {
-					try {
-						connection.close();
-					} catch (SQLException e) {
-					}
-				}
-			}
-		}
+    /**
+     * Populates a in memory data source with test data.
+     */
+    private class TestDatabasePopulator {
 
-		// create the application's database schema (tables, indexes, etc.)
-		private void createDatabaseSchema(Connection connection) {
-			try {
-				String sql = parseSqlIn(schemaLocation);
-				executeSql(sql, connection);
-			} catch (IOException e) {
-				throw new RuntimeException("I/O exception occurred accessing the database schema file", e);
-			} catch (SQLException e) {
-				throw new RuntimeException("SQL exception occurred exporting database schema", e);
-			}
-		}
+        private DataSource dataSource;
 
-		// populate the tables with test data
-		private void insertTestData(Connection connection) {
-			try {
-				String sql = parseSqlIn(testDataLocation);
-				executeSql(sql, connection);
-			} catch (IOException e) {
-				throw new RuntimeException("I/O exception occurred accessing the test data file", e);
-			} catch (SQLException e) {
-				throw new RuntimeException("SQL exception occurred loading test data", e);
-			}
-		}
+        /**
+         * Creates a new test database populator.
+         * 
+         * @param dataSource
+         *            the test data source that will be populated.
+         */
+        public TestDatabasePopulator(DataSource dataSource) {
+            this.dataSource = dataSource;
+        }
 
-		// utility method to read a .sql txt input stream
+        /**
+         * Populate the test database by creating the database schema from 'schema.sql' and inserting the test data
+         * in 'testdata.sql'.
+         */
+        public void populate() {
+            Connection connection = null;
+            try {
+                connection = dataSource.getConnection();
+                createDatabaseSchema(connection);
+                insertTestData(connection);
+            } catch (SQLException e) {
+                throw new RuntimeException("SQL exception occurred acquiring connection", e);
+            } finally {
+                if (connection != null) {
+                    try {
+                        connection.close();
+                    } catch (SQLException e) {
+                    }
+                }
+            }
+        }
+
+        // create the application's database schema (tables, indexes, etc.)
+        private void createDatabaseSchema(Connection connection) {
+            try {
+                String sql = parseSqlIn(schemaLocation);
+                executeSql(sql, connection);
+            } catch (IOException e) {
+                throw new RuntimeException("I/O exception occurred accessing the database schema file", e);
+            } catch (SQLException e) {
+                throw new RuntimeException("SQL exception occurred exporting database schema", e);
+            }
+        }
+
+        // populate the tables with test data
+        private void insertTestData(Connection connection) {
+            try {
+                String sql = parseSqlIn(testDataLocation);
+                executeSql(sql, connection);
+            } catch (IOException e) {
+                throw new RuntimeException("I/O exception occurred accessing the test data file", e);
+            } catch (SQLException e) {
+                throw new RuntimeException("SQL exception occurred loading test data", e);
+            }
+        }
+
+        // utility method to read a .sql txt input stream
         private String parseSqlIn(Resource resource) throws IOException {
-			InputStream is = null;
-			try {
-				is = resource.getInputStream();
-				BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-				
-				StringWriter sw = new StringWriter();
-				BufferedWriter writer = new BufferedWriter(sw);
-			
-				for (int c=reader.read(); c != -1; c=reader.read()) {
-					writer.write(c);
-				}
-				writer.flush();
-				return sw.toString();
-				
-			} finally {
-				if (is != null) {
-					is.close();
-				}
-			}
-		}
+            InputStream is = null;
+            try {
+                is = resource.getInputStream();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(is));
 
-		// utility method to run the parsed sql
-		private void executeSql(String sql, Connection connection) throws SQLException {
-			Statement statement = connection.createStatement();
-			statement.execute(sql);
-		}
-	}
+                StringWriter sw = new StringWriter();
+                BufferedWriter writer = new BufferedWriter(sw);
+
+                for (int c = reader.read(); c != -1; c = reader.read()) {
+                    writer.write(c);
+                }
+                writer.flush();
+                return sw.toString();
+
+            } finally {
+                if (is != null) {
+                    is.close();
+                }
+            }
+        }
+
+        // utility method to run the parsed sql
+        private void executeSql(String sql, Connection connection) throws SQLException {
+            Statement statement = connection.createStatement();
+            statement.execute(sql);
+        }
+    }
 }

@@ -32,10 +32,12 @@ import javax.portlet.RenderResponse;
 import javax.portlet.ResourceRequest;
 import javax.portlet.WindowState;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,9 +46,9 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 import org.springframework.web.portlet.util.PortletUtils;
 
+import se.vgregion.portal.csiframe.domain.UserSiteCredential;
+import se.vgregion.portal.csiframe.service.UserSiteCredentialService;
 import se.vgregion.portal.iframe.model.PortletConfig;
-import se.vgregion.portal.iframe.model.UserSiteCredential;
-import se.vgregion.portal.repository.CredentialStoreRepository;
 
 /**
  * This action do that and that, if it has something special it is.
@@ -58,18 +60,8 @@ import se.vgregion.portal.repository.CredentialStoreRepository;
 public class CSViewController {
     private Logger log = LoggerFactory.getLogger(CSViewController.class);
 
-    private CredentialStoreRepository credentialStoreRepository;
-
-    /**
-     * Spring configuration setter.
-     * 
-     * @param credentialStoreRepository
-     *            - CredentialStoreRepository implementation
-     */
     @Autowired
-    public void setCredentialStoreRepository(CredentialStoreRepository credentialStoreRepository) {
-        this.credentialStoreRepository = credentialStoreRepository;
-    }
+    private UserSiteCredentialService userSiteCredentialService;
 
     /**
      * Main controllermethod. Handling of user-sitecredential availability and iFrame source linking
@@ -87,11 +79,11 @@ public class CSViewController {
     @RenderMapping
     public String showView(PortletPreferences prefs, RenderRequest req, RenderResponse resp, ModelMap model) {
         PortletConfig portletConfig = PortletConfig.getInstance(prefs);
+        model.addAttribute("portletConfig", portletConfig);
         log.debug("Creds: {}", portletConfig);
 
         UserSiteCredential siteCredential = new UserSiteCredential();
         if (!credentialsAvailable(req, model, portletConfig, siteCredential)) {
-            model.addAttribute("portletConfig", portletConfig);
             return "userCredentialForm";
         }
 
@@ -121,8 +113,6 @@ public class CSViewController {
         model.addAttribute("width", portletConfig.getHtmlAttribute("width", "100%"));
         String linkDisplay = portletConfig.isAuth() ? "display:block;" : "display:none;";
         model.addAttribute("link_display", linkDisplay);
-        // view is using defineObjects, so the name portletConfig is taken...
-        model.addAttribute("myPortletConfig", portletConfig);
 
         return "view";
     }
@@ -215,17 +205,29 @@ public class CSViewController {
      * @param req
      *            - action request to handle cancel
      */
+    @Transactional
     @ActionMapping
     public void storeUserCredential(@ModelAttribute("siteCredential") UserSiteCredential siteCredential,
             ActionRequest req) {
-        if (siteCredential.getUid() == null || siteCredential.getUid().trim().length() < 1) {
+
+        if (StringUtils.isBlank(siteCredential.getUid())) {
             throw new RuntimeException("ERROR: Unknown user. Cannot store credential.");
         }
-        if (siteCredential.getSiteKey() == null || siteCredential.getSiteKey().trim().length() < 1) {
+
+        if (StringUtils.isBlank(siteCredential.getSiteKey())) {
             throw new RuntimeException("CONFIGURATION ERROR: No site-key given. Cannot store user credential.");
         }
         if (!PortletUtils.hasSubmitParameter(req, "_cancel")) {
-            credentialStoreRepository.addUserSiteCredential(siteCredential);
+            UserSiteCredential entToStore = userSiteCredentialService.getUserSiteCredential(
+                    siteCredential.getUid(), siteCredential.getSiteKey());
+            if (entToStore == null || entToStore.getId() == null) {
+                entToStore = siteCredential;
+            } else {
+                entToStore.setSiteUser(siteCredential.getSiteUser());
+                entToStore.setSitePassword(siteCredential.getSitePassword());
+            }
+            // credentialStoreRepository.addUserSiteCredential(siteCredential);
+            userSiteCredentialService.addUserSiteCredential(entToStore);
             // log.debug("storeUserCredential: {}", siteCredential);
         }
     }
@@ -251,9 +253,6 @@ public class CSViewController {
         }
 
         if (src.length() > 0) {
-            if (portletConfig.isSslUrlsOnly() && !src.startsWith("https:")) {
-                src = src.replace("http:", "https:");
-            }
             iFrameSrc = src;
         }
 
@@ -275,9 +274,11 @@ public class CSViewController {
                 returnSiteCredential.setSiteUser(uid);
             }
 
-            UserSiteCredential siteCredential = credentialStoreRepository.getUserSiteCredential(uid,
+            UserSiteCredential siteCredential = userSiteCredentialService.getUserSiteCredential(uid,
                     portletConfig.getSiteKey());
+
             if (siteCredential != null) {
+                returnSiteCredential.setId(siteCredential.getId());
                 if (!portletConfig.isScreenNameOnly()) {
                     returnSiteCredential.setSiteUser(siteCredential.getSiteUser());
                 }
@@ -320,4 +321,5 @@ public class CSViewController {
         }
         return iFrameHeight;
     }
+
 }

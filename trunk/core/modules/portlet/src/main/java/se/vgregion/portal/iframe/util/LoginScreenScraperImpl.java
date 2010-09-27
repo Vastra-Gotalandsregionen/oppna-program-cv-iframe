@@ -48,14 +48,13 @@ public class LoginScreenScraperImpl implements LoginScreenScraper {
 
     /**
      * Utility method for accessing form information from login screens.
-     *
-     * @param portletConfig - CS-iFrame configuration to know where to look.
+     * 
+     * @param portletConfig
+     *            - CS-iFrame configuration to know where to look.
      */
     public void advancedScraping(PortletConfig portletConfig) {
         try {
-            if (portletConfig == null
-                    || portletConfig.getSrc() == null
-                    || portletConfig.getSrc().length() < 1) {
+            if (portletConfig == null || portletConfig.getSrc() == null || portletConfig.getSrc().length() < 1) {
                 return;
             }
             log.debug("Target page: {}", portletConfig.getSrc());
@@ -68,7 +67,7 @@ public class LoginScreenScraperImpl implements LoginScreenScraper {
             HttpEntity entity = httpResponse.getEntity();
             HttpEntity bufferedEntity = new BufferedHttpEntity(entity);
             String pageContent = EntityUtils.toString(bufferedEntity);
-//            System.out.println(pageContent);
+            // System.out.println(pageContent);
 
             Parser parser = Parser.createParser(pageContent, "UTF-8");
             TagNameFilter formTagFilter = new TagNameFilter("form");
@@ -78,20 +77,16 @@ public class LoginScreenScraperImpl implements LoginScreenScraper {
                 FormTag tag = (FormTag) it.nextNode();
                 log.debug("Form id: {} name: {}", tag.getAttribute("id"), tag.getAttribute("name"));
                 log.debug("Form name: {}", tag.getFormName());
-                log.debug("Form location: {} resolved: {}",
-                        tag.getFormLocation(), uri.resolve(tag.getFormLocation()));
+                log.debug("Form location: {} resolved: {}", tag.getFormLocation(),
+                        uri.resolve(tag.getFormLocation()));
                 log.debug("Form method: {}", tag.getFormMethod());
                 log.debug("Form size: {}", tag.getFormInputs().size());
-                for (SimpleNodeIterator itInputs = tag.getFormInputs().elements();
-                     itInputs.hasMoreNodes();) {
+                for (SimpleNodeIterator itInputs = tag.getFormInputs().elements(); itInputs.hasMoreNodes();) {
                     InputTag input = (InputTag) itInputs.nextNode();
-                    log.debug("Input type: {} id: {} name: {} value: {}",
-                            new Object[] {
-                                    input.getAttribute("type"),
-                                    input.getAttribute("id"),
-                                    input.getAttribute("name"),
-                                    input.getAttribute("value")
-                            });
+                    log.debug(
+                            "Input type: {} id: {} name: {} value: {}",
+                            new Object[] { input.getAttribute("type"), input.getAttribute("id"),
+                                    input.getAttribute("name"), input.getAttribute("value") });
                 }
             }
 

@@ -19,18 +19,19 @@
 
 package se.vgregion.portal.repository;
 
-import org.springframework.jdbc.core.simple.SimpleJdbcDaoSupport;
-import org.springframework.jdbc.core.simple.ParameterizedBeanPropertyRowMapper;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
-import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.dao.DataAccessException;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
-import se.vgregion.portal.iframe.model.UserSiteCredential;
-import se.vgregion.portal.iframe.util.CryptoUtil;
-
 import java.security.GeneralSecurityException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.simple.ParameterizedBeanPropertyRowMapper;
+import org.springframework.jdbc.core.simple.SimpleJdbcDaoSupport;
+
+import se.vgregion.portal.csiframe.domain.UserSiteCredential;
+import se.vgregion.portal.iframe.util.CryptoUtil;
 
 /**
  * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
@@ -43,7 +44,7 @@ public class JDBCCredentialStoreRepository extends SimpleJdbcDaoSupport implemen
     private CryptoUtil cryptoUtils;
 
     public void setCryptoUtils(CryptoUtil cryptoUtils) {
-       this.cryptoUtils = cryptoUtils;
+        this.cryptoUtils = cryptoUtils;
     }
 
     public void setDbCredentialFile(String dbCredentialFile) {
@@ -51,18 +52,20 @@ public class JDBCCredentialStoreRepository extends SimpleJdbcDaoSupport implemen
     }
 
     /**
-     * Retrive user credentials.
-     * If no credentals are stored, null will be returned.
-     *
-     * @param uid - user identifier.
-     * @param siteKey - site credental identifier.
+     * Retrive user credentials. If no credentals are stored, null will be returned.
+     * 
+     * @param uid
+     *            - user identifier.
+     * @param siteKey
+     *            - site credental identifier.
      * @return credentials
      */
+    @Override
     public UserSiteCredential getUserSiteCredential(String uid, String siteKey) {
         String sql = "select * from vgr_user_site_credential where uid = ? and site_key = ?";
 
-        RowMapper<UserSiteCredential> rowMapper =
-                ParameterizedBeanPropertyRowMapper.newInstance(UserSiteCredential.class);
+        RowMapper<UserSiteCredential> rowMapper = ParameterizedBeanPropertyRowMapper
+                .newInstance(UserSiteCredential.class);
         UserSiteCredential creds = null;
         try {
             creds = getSimpleJdbcTemplate().queryForObject(sql, rowMapper, uid, siteKey);
@@ -78,11 +81,12 @@ public class JDBCCredentialStoreRepository extends SimpleJdbcDaoSupport implemen
     }
 
     /**
-     * Store a credental.
-     * Password will be encrypted before storage.
-     *
-     * @param siteCredential - credental to be stored
+     * Store a credental. Password will be encrypted before storage.
+     * 
+     * @param siteCredential
+     *            - credental to be stored
      */
+    @Override
     public void addUserSiteCredential(UserSiteCredential siteCredential) {
         UserSiteCredential copy = siteCredential.copy();
         encryptSitePwd(copy);
@@ -117,8 +121,7 @@ public class JDBCCredentialStoreRepository extends SimpleJdbcDaoSupport implemen
                     + "SET SITE_USER = :siteUser,  SITE_PASSWORD = :sitePassword "
                     + "WHERE UID = :uid AND SITE_KEY = :siteKey";
         } else {
-            sql = "INSERT INTO VGR_USER_SITE_CREDENTIAL "
-                    + "(UID, SITE_KEY, SITE_USER, SITE_PASSWORD) "
+            sql = "INSERT INTO VGR_USER_SITE_CREDENTIAL " + "(UID, SITE_KEY, SITE_USER, SITE_PASSWORD) "
                     + "VALUES(:uid, :siteKey, :siteUser, :sitePassword)";
         }
         return sql;

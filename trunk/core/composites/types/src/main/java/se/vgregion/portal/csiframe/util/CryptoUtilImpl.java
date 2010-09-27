@@ -17,12 +17,8 @@
  *
  */
 
-package se.vgregion.portal.iframe.util;
+package se.vgregion.portal.csiframe.util;
 
-import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -32,13 +28,21 @@ import java.io.Reader;
 import java.io.Writer;
 import java.security.GeneralSecurityException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Locale;
 import java.util.Properties;
 import java.util.Scanner;
-import java.util.Locale;
+
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+
+import org.springframework.stereotype.Component;
 
 /**
  * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
  */
+@Component
 public class CryptoUtilImpl implements CryptoUtil {
 
     private static final String AES = "AES";
@@ -50,13 +54,15 @@ public class CryptoUtilImpl implements CryptoUtil {
     }
 
     /**
-     * Encrypt a value and generate a keyfile.
-     * if the keyfile is not found then a new one is created
-     *
-     * @param value - value to be encrypted
-     * @throws GeneralSecurityException - security exception
+     * Encrypt a value and generate a keyfile. if the keyfile is not found then a new one is created
+     * 
+     * @param value
+     *            - value to be encrypted
+     * @throws GeneralSecurityException
+     *             - security exception
      * @return Encrypted value
      */
+    @Override
     public String encrypt(String value) throws GeneralSecurityException {
         if (!keyFile.exists()) {
             KeyGenerator keyGen = KeyGenerator.getInstance(AES);
@@ -88,11 +94,14 @@ public class CryptoUtilImpl implements CryptoUtil {
 
     /**
      * decrypt a value.
-     *
-     * @param value - value to be decrypted
-     * @throws GeneralSecurityException - decrypt failed
+     * 
+     * @param value
+     *            - value to be decrypted
+     * @throws GeneralSecurityException
+     *             - decrypt failed
      * @return decrypted value
      */
+    @Override
     public String decrypt(String value) throws GeneralSecurityException {
         SecretKeySpec sks = getSecretKeySpec();
         Cipher cipher = Cipher.getInstance(AES);
@@ -102,7 +111,6 @@ public class CryptoUtilImpl implements CryptoUtil {
 
         return new String(decrypted);
     }
-
 
     private SecretKeySpec getSecretKeySpec() throws NoSuchAlgorithmException {
         byte[] key = readKeyFile();
@@ -122,7 +130,6 @@ public class CryptoUtilImpl implements CryptoUtil {
             return null;
         }
     }
-
 
     private String byteArrayToHexString(byte[] b) {
         StringBuffer sb = new StringBuffer(b.length * 2);
@@ -148,8 +155,9 @@ public class CryptoUtilImpl implements CryptoUtil {
 
     /**
      * Main method used for creating initial key file.
-     *
-     * @param args - not used
+     * 
+     * @param args
+     *            - not used
      */
     public static void main(String[] args) {
         final String KEY_FILE = "./howto.key";
@@ -198,13 +206,13 @@ public class CryptoUtilImpl implements CryptoUtil {
         } catch (GeneralSecurityException e) {
             e.printStackTrace();
         } finally {
-          if (r != null) {
-              try {
-                  r.close();
-              } catch (IOException e) {
-                  e.printStackTrace();
-              }
-          }
+            if (r != null) {
+                try {
+                    r.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 }

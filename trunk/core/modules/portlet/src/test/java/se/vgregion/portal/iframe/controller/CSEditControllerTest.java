@@ -36,7 +36,7 @@ import static org.junit.Assert.assertEquals;
 
 /**
  * This action do that and that, if it has something special it is.
- *
+ * 
  * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
  */
 public class CSEditControllerTest extends BaseTestSetup {
@@ -142,7 +142,6 @@ public class CSEditControllerTest extends BaseTestSetup {
         public int getStoreCalled() {
             return storeCalled;
         }
-
 
         @Override
         public void store() throws IOException, ValidatorException {

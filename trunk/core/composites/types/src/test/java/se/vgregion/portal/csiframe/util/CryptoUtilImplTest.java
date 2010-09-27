@@ -17,20 +17,22 @@
  *
  */
 
-package se.vgregion.portal.iframe.util;
+package se.vgregion.portal.csiframe.util;
 
-import static org.junit.Assert.*;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.After;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.security.GeneralSecurityException;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
 /**
  * This action do that and that, if it has something special it is.
- *
+ * 
  * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
  */
 public class CryptoUtilImplTest {
@@ -79,6 +81,9 @@ public class CryptoUtilImplTest {
     }
 
     @Test
+    /**
+     * This is a test to verify that error is thrown when no key file is present.
+     */
     public void testDecryptNoKeyfile() throws GeneralSecurityException {
         String value = "test-encrypt-string";
 
