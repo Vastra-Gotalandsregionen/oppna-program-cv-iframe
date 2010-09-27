@@ -19,21 +19,21 @@
 
 package se.vgregion.portal.iframe.model;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
-
-import javax.portlet.PortletPreferences;
-import javax.portlet.ReadOnlyException;
-import javax.portlet.ValidatorException;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.portlet.PortletPreferences;
+import javax.portlet.ReadOnlyException;
+import javax.portlet.ValidatorException;
+
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 
 /**
  * This action do that and that, if it has something special it is.
- *
+ * 
  * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
  */
 
@@ -50,6 +50,7 @@ public class PortletConfig implements Serializable {
     private String formAction;
     private boolean screenNameOnly;
     private boolean suggestScreenName = true;
+    private boolean sslUrlsOnly;
     private String siteUserNameField;
     private String sitePasswordField;
     private String hiddenVariables;
@@ -66,8 +67,9 @@ public class PortletConfig implements Serializable {
 
     /**
      * Factory for creating portlet configuration.
-     *
-     * @param prefs - PortletPreferences to synch with
+     * 
+     * @param prefs
+     *            - PortletPreferences to synch with
      * @return configuration parameters
      */
     public static PortletConfig getInstance(PortletPreferences prefs) {
@@ -82,6 +84,7 @@ public class PortletConfig implements Serializable {
         portletConfig.setFormMethod(prefs.getValue("form-method", ""));
         portletConfig.setScreenNameOnly(Boolean.valueOf(prefs.getValue("screenNameOnly", "false")));
         portletConfig.setSuggestScreenName(Boolean.valueOf(prefs.getValue("suggestScreenName", "true")));
+        portletConfig.setSslUrlsOnly(Boolean.valueOf(prefs.getValue("sslUrlsOnly", "false")));
         portletConfig.setSiteUserNameField(prefs.getValue("user-name-field", ""));
         portletConfig.setSitePasswordField(prefs.getValue("password-field", ""));
         portletConfig.setHiddenVariables(prefs.getValue("hidden-variables", ""));
@@ -93,9 +96,11 @@ public class PortletConfig implements Serializable {
 
     /**
      * Store configuration in PortlerPreferences.
-     *
-     * @param prefs - PortlerPreferences
-     * @throws ValidatorException - property validation exception
+     * 
+     * @param prefs
+     *            - PortlerPreferences
+     * @throws ValidatorException
+     *             - property validation exception
      */
     public void store(PortletPreferences prefs) throws ValidatorException {
         try {
@@ -108,6 +113,7 @@ public class PortletConfig implements Serializable {
             prefs.setValue("form-method", getFormMethod());
             prefs.setValue("screenNameOnly", String.valueOf(isScreenNameOnly()));
             prefs.setValue("suggestScreenName", String.valueOf(isSuggestScreenName()));
+            prefs.setValue("sslUrlsOnly", String.valueOf(isSslUrlsOnly()));
             prefs.setValue("user-name-field", getSiteUserNameField());
             prefs.setValue("password-field", getSitePasswordField());
             prefs.setValue("hidden-variables", getHiddenVariables());
@@ -124,9 +130,11 @@ public class PortletConfig implements Serializable {
 
     /**
      * Convienience method to access html-attribute.
-     *
-     * @param attribute    - attribute name
-     * @param defaultValue - default value if attribute not found
+     * 
+     * @param attribute
+     *            - attribute name
+     * @param defaultValue
+     *            - default value if attribute not found
      * @return attribute value
      */
     public String getHtmlAttribute(String attribute, String defaultValue) {
@@ -211,6 +219,14 @@ public class PortletConfig implements Serializable {
         this.suggestScreenName = suggestScreenName;
     }
 
+    public boolean isSslUrlsOnly() {
+        return sslUrlsOnly;
+    }
+
+    public void setSslUrlsOnly(boolean sslUrlsOnly) {
+        this.sslUrlsOnly = sslUrlsOnly;
+    }
+
     public String getSiteUserNameField() {
         return siteUserNameField;
     }
@@ -249,7 +265,7 @@ public class PortletConfig implements Serializable {
 
     /**
      * Convinience method for access of hidden attribures.
-     *
+     * 
      * @return Map<String, String> - name/value pair
      */
     public Map<String, String> getHiddenVarialbleMap() {
@@ -270,8 +286,9 @@ public class PortletConfig implements Serializable {
 
     /**
      * Set html attributes.
-     *
-     * @param htmlAttributes - new line ('\n') separated list of html attributes
+     * 
+     * @param htmlAttributes
+     *            - new line ('\n') separated list of html attributes
      */
     public void setHtmlAttributes(String htmlAttributes) {
         this.htmlAttributes = htmlAttributes;
@@ -292,21 +309,12 @@ public class PortletConfig implements Serializable {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).
-                append("siteKey", siteKey).
-                append("src", src).
-                append("relative", relative).
-                append("auth", auth).
-                append("authType", authType).
-                append("formAction", formAction).
-                append("formMethod", formMethod).
-                append("screenNameOnly", screenNameOnly).
-                append("suggestScreenName", suggestScreenName).
-                append("siteUserNameField", siteUserNameField).
-                append("sitePasswordField", sitePasswordField).
-                append("hiddenVariables", hiddenVariables).
-                append("preIFrameAction", preIFrameAction).
-                append("htmlAttributes", htmlAttributes).
-                toString();
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).append("siteKey", siteKey)
+                .append("src", src).append("relative", relative).append("auth", auth).append("authType", authType)
+                .append("formAction", formAction).append("formMethod", formMethod)
+                .append("screenNameOnly", screenNameOnly).append("suggestScreenName", suggestScreenName)
+                .append("sslUrlsOnly", sslUrlsOnly).append("siteUserNameField", siteUserNameField)
+                .append("sitePasswordField", sitePasswordField).append("hiddenVariables", hiddenVariables)
+                .append("preIFrameAction", preIFrameAction).append("htmlAttributes", htmlAttributes).toString();
     }
 }

@@ -22,22 +22,22 @@
  */
 package se.vgregion.portal.iframe.controller;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.portlet.bind.annotation.RenderMapping;
-import org.springframework.web.portlet.bind.annotation.ActionMapping;
-
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.ui.ModelMap;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import se.vgregion.portal.iframe.model.PortletConfig;
-import se.vgregion.portal.iframe.util.LoginScreenScraper;
-
+import javax.portlet.ActionRequest;
 import javax.portlet.PortletPreferences;
 import javax.portlet.ValidatorException;
-import javax.portlet.ActionRequest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.portlet.bind.annotation.ActionMapping;
+import org.springframework.web.portlet.bind.annotation.RenderMapping;
+
+import se.vgregion.portal.iframe.model.PortletConfig;
+import se.vgregion.portal.iframe.util.LoginScreenScraper;
 
 /**
  * Portlet mode=EDIT controller.
@@ -53,16 +53,18 @@ public class CSEditController {
     public void setLoginScreenScraper(LoginScreenScraper loginScreenScraper) {
         this.loginScreenScraper = loginScreenScraper;
     }
+
     /**
      * RenderMapping for edit page.
-     *
-     * @param model - model
-     * @param prefs - portletPreferences
+     * 
+     * @param model
+     *            - model
+     * @param prefs
+     *            - portletPreferences
      * @return view
      */
     @RenderMapping
-    public String editPreferences(ModelMap model,
-                                        PortletPreferences prefs) {
+    public String editPreferences(ModelMap model, PortletPreferences prefs) {
         PortletConfig portletConfig = PortletConfig.getInstance(prefs);
         log.debug("editPreferences: {}", portletConfig);
 
@@ -74,27 +76,26 @@ public class CSEditController {
     }
 
     /**
-     *
-     * @param actionRequest - action request
-     * @param prefs - portlet preferences
-     * @param portletConfig - request parameter
+     * 
+     * @param actionRequest
+     *            - action request
+     * @param prefs
+     *            - portlet preferences
+     * @param portletConfig
+     *            - request parameter
      */
     @ActionMapping
-    public void savePreferences(ActionRequest actionRequest,
-                                      PortletPreferences prefs,
-                                      @ModelAttribute("credential")
-                                      PortletConfig portletConfig) {
+    public void savePreferences(ActionRequest actionRequest, PortletPreferences prefs,
+            @ModelAttribute("credential") PortletConfig portletConfig) {
 
         log.debug("savePreferences 1: {}", portletConfig);
 
         String src = portletConfig.getSrc();
-        if (!src.startsWith("/")
-            && !src.startsWith("http://")
-            && !src.startsWith("https://")
-            && !src.startsWith("mhtml://")) {
+        if (!src.startsWith("/") && !src.startsWith("http://") && !src.startsWith("https://")
+                && !src.startsWith("mhtml://")) {
 
             if (actionRequest.isSecure()) {
-                src =  "https://" + src;
+                src = "https://" + src;
             } else {
                 src = "http://" + src;
             }
