@@ -23,7 +23,7 @@
 
 <%@page pageEncoding="UTF-8"%>
 
-<portlet:renderURL portletMode="view" var="showView" />
+<portlet:renderURL portletMode="view" var="showView" secure="${portletConfig.sslUrlsOnly}"/>
 <br />
 <div class="vgr-portlet-controlls-container" style="width: 600px; text-align: left;">
     <h1>Användning</h1>

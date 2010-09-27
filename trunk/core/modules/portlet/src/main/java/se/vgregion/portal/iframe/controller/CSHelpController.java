@@ -22,9 +22,14 @@
  */
 package se.vgregion.portal.iframe.controller;
 
+import javax.portlet.PortletPreferences;
+
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
+
+import se.vgregion.portal.iframe.model.PortletConfig;
 
 /**
  * @author Anders Asplund
@@ -34,7 +39,9 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 @RequestMapping("HELP")
 public class CSHelpController {
     @RenderMapping
-    public String showHelp() {
+    public String showHelp(ModelMap model, PortletPreferences prefs) {
+        PortletConfig portletConfig = se.vgregion.portal.iframe.model.PortletConfig.getInstance(prefs);
+        model.addAttribute("portletConfig", portletConfig);
         return "help";
     }
 }

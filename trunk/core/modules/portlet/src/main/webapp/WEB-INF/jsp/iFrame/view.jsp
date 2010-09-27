@@ -41,7 +41,7 @@
             var src = '';
 
             var path = hash.substring(1);
-
+            
             if (path.indexOf('http://') != 0) {
                 src = '${baseSrc}';
             }
@@ -168,10 +168,10 @@
             );
 --></script>
 
-<portlet:renderURL var="changeCredentials">
+<portlet:renderURL var="changeCredentials" secure="${myPortletConfig.sslUrlsOnly}">
     <portlet:param name="action" value="changeVaultCredentials"/>
 </portlet:renderURL>
-<portlet:renderURL portletMode="help" var="showHelp" />
+<portlet:renderURL portletMode="help" var="showHelp" secure="${myPortletConfig.sslUrlsOnly}"/>
 
 <div class="vgr-portlet-controlls-container" style="${link_display}">
     <span class="vgr-portlet-controlls-left">
@@ -201,8 +201,8 @@
   <h1>&nbsp;Laddar extern källa...&nbsp;</h1> 
 </div> 
 
-<script type="text/javascript">
-    //Display "loading" block over IFrame for two seconds
+<script type="text/javascript"><!--
+    // Display "loading" block over IFrame for two seconds
     jQuery('#p_p_id<portlet:namespace /> #blockMe').block({ 
         message: jQuery('#p_p_id<portlet:namespace /> #blockDisplayMessage'),
         centerY: 50,
@@ -219,4 +219,4 @@
             this.src="${iFrameSrc}";
         }
     });
-</script>
+--></script>

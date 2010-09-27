@@ -25,7 +25,7 @@
 <%@ taglib prefix="portlet" uri="http://java.sun.com/portlet_2_0" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<portlet:actionURL var="formAction" />
+<portlet:actionURL var="formAction" escapeXml="false" secure="${portletConfig.sslUrlsOnly}"/>
 
 <form:form method="post" action="${formAction}" commandName="siteCredential">
     <h1>SiteKey - ${siteCredential.siteKey}</h1>

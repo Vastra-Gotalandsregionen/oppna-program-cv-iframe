@@ -106,7 +106,7 @@
 	);
 </script>
 
-<portlet:actionURL var="formAction" />
+<portlet:actionURL var="formAction" escapeXml="false" secure="${portletConfig.sslUrlsOnly}"/>
 <c:set var="ns"><portlet:namespace /></c:set>
 
 <form:form method="post" action="${formAction}" commandName="portletConfig">
@@ -172,6 +172,10 @@
                 <tr>
                     <td><label for="<portlet:namespace/>screenNameOnlyField">ScreenName Only</label></td>
                     <td><form:checkbox path="screenNameOnly" id="${ns}screenNameOnly" /></td>
+                </tr>
+                <tr>
+                    <td><label for="<portlet:namespace/>sslUrlsOnlyField">SSL URLs Only</label></td>
+                    <td><form:checkbox path="sslUrlsOnly" id="${ns}sslUrlsOnly" /></td>
                 </tr>
                 <tr>
                     <td><label for="<portlet:namespace/>siteUserNameField">User Field Name</label></td>

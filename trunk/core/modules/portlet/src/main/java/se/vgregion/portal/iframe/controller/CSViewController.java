@@ -87,11 +87,11 @@ public class CSViewController {
     @RenderMapping
     public String showView(PortletPreferences prefs, RenderRequest req, RenderResponse resp, ModelMap model) {
         PortletConfig portletConfig = PortletConfig.getInstance(prefs);
-        model.addAttribute("portletConfig", portletConfig);
         log.debug("Creds: {}", portletConfig);
 
         UserSiteCredential siteCredential = new UserSiteCredential();
         if (!credentialsAvailable(req, model, portletConfig, siteCredential)) {
+            model.addAttribute("portletConfig", portletConfig);
             return "userCredentialForm";
         }
 
@@ -121,6 +121,8 @@ public class CSViewController {
         model.addAttribute("width", portletConfig.getHtmlAttribute("width", "100%"));
         String linkDisplay = portletConfig.isAuth() ? "display:block;" : "display:none;";
         model.addAttribute("link_display", linkDisplay);
+        // view is using defineObjects, so the name portletConfig is taken...
+        model.addAttribute("myPortletConfig", portletConfig);
 
         return "view";
     }
@@ -249,6 +251,9 @@ public class CSViewController {
         }
 
         if (src.length() > 0) {
+            if (portletConfig.isSslUrlsOnly() && !src.startsWith("https:")) {
+                src = src.replace("http:", "https:");
+            }
             iFrameSrc = src;
         }
 
