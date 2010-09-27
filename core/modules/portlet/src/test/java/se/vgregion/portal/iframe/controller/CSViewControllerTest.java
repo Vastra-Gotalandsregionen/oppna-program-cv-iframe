@@ -19,36 +19,57 @@
 
 package se.vgregion.portal.iframe.controller;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.springframework.mock.web.portlet.*;
-import org.springframework.ui.ModelMap;
-import se.vgregion.portal.iframe.BaseTestSetup;
-import se.vgregion.portal.iframe.model.PortletConfig;
-import se.vgregion.portal.iframe.model.UserSiteCredential;
-import se.vgregion.portal.repository.CredentialStoreRepository;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
-import javax.portlet.*;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import javax.portlet.PortletMode;
+import javax.portlet.PortletPreferences;
+import javax.portlet.PortletRequest;
+import javax.portlet.ReadOnlyException;
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
+import javax.portlet.ResourceRequest;
+import javax.portlet.ResourceURL;
+import javax.portlet.WindowState;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.springframework.mock.web.portlet.MockActionRequest;
+import org.springframework.mock.web.portlet.MockPortletPreferences;
+import org.springframework.mock.web.portlet.MockRenderRequest;
+import org.springframework.mock.web.portlet.MockRenderResponse;
+import org.springframework.mock.web.portlet.MockResourceRequest;
+import org.springframework.mock.web.portlet.MockResourceURL;
+import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.ui.ModelMap;
+
+import se.vgregion.portal.csiframe.domain.UserSiteCredential;
+import se.vgregion.portal.iframe.BaseTestSetup;
+import se.vgregion.portal.iframe.model.PortletConfig;
 
 /**
  * This action do that and that, if it has something special it is.
- *
+ * 
  * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
  */
 public class CSViewControllerTest extends BaseTestSetup {
 
     CSViewController controller;
+    MockUserSiteCredentialService storeService;
 
     @Before
     public void setUp() {
         controller = new CSViewController();
-        controller.setCredentialStoreRepository(new TestStubCredentialStoreRepository());
+        storeService = new MockUserSiteCredentialService();
+        // Sets the private field userSiteCredentialService to our mock version.
+        ReflectionTestUtils.setField(controller, "userSiteCredentialService", storeService);
     }
 
     @After
@@ -153,8 +174,10 @@ public class CSViewControllerTest extends BaseTestSetup {
         assertEquals("test-site-password", siteCredential.getSitePassword());
 
         // Test model
-        assertEquals("http://" + siteCredential.getSiteUser() + ":" + siteCredential.getSitePassword() + "@www.google.com", model.get("iFrameSrc"));
-        assertEquals("http://" + siteCredential.getSiteUser() + ":" + siteCredential.getSitePassword() + "@www.google.com", model.get("baseSrc"));
+        assertEquals("http://" + siteCredential.getSiteUser() + ":" + siteCredential.getSitePassword()
+                + "@www.google.com", model.get("iFrameSrc"));
+        assertEquals("http://" + siteCredential.getSiteUser() + ":" + siteCredential.getSitePassword()
+                + "@www.google.com", model.get("baseSrc"));
         assertEquals("300", model.get("iFrameHeight"));
         assertEquals("0", model.get("border"));
         assertEquals("#000000", model.get("bordercolor"));
@@ -431,7 +454,7 @@ public class CSViewControllerTest extends BaseTestSetup {
         assertNotNull(portletConfig);
         assertEquals("", portletConfig.getPreIFrameAction());
 
-        String proxyFormAction = (String)model.get("proxyFormAction");
+        String proxyFormAction = (String) model.get("proxyFormAction");
         assertEquals("test-src", proxyFormAction);
 
         UserSiteCredential siteCredential = (UserSiteCredential) model.get("siteCredential");
@@ -569,12 +592,9 @@ public class CSViewControllerTest extends BaseTestSetup {
         userSiteCredential.setSiteKey("test-key");
         MockActionRequest request = new MockActionRequest();
 
-        final TestStubCredentialStoreRepository storeRepository = new TestStubCredentialStoreRepository();
-        controller.setCredentialStoreRepository(storeRepository);
-
         controller.storeUserCredential(userSiteCredential, request);
 
-        assertEquals(1, storeRepository.getStoreCalled());
+        assertEquals(1, storeService.getStoreCalled());
     }
 
     @Test
@@ -585,36 +605,9 @@ public class CSViewControllerTest extends BaseTestSetup {
         MockActionRequest request = new MockActionRequest();
         request.setParameter("_cancel", "");
 
-        final TestStubCredentialStoreRepository storeRepository = new TestStubCredentialStoreRepository();
-        controller.setCredentialStoreRepository(storeRepository);
-
         controller.storeUserCredential(userSiteCredential, request);
 
-        assertEquals(0, storeRepository.getStoreCalled());
-    }
-
-    class TestStubCredentialStoreRepository implements CredentialStoreRepository {
-        private int storeCalled = 0;
-
-        public int getStoreCalled() {
-            return storeCalled;
-        }
-
-        public UserSiteCredential getUserSiteCredential(String uid, String siteKey) {
-            if ("test-user".equals(uid) && "test-site-key".equals(siteKey)) {
-                UserSiteCredential siteCredential = new UserSiteCredential("test-user", "test-site-key");
-                siteCredential.setSiteUser("test-site-user");
-                siteCredential.setSitePassword("test-site-password");
-
-                return siteCredential;
-            } else {
-                return null;
-            }
-        }
-
-        public void addUserSiteCredential(UserSiteCredential siteCredential) {
-            storeCalled++;
-        }
+        assertEquals(0, storeService.getStoreCalled());
     }
 
     class TestStubMockRenderResponse extends MockRenderResponse {

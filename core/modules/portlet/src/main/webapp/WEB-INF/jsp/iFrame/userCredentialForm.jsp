@@ -30,6 +30,7 @@
 <form:form method="post" action="${formAction}" commandName="siteCredential">
     <h1>SiteKey - ${siteCredential.siteKey}</h1>
     <form:hidden path="uid" />
+    <form:hidden path="id" />
     <form:hidden path="siteKey" />
 
     <label for="siteUser">Användarnamn</label>

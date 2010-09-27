@@ -17,42 +17,34 @@
  *
  */
 
-package se.vgregion.portal.repository;
+package se.vgregion.portal.csiframe.domain.persistence.jpa;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import se.vgregion.portal.iframe.model.UserSiteCredential;
-import se.vgregion.portal.iframe.util.CryptoUtil;
+import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 
-import java.security.GeneralSecurityException;
-
-import static org.junit.Assert.*;
+import se.vgregion.portal.csiframe.domain.UserSiteCredential;
+import se.vgregion.portal.csiframe.domain.UserSiteCredentialRepository;
 
 /**
  * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
  */
-@ContextConfiguration
-@RunWith(SpringJUnit4ClassRunner.class)
-public class JDBCCredentialStoreRepositoryTest {
+@ContextConfiguration("classpath:JpaUserSiteCredentialRepositoryTest-context.xml")
+public class JpaUserSiteCredentialRepositoryTest extends AbstractTransactionalJUnit4SpringContextTests {
 
     @Autowired
-    private JDBCCredentialStoreRepository repo;
+    private UserSiteCredentialRepository repo;
 
     @Before
     public void setup() {
-        repo.setCryptoUtils(new CryptoUtil() {
-            public String encrypt(String value) throws GeneralSecurityException {
-                return new StringBuffer(value).reverse().toString();
-            }
 
-            public String decrypt(String value) throws GeneralSecurityException {
-                return new StringBuffer(value).reverse().toString();
-            }
-        });
+        executeSqlScript("classpath:dbsetup/test-data.sql", false);
     }
 
     @Test
