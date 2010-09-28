@@ -48,4 +48,4 @@ Filen cv.key MÅSTE hanteras konfidenciellt eftersom alla sparade lösenord kan 
 
 = Utvecklingsmiljö - Liferay & Eclipse =
 
-Man behöver se till att filen util-taglib.jar ligger under `$LIFERAY_HOME\tomcat\lib\ext`
+Man behöver se till att filen `util-taglib.jar` ligger under `$LIFERAY_HOME\tomcat\lib\ext`
