@@ -47,15 +47,6 @@
         <property name="password" value="${database.password}" />
     </bean>
 
-    <bean name="credentialStoreRepository" class="se.vgregion.portal.repository.JDBCCredentialStoreRepository">
-        <property name="dataSource" ref="dataSource" />
-        <property name="cryptoUtils" ref="cryptoUtils" />
-    </bean>
-
-    <bean name="cryptoUtils" class="se.vgregion.portal.iframe.util.CryptoUtilImpl">
-        <property name="keyFile" value="classpath:cv.key" />
-    </bean>
-
     <bean name="loginScreenScraper" class="se.vgregion.portal.iframe.util.LoginScreenScraperImpl" />
   
 </beans>
