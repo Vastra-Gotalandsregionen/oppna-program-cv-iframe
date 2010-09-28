@@ -17,19 +17,74 @@
 
 ====
 
---- Table: vgr_user_site_credential
+===============================================================================
+
+If the table already exists in an older version and contains data, we need
+to handle this manually (column has been added and constraints altered):
+
+1. Create the new table as vgr_user_site_credential_new instead
+
+2. Create below function copy_user_site_credentials
+
+3. Run function [select copy_user_site_credentials()]
+
+4. Verify that all data has been copied into the new table
+
+5. Stop server
+
+6. Rename vgr_user_site_credential to vgr_user_site_credential_old and vgr_user_site_credential_new to vgr_user_site_credential
+
+7. Deploy portlet
+
+8. Start server 
+
+9. Drop table vgr_user_site_credential_old and function copy_user_site_credentials if everything is ok
+
+===============================================================================
+
+-- Table: vgr_user_site_credential
 
 -- DROP TABLE vgr_user_site_credential;
 
 CREATE TABLE vgr_user_site_credential
 (
-  uid character varying(50) NOT NULL,
+  id bigint NOT NULL,
   site_key character varying(50) NOT NULL,
-  site_user character varying(256),
   site_password character varying(256),
-  CONSTRAINT vaultkey PRIMARY KEY (uid, site_key)
+  site_user character varying(256),
+  uid character varying(50) NOT NULL,
+  CONSTRAINT vgr_user_site_credential_pkey PRIMARY KEY (id),
+  CONSTRAINT vgr_user_site_credential_uid_key UNIQUE (uid, site_key)
 )
 WITH (
   OIDS=FALSE
 );
 ALTER TABLE vgr_user_site_credential OWNER TO liferay;
+
+===============================================================================
+
+-- Function: copy_user_site_credentials()
+
+-- DROP FUNCTION copy_user_site_credentials();
+
+CREATE OR REPLACE FUNCTION copy_user_site_credentials()
+  RETURNS integer AS
+$BODY$
+DECLARE
+    oldRow RECORD;
+    rowCount INTEGER DEFAULT 0;
+BEGIN
+    FOR oldRow IN SELECT site_key, site_password, site_user, uid from vgr_user_site_credential
+ LOOP
+	rowCount := rowCount + 1;
+
+    insert into vgr_user_site_credential_new values (rowCount, oldRow.site_key, oldRow.site_password, oldRow.site_user, oldRow.uid);    
+        
+  END LOOP;
+
+  RETURN 1;
+END;
+$BODY$
+  LANGUAGE 'plpgsql' VOLATILE
+  COST 100;
+ALTER FUNCTION copy_user_site_credentials() OWNER TO postgres;
