@@ -19,20 +19,22 @@
 
 package se.vgregion.portal.iframe.controller;
 
+import static org.junit.Assert.*;
+
+import java.io.IOException;
+
+import javax.portlet.ReadOnlyException;
+import javax.portlet.ValidatorException;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.mock.web.portlet.MockActionRequest;
 import org.springframework.mock.web.portlet.MockPortletPreferences;
 import org.springframework.ui.ModelMap;
+
 import se.vgregion.portal.iframe.BaseTestSetup;
 import se.vgregion.portal.iframe.model.PortletConfig;
 import se.vgregion.portal.iframe.util.LoginScreenScraper;
-
-import javax.portlet.ReadOnlyException;
-import javax.portlet.ValidatorException;
-import java.io.IOException;
-
-import static org.junit.Assert.assertEquals;
 
 /**
  * This action do that and that, if it has something special it is.
@@ -90,11 +92,11 @@ public class CSEditControllerTest extends BaseTestSetup {
         controller.savePreferences(actionRequest, stubPrefs, portletConfig);
 
         assertEquals(1, stubPrefs.getStoreCalled());
-        assertEquals("https://test-src", portletConfig.getSrc());
+        assertEquals("https://test-src/", portletConfig.getSrc());
 
         actionRequest.setSecure(false);
         controller.savePreferences(actionRequest, stubPrefs, portletConfig);
-        assertEquals("https://test-src", portletConfig.getSrc());
+        assertEquals("https://test-src/", portletConfig.getSrc());
     }
 
     @Test
@@ -108,11 +110,11 @@ public class CSEditControllerTest extends BaseTestSetup {
         controller.savePreferences(actionRequest, stubPrefs, portletConfig);
 
         assertEquals(1, stubPrefs.getStoreCalled());
-        assertEquals("http://test-src", portletConfig.getSrc());
+        assertEquals("http://test-src/", portletConfig.getSrc());
 
         actionRequest.setSecure(true);
         controller.savePreferences(actionRequest, stubPrefs, portletConfig);
-        assertEquals("http://test-src", portletConfig.getSrc());
+        assertEquals("http://test-src/", portletConfig.getSrc());
     }
 
     @Test
@@ -127,13 +129,13 @@ public class CSEditControllerTest extends BaseTestSetup {
         controller.savePreferences(actionRequest, stubPrefs, portletConfig);
 
         assertEquals(1, stubPrefs.getStoreCalled());
-        assertEquals("/relative", portletConfig.getSrc());
+        assertEquals("/relative/", portletConfig.getSrc());
 
         actionRequest.setSecure(true);
 
         controller.savePreferences(actionRequest, stubPrefs, portletConfig);
 
-        assertEquals("/relative", portletConfig.getSrc());
+        assertEquals("/relative/", portletConfig.getSrc());
     }
 
     class TestMockPortletPreferences extends MockPortletPreferences {
