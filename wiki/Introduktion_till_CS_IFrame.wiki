@@ -45,3 +45,7 @@ Denna nyckelfil skall finnas på classpath för att krypteringen skall fungera.
 Nyckelfilen kan skapas med CryptoUtilImpl som finns med i koden genom att köra CryptoUtilImpl som ett fristående program.
 
 Filen cv.key MÅSTE hanteras konfidenciellt eftersom alla sparade lösenord kan återskapas om man har tillgång till den.
+
+= Utvecklingsmiljö - Liferay & Eclipse =
+
+Man behöver se till att filen util-taglib.jar ligger under `$LIFERAY_HOME\tomcat\lib\ext`
