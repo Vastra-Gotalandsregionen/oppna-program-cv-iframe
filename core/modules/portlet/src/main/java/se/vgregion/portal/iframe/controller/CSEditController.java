@@ -90,17 +90,8 @@ public class CSEditController {
 
         log.debug("savePreferences 1: {}", portletConfig);
 
-        String src = portletConfig.getSrc();
-        if (!src.startsWith("/") && !src.startsWith("http://") && !src.startsWith("https://")
-                && !src.startsWith("mhtml://")) {
-
-            if (actionRequest.isSecure()) {
-                src = "https://" + src;
-            } else {
-                src = "http://" + src;
-            }
-            portletConfig.setSrc(src);
-        }
+        // Link should be on format http(s):/the.domain.com/
+        fixSrcLinkOnPortletConfig(portletConfig, actionRequest.isSecure());
 
         log.debug("savePreferences 2: {}", portletConfig);
 
@@ -111,5 +102,26 @@ public class CSEditController {
         }
 
         log.debug("src: {}", prefs.getValue("src", ""));
+    }
+
+    private void fixSrcLinkOnPortletConfig(PortletConfig portletConfig, boolean secureAction) {
+        String src = portletConfig.getSrc();
+
+        // Ensure link starts with http or https
+        if (!src.startsWith("/") && !src.startsWith("http://") && !src.startsWith("https://")
+                && !src.startsWith("mhtml://")) {
+            if (secureAction) {
+                src = "https://" + src;
+            } else {
+                src = "http://" + src;
+            }
+            portletConfig.setSrc(src);
+        }
+
+        // Ensure link ends with /
+        if (!src.endsWith("/")) {
+            src = src + "/";
+            portletConfig.setSrc(src);
+        }
     }
 }
