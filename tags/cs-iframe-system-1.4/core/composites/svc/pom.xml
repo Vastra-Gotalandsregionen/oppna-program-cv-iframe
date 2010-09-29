@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<!--
+        This is the Service-composite Maven POM. Template version:
+        1.2-SNAPSHOT Generation time : 2010-01-14 14:39:28 CET
+    -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>se.vgregion.cs-iframe</groupId>
+    <artifactId>cs-iframe-system</artifactId>
+    <version>1.4</version>
+  </parent>
+  <groupId>se.vgregion.cs-iframe</groupId>
+  <artifactId>cs-iframe-core-composite-svc</artifactId>
+  <packaging>jar</packaging>
+  <name>${project.artifactId}</name>
+
+  <dependencies>
+  <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>cs-iframe-core-composite-types</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+	
+    <dependency>
+      <groupId>se.vgregion.liferay.integration</groupId>
+      <artifactId>liferay-integration-composite-svc</artifactId>
+      <version>1.9</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-core</artifactId>
+      <version>${spring.fw.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+      <version>${spring.fw.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-aspects</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.aspectj</groupId>
+      <artifactId>aspectjweaver</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.liferay</groupId>
+      <artifactId>portal-kernal</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.liferay</groupId>
+      <artifactId>portal-service</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-test</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-all</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>hsqldb</groupId>
+      <artifactId>hsqldb</artifactId>
+    </dependency>
+    
+  </dependencies>
+</project>
