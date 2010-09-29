@@ -5,12 +5,10 @@ import java.util.List;
 
 import javax.persistence.Query;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import se.vgregion.portal.core.infrastructure.persistence.jpa.JpaRepository;
+import se.vgregion.portal.core.infrastructure.persistence.jpa.DefaultJpaRepository;
 import se.vgregion.portal.csiframe.domain.UserSiteCredential;
 import se.vgregion.portal.csiframe.domain.UserSiteCredentialRepository;
 import se.vgregion.portal.csiframe.util.CryptoUtil;
@@ -21,10 +19,8 @@ import se.vgregion.portal.csiframe.util.CryptoUtil;
  * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
  */
 @Repository
-public class JpaUserSiteCredentialRepository extends JpaRepository<UserSiteCredential, Long> implements
+public class JpaUserSiteCredentialRepository extends DefaultJpaRepository<UserSiteCredential> implements
         UserSiteCredentialRepository {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(JpaUserSiteCredentialRepository.class);
 
     @Autowired
     private CryptoUtil cryptoUtils;
