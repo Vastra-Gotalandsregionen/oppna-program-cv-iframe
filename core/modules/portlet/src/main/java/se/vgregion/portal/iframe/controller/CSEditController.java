@@ -22,10 +22,6 @@
  */
 package se.vgregion.portal.iframe.controller;
 
-import javax.portlet.ActionRequest;
-import javax.portlet.PortletPreferences;
-import javax.portlet.ValidatorException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,9 +31,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
-
 import se.vgregion.portal.iframe.model.PortletConfig;
 import se.vgregion.portal.iframe.util.LoginScreenScraper;
+
+import javax.portlet.ActionRequest;
+import javax.portlet.PortletPreferences;
+import javax.portlet.ValidatorException;
 
 /**
  * Portlet mode=EDIT controller.
@@ -115,12 +114,6 @@ public class CSEditController {
             } else {
                 src = "http://" + src;
             }
-            portletConfig.setSrc(src);
-        }
-
-        // Ensure link ends with /
-        if (!src.endsWith("/")) {
-            src = src + "/";
             portletConfig.setSrc(src);
         }
     }

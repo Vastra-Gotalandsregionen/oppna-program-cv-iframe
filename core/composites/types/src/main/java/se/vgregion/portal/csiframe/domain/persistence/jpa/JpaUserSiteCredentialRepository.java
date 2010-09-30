@@ -1,10 +1,5 @@
 package se.vgregion.portal.csiframe.domain.persistence.jpa;
 
-import java.security.GeneralSecurityException;
-import java.util.List;
-
-import javax.persistence.Query;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -12,6 +7,10 @@ import se.vgregion.portal.core.infrastructure.persistence.jpa.DefaultJpaReposito
 import se.vgregion.portal.csiframe.domain.UserSiteCredential;
 import se.vgregion.portal.csiframe.domain.UserSiteCredentialRepository;
 import se.vgregion.portal.csiframe.util.CryptoUtil;
+
+import javax.persistence.Query;
+import java.security.GeneralSecurityException;
+import java.util.List;
 
 /**
  * This action do that and that, if it has something special it is.
@@ -37,6 +36,7 @@ public class JpaUserSiteCredentialRepository extends DefaultJpaRepository<UserSi
         String queryString = "SELECT s FROM UserSiteCredential s WHERE s.uid = :uid and s.siteKey = :siteKey";
         Query query = entityManager.createQuery(queryString).setParameter("uid", uid)
                 .setParameter("siteKey", siteKey);
+
         @SuppressWarnings("unchecked")
         List<UserSiteCredential> results = query.getResultList();
         if (results.size() == 0) {
@@ -47,6 +47,7 @@ public class JpaUserSiteCredentialRepository extends DefaultJpaRepository<UserSi
                     + " did not match a unique post of the type " + UserSiteCredential.class.getSimpleName();
             throw new IllegalArgumentException(message);
         }
+
         UserSiteCredential result = results.get(0);
         try {
             decryptSitePwd(result);

@@ -1,5 +1,9 @@
 package se.vgregion.portal.csiframe.domain;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+import se.vgregion.portal.core.domain.patterns.entity.AbstractEntity;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,18 +12,14 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
-
-import se.vgregion.portal.core.domain.patterns.entity.AbstractEntity;
-
 /**
  * The persistent class for the vgr_user_site_credential database table.
- * 
  */
 @Entity
-@Table(name = "vgr_user_site_credential", uniqueConstraints = { @UniqueConstraint(columnNames = { "uid",
-        "site_key" }) })
+@Table(name = "vgr_user_site_credential",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"uid", "site_key"})
+        })
 public class UserSiteCredential extends AbstractEntity<UserSiteCredential, Long> {
     private static final long serialVersionUID = 1L;
 
@@ -48,11 +48,9 @@ public class UserSiteCredential extends AbstractEntity<UserSiteCredential, Long>
 
     /**
      * Constructor initialized with primary key fields.
-     * 
-     * @param uid
-     *            user id.
-     * @param siteKey
-     *            name given of the administrator to site.
+     *
+     * @param uid     user id.
+     * @param siteKey name given of the administrator to site.
      */
     public UserSiteCredential(String uid, String siteKey) {
         setUid(uid);
@@ -108,7 +106,7 @@ public class UserSiteCredential extends AbstractEntity<UserSiteCredential, Long>
 
     /**
      * Copy the UserSiteCredential object.
-     * 
+     *
      * @return new userSiteCredental object
      */
     public UserSiteCredential copy() {
