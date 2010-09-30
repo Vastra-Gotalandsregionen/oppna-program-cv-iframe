@@ -62,6 +62,7 @@ WITH (
 ALTER TABLE vgr_user_site_credential OWNER TO liferay;
 
 ===============================================================================
+-- HINT:  Use CREATE LANGUAGE to load the language into the database.
 
 -- Function: copy_user_site_credentials()
 
@@ -87,4 +88,4 @@ END;
 $BODY$
   LANGUAGE 'plpgsql' VOLATILE
   COST 100;
-ALTER FUNCTION copy_user_site_credentials() OWNER TO postgres;
+ALTER FUNCTION copy_user_site_credentials() OWNER TO liferay;
