@@ -24,29 +24,31 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd" >
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <context:annotation-config />
-    <context:component-scan base-package="se.vgregion.portal.iframe.controller" />
-
-    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
-        <property name="prefix"  value="/WEB-INF/jsp/iFrame/" />
-        <property name="suffix" value=".jsp" />
-        <property name="contentType" value="text/html;charset=UTF-8" />
-    </bean>
-    
-    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="location" value="classpath:datasource.properties" />
-    </bean>
-
-    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="driverClassName" value="${database.driver}" />
-        <property name="url" value="${database.url}" />
-        <property name="username" value="${database.user}" />
-        <property name="password" value="${database.password}" />
-    </bean>
-
-    <bean name="loginScreenScraper" class="se.vgregion.portal.iframe.util.LoginScreenScraperImpl" />
+  <import resource="classpath:applicationContext.xml" />
   
+  <context:annotation-config/>
+  <context:component-scan base-package="se.vgregion.portal.iframe.controller"/>
+
+  <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+    <property name="prefix" value="/WEB-INF/jsp/iFrame/"/>
+    <property name="suffix" value=".jsp"/>
+    <property name="contentType" value="text/html;charset=UTF-8"/>
+  </bean>
+
+  <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <property name="location" value="classpath:datasource.properties"/>
+  </bean>
+
+  <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+    <property name="driverClassName" value="${database.driver}"/>
+    <property name="url" value="${database.url}"/>
+    <property name="username" value="${database.user}"/>
+    <property name="password" value="${database.password}"/>
+  </bean>
+
+  <bean name="loginScreenScraper" class="se.vgregion.portal.iframe.util.LoginScreenScraperImpl"/>
+
 </beans>
