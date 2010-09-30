@@ -11,7 +11,7 @@
   <context:component-scan base-package="se.vgregion.portal.csiframe.util" />
 
   <bean name="cryptoUtilImpl"  class="se.vgregion.portal.csiframe.util.CryptoUtilImpl">
-    <property name="keyFile" value="classpath:cv.key" />
+    <property name="keyFile" value="classpath:security/cv.key" />
   </bean>
 
 </beans>
