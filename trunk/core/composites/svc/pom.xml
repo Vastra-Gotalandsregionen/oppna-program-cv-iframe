@@ -42,6 +42,7 @@
       <groupId>org.aspectj</groupId>
       <artifactId>aspectjweaver</artifactId>
     </dependency>
+<!--
     <dependency>
       <groupId>com.liferay</groupId>
       <artifactId>portal-kernal</artifactId>
@@ -50,6 +51,7 @@
       <groupId>com.liferay</groupId>
       <artifactId>portal-service</artifactId>
     </dependency>
+    -->
 
     <dependency>
       <groupId>org.springframework</groupId>
@@ -66,25 +68,6 @@
 
   </dependencies>
 
-  <profiles>
-    <profile>
-      <id>default</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <artifactId>maven-jar-plugin</artifactId>
-            <configuration>
-              <excludes>
-                <exclude>**/security/**</exclude>
-              </excludes>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
+  
   
 </project>
