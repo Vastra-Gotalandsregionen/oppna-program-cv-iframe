@@ -56,6 +56,8 @@ public class PortletConfig implements Serializable {
     private String hiddenVariables;
     private String htmlAttributes;
     private String preIFrameAction;
+    private String allowedBrowsersRegExp;
+    private String allowedBrowsersViolationMessage;
 
     private Map<String, String> htmlAttributeMap = new HashMap<String, String>();
 
@@ -90,7 +92,8 @@ public class PortletConfig implements Serializable {
         portletConfig.setHiddenVariables(prefs.getValue("hidden-variables", ""));
         portletConfig.setPreIFrameAction(prefs.getValue("pre-iframe-action", ""));
         portletConfig.setHtmlAttributes(prefs.getValue("html-attributes", ""));
-
+        portletConfig.setAllowedBrowsersRegExp(prefs.getValue("allowed-browsers-regExp", ""));
+        portletConfig.setAllowedBrowsersViolationMessage(prefs.getValue("allowed-browsers-violation-message", ""));
         return portletConfig;
     }
 
@@ -119,6 +122,8 @@ public class PortletConfig implements Serializable {
             prefs.setValue("hidden-variables", getHiddenVariables());
             prefs.setValue("pre-iframe-action", getPreIFrameAction());
             prefs.setValue("html-attributes", getHtmlAttributes());
+            prefs.setValue("allowed-browsers-regExp", getAllowedBrowsersRegExp());
+            prefs.setValue("allowed-browsers-violation-message", getAllowedBrowsersViolationMessage());
 
             prefs.store();
         } catch (ReadOnlyException e) {
@@ -316,5 +321,21 @@ public class PortletConfig implements Serializable {
                 .append("sslUrlsOnly", sslUrlsOnly).append("siteUserNameField", siteUserNameField)
                 .append("sitePasswordField", sitePasswordField).append("hiddenVariables", hiddenVariables)
                 .append("preIFrameAction", preIFrameAction).append("htmlAttributes", htmlAttributes).toString();
+    }
+
+    public void setAllowedBrowsersRegExp(String allowedBrowsersRegExp) {
+        this.allowedBrowsersRegExp = allowedBrowsersRegExp;
+    }
+
+    public String getAllowedBrowsersRegExp() {
+        return allowedBrowsersRegExp;
+    }
+
+    public void setAllowedBrowsersViolationMessage(String allowedBrowsersViolationMessage) {
+        this.allowedBrowsersViolationMessage = allowedBrowsersViolationMessage;
+    }
+
+    public String getAllowedBrowsersViolationMessage() {
+        return allowedBrowsersViolationMessage;
     }
 }
