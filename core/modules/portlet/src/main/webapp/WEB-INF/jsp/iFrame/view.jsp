@@ -215,8 +215,15 @@
 
     // On load for IFrame...
     jQuery('#<portlet:namespace />iframe').load(function() {
+        //alert(123);
+        //try { jQuery('.vgr-express-login').fadeOut(3000); } catch(e){ alert(e.message); }
         if (this.src != "${iFrameSrc}") {
             this.src="${iFrameSrc}";
         }
     });
+    
+    jQuery('#<portlet:namespace />iframe').ready(function() {
+        jQuery('.vgr-express-login').fadeOut(3500);
+    });
+    
 --></script>
