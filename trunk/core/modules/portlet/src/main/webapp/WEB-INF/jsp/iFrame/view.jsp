@@ -28,6 +28,8 @@
 
 <%@page pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
+<%@ taglib uri="/WEB-INF/tld/vgr-regexp.tld" prefix="re" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <script type="text/javascript" src="${pageContext.request.contextPath}/script/jquery.blockUI.js"></script>
  
@@ -184,17 +186,24 @@
 </div>
 
 <div id="blockMe">  
-  <iframe src="${preIFrameSrc}"
-          name="<portlet:namespace />iframe"
-          id="<portlet:namespace />iframe"
-          border="${bordercolor}"
-          frameborder="${frameborder}"
-          height="${iFrameHeight}"
-          hspace="${hspace}"
-          scrolling="${scrolling}"
-          vspace="${vspace}"
-          width="${width}">
-  </iframe>
+  <c:choose>
+    <c:when test="${(empty myPortletConfig.allowedBrowsersRegExp) or re:matches(myPortletConfig.allowedBrowsersRegExp, header['user-agent'])}">
+      <iframe src="${preIFrameSrc}"
+              name="<portlet:namespace />iframe"
+              id="<portlet:namespace />iframe"
+              border="${bordercolor}"
+              frameborder="${frameborder}"
+              height="${iFrameHeight}"
+              hspace="${hspace}"
+              scrolling="${scrolling}"
+              vspace="${vspace}"
+              width="${width}">
+      </iframe>
+    </c:when>
+    <c:otherwise>
+       <span class="error">${myPortletConfig.allowedBrowsersViolationMessage}</span>
+    </c:otherwise>
+  </c:choose>
 </div>
 
 <div id="blockDisplayMessage" style="display:none"> 

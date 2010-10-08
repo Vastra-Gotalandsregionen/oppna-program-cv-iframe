@@ -196,6 +196,25 @@
             </tbody>
         </table>
     </fieldset>
+    
+    <fieldset>
+        <legend>Browser Compatibility</legend>
+
+        <div class="portlet-msg-info" id="<portlet:namespace/>currentLoginMsg">
+            <liferay-ui:message key="Regexp to validate against user-agent header sent from the client browser." />
+        </div>
+
+        <table class="lfr-table">
+          <tr>
+              <td><label for="<portlet:namespace/>allowedBrowsersRegExp">RegExp to validate allowed browsers</label></td>
+              <td><form:input path="allowedBrowsersRegExp" id="${ns}allowedBrowsersRegExp" size="80" /></td>
+          </tr>
+          <tr>
+              <td><label for="<portlet:namespace/>allowedBrowsersViolationMessage">Message to present if browser RegExp fails</label></td>
+              <td><form:input path="allowedBrowsersViolationMessage" id="${ns}allowedBrowsersViolationMessage" size="80" /></td>
+          </tr>
+        </table>
+    </fieldset>
 
     <fieldset>
         <legend>Advanced</legend>
@@ -209,7 +228,7 @@
             </tr>
         </table>
     </fieldset>
-
+    
     <br />
 
     <input type="submit" value="Save" />
