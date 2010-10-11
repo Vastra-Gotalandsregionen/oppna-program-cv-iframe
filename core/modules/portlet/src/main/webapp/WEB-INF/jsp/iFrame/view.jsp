@@ -202,6 +202,7 @@
     </c:when>
     <c:otherwise>
        <span class="error">${myPortletConfig.allowedBrowsersViolationMessage}</span>
+       <br/><br/>
     </c:otherwise>
   </c:choose>
 </div>
@@ -211,6 +212,7 @@
 </div> 
 
 <script type="text/javascript"><!--
+  <c:if test="${(empty myPortletConfig.allowedBrowsersRegExp) or re:matches(myPortletConfig.allowedBrowsersRegExp, header['user-agent'])}">
     // Display "loading" block over IFrame for two seconds
     jQuery('#p_p_id<portlet:namespace /> #blockMe').block({ 
         message: jQuery('#p_p_id<portlet:namespace /> #blockDisplayMessage'),
@@ -221,15 +223,12 @@
         fadeOut: 500, 
         timeout: 2000
     });
+  </c:if>
 
     // On load for IFrame...
     jQuery('#<portlet:namespace />iframe').load(function() {
         if (this.src != "${iFrameSrc}") {
             this.src="${iFrameSrc}";
         }
-    });
-    
-    jQuery('#<portlet:namespace />iframe').ready(function() {
-        jQuery('.vgr-express-login').fadeOut(3500);
     });
 --></script>
