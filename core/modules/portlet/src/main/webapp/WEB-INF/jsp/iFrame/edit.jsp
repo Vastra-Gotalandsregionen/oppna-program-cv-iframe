@@ -210,6 +210,9 @@
               <td><form:input path="allowedBrowsersRegExp" id="${ns}allowedBrowsersRegExp" size="80" /></td>
           </tr>
           <tr>
+              <td colspan="2">Example: If you want to ensure that the client is using Internet Explorer 5-8 then type in '.*MSIE [5678].*'</td>
+          </tr>
+          <tr>
               <td><label for="<portlet:namespace/>allowedBrowsersViolationMessage">Message to present if browser RegExp fails</label></td>
               <td><form:input path="allowedBrowsersViolationMessage" id="${ns}allowedBrowsersViolationMessage" size="80" /></td>
           </tr>
