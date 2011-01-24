@@ -46,10 +46,10 @@ Generation time : 2009-10-28 12:45:52 CET
       <groupId>javax.portlet</groupId>
       <artifactId>portlet-api</artifactId>
     </dependency>
-    <dependency>
-      <groupId>com.sun.portal</groupId>
-      <artifactId>portlet-container</artifactId>
-    </dependency>
+    <!--<dependency>-->
+      <!--<groupId>com.sun.portal</groupId>-->
+      <!--<artifactId>portlet-container</artifactId>-->
+    <!--</dependency>-->
     <dependency>
       <groupId>taglibs</groupId>
       <artifactId>standard</artifactId>
