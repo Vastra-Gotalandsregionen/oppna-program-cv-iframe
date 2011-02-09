@@ -15,7 +15,7 @@
   <groupId>se.vgregion.cs-iframe</groupId>
   <artifactId>cs-iframe-system</artifactId>
   <packaging>pom</packaging>
-  <version>1.4.1</version>
+  <version>1.4.2-SNAPSHOT</version>
   <name>${project.artifactId}</name>
 
   <modules>
@@ -23,9 +23,9 @@
   </modules>
 
   <scm>
-    <developerConnection>scm:svn:https://oppna-program-cv-iframe.googlecode.com/svn/tags/cs-iframe-system-1.4.1
+    <developerConnection>scm:svn:https://oppna-program-cv-iframe.googlecode.com/svn/trunk
     </developerConnection>
-    <url>http://oppna-program-cv-iframe.googlecode.com/svn/tags/cs-iframe-system-1.4.1</url>
+    <url>http://oppna-program-cv-iframe.googlecode.com/svn/trunk</url>
   </scm>
 
 </project>
