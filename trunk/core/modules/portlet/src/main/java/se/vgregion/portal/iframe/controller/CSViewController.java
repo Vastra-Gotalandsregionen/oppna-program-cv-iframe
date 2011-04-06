@@ -88,7 +88,7 @@ public class CSViewController {
             return "userCredentialForm";
         }
 
-        String iFrameSrc = prepareView(resp, portletConfig, siteCredential);
+        String iFrameSrc = prepareView(resp, req, portletConfig, siteCredential);
         String preIFrameSrc;
         if (portletConfig.getPreIFrameAction() != null && portletConfig.getPreIFrameAction().length() > 0) {
             preIFrameSrc = portletConfig.getPreIFrameAction();
@@ -178,9 +178,15 @@ public class CSViewController {
         }
 
         model.addAttribute("proxyFormAction", proxyFormAction);
-        log.debug("ProxyFormAction: {}", proxyFormAction);
+        debug(req, proxyFormAction);
 
+        return "proxyLoginForm";
+    }
+
+    private void debug(ResourceRequest req, String proxyFormAction) {
         if (log.isDebugEnabled()) {
+            log.debug("ProxyFormAction: {}", proxyFormAction);
+
             log.debug("Request attributes");
             Enumeration attrs = req.getAttributeNames();
             while (attrs.hasMoreElements()) {
@@ -195,8 +201,6 @@ public class CSViewController {
                 log.debug("Request parameters: {} : {}", param, req.getParameterValues(param));
             }
         }
-
-        return "proxyLoginForm";
     }
 
     /**
@@ -234,7 +238,7 @@ public class CSViewController {
         }
     }
 
-    private String prepareView(RenderResponse resp, PortletConfig portletConfig, UserSiteCredential siteCredential) {
+    private String prepareView(RenderResponse resp, RenderRequest req, PortletConfig portletConfig, UserSiteCredential siteCredential) {
         String iFrameSrc = getDefaultTarget();
 
         String src = portletConfig.getSrc();
@@ -256,6 +260,14 @@ public class CSViewController {
 
         if (src.length() > 0) {
             iFrameSrc = src;
+        }
+
+        if (portletConfig.isUserLoggedIn()) {
+            if (iFrameSrc.indexOf("?") == -1) {
+                iFrameSrc += "?userId="+lookupUid(req);
+            } else {
+                iFrameSrc += "&userId="+lookupUid(req);
+            }
         }
 
         return iFrameSrc;

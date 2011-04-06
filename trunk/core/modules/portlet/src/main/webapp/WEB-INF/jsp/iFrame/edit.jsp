@@ -52,6 +52,10 @@
                 <td><label for="<portlet:namespace/>src">IFrame Source URL</label></td>
                 <td><form:input path="src" id="${ns}src" size="80" /></td>
             </tr>
+            <tr id="<portlet:namespace/>addUserLoggedIn">
+                <td><label for="<portlet:namespace/>userLoggedIn">Add user logged in</label></td>
+                <td><form:checkbox path="userLoggedIn" id="${ns}userLoggedIn" /></td>
+            </tr>
             <!--tr>
                 <td><label for="<portlet:namespace/>relative">Relativ to Context Path</label></td>
                 <td><form:checkbox path="relative" id="${ns}relative" /></td>

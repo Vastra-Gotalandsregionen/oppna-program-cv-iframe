@@ -44,6 +44,7 @@ public class PortletConfig implements Serializable {
 
     private String src;
     private boolean relative;
+    private boolean userLoggedIn;
     private boolean auth;
     private String authType;
     private String formMethod;
@@ -80,6 +81,7 @@ public class PortletConfig implements Serializable {
         portletConfig.setSiteKey(prefs.getValue("site-key", ""));
         portletConfig.setSrc(prefs.getValue("src", ""));
         portletConfig.setRelative(Boolean.valueOf(prefs.getValue("relative", "false")));
+        portletConfig.setUserLoggedIn(Boolean.valueOf(prefs.getValue("userLoggedIn", "false")));
         portletConfig.setAuth(Boolean.valueOf(prefs.getValue("auth", "false")));
         portletConfig.setAuthType(prefs.getValue("auth-type", ""));
         portletConfig.setFormAction(prefs.getValue("form-action", ""));
@@ -110,6 +112,7 @@ public class PortletConfig implements Serializable {
             prefs.setValue("site-key", getSiteKey());
             prefs.setValue("src", getSrc());
             prefs.setValue("relative", String.valueOf(isRelative()));
+            prefs.setValue("userLoggedIn", String.valueOf(isUserLoggedIn()));
             prefs.setValue("auth", String.valueOf(isAuth()));
             prefs.setValue("auth-type", getAuthType());
             prefs.setValue("form-action", getFormAction());
@@ -174,6 +177,14 @@ public class PortletConfig implements Serializable {
 
     public void setRelative(boolean relative) {
         this.relative = relative;
+    }
+
+    public boolean isUserLoggedIn() {
+        return userLoggedIn;
+    }
+
+    public void setUserLoggedIn(boolean userLoggedIn) {
+        this.userLoggedIn = userLoggedIn;
     }
 
     public boolean isAuth() {
