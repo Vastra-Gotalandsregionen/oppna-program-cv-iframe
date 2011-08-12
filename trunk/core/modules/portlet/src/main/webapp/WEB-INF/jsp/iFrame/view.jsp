@@ -34,7 +34,7 @@
 <portlet:defineObjects/>
 
 <portlet:renderURL var="changeCredentials" secure="${myPortletConfig.sslUrlsOnly}">
-	<portlet:param name="action" value="changeVaultCredentials"/>
+    <portlet:param name="action" value="changeVaultCredentials"/>
 </portlet:renderURL>
 <portlet:renderURL portletMode="help" var="showHelp" secure="${myPortletConfig.sslUrlsOnly}"/>
 
@@ -49,56 +49,56 @@
 </div>
 
 <div id="<portlet:namespace />iframeWrap">
-  <c:choose>
-    <c:when test="${(empty myPortletConfig.allowedBrowsersRegExp) or re:matches(myPortletConfig.allowedBrowsersRegExp, header['user-agent'])}">
-      <iframe src="${preIFrameSrc}"
-              name="<portlet:namespace />iframe"
-              id="<portlet:namespace />iframe"
-              border="${bordercolor}"
-              frameborder="${frameborder}"
-              height="${iFrameHeight}"
-              hspace="${hspace}"
-              scrolling="${scrolling}"
-              vspace="${vspace}"
-              width="${width}">
-      </iframe>
-    </c:when>
-    <c:otherwise>
-       <span class="error">${myPortletConfig.allowedBrowsersViolationMessage}</span>
-       <br/><br/>
-    </c:otherwise>
-  </c:choose>
+    <c:choose>
+        <c:when test="${(empty myPortletConfig.allowedBrowsersRegExp) or re:matches(myPortletConfig.allowedBrowsersRegExp, header['user-agent'])}">
+            <iframe src="${preIFrameSrc}"
+                    name="<portlet:namespace />iframe"
+                    id="<portlet:namespace />iframe"
+                    border="${bordercolor}"
+                    frameborder="${frameborder}"
+                    height="${iFrameHeight}"
+                    hspace="${hspace}"
+                    scrolling="${scrolling}"
+                    vspace="${vspace}"
+                    width="${width}">
+            </iframe>
+        </c:when>
+        <c:otherwise>
+            <span class="error">${myPortletConfig.allowedBrowsersViolationMessage}</span>
+            <br/><br/>
+        </c:otherwise>
+    </c:choose>
 </div>
 
 <script type="text/javascript">
 
-	AUI().ready(
-		'aui-base',
-		'aui-loading-mask',
-		function(A) {
-		
-			var iFrameWrap = A.one('#<portlet:namespace />iframeWrap');
-			var iFrame = A.one('#<portlet:namespace />iframe');
-			var iFrameSrc = '${iFrameSrc}';
-			
-		    if (iFrame.getAttribute('src') != iFrameSrc) {
-		    	iFrame.setAttribute('src', iFrameSrc);
-		    }
-		    
-		    iFrameWrap.plug(A.LoadingMask, {
-				background: '#555',
-				strings: { loading: 'Laddar extern källa…' }
-			});
-		    
-			// Show loading mask
-		    iFrameWrap.loadingmask.show();
-			
-			// Hide loading mask after 2 seconds
-		    A.later('2000' , iFrameWrap , function() {
-		    	iFrameWrap.loadingmask.hide();	
-		    });
-		
-		}
-	);
-	
+    AUI().ready(
+            'aui-base',
+            'aui-loading-mask',
+            function(A) {
+
+                var iFrameWrap = A.one('#<portlet:namespace />iframeWrap');
+                var iFrame = A.one('#<portlet:namespace />iframe');
+                var iFrameSrc = '${iFrameSrc}';
+
+                if (iFrame.getAttribute('src') != iFrameSrc) {
+                    iFrame.setAttribute('src', iFrameSrc);
+                }
+
+                iFrameWrap.plug(A.LoadingMask, {
+                    background: '#555',
+                    strings: { loading: 'Laddar extern källa…' }
+                });
+
+                // Show loading mask
+                iFrameWrap.loadingmask.show();
+
+                // Hide loading mask after 2 seconds
+                A.later('2000', iFrameWrap, function() {
+                    iFrameWrap.loadingmask.hide();
+                });
+
+            }
+    );
+
 </script>
