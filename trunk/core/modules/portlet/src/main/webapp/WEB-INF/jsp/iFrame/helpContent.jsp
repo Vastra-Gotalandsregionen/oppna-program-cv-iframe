@@ -24,7 +24,7 @@
 
 <br />
 <div class="vgr-portlet-controlls-container" style="width: 600px; text-align: left;">
-    <h1>Användning</h1>
+    <h2>Användning</h2>
 
     <p>Första gången man går in på sidan ges möjligheten att spara användarnamn och lösenord för en extern webplats.
     Dessa uppgifter krypteras, sparas och återanvänds så att du därefter loggas in automatiskt.</p>

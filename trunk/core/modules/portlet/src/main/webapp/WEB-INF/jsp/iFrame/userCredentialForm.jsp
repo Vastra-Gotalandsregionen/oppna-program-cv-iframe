@@ -28,18 +28,20 @@
 <portlet:actionURL var="formAction" escapeXml="false" secure="${portletConfig.sslUrlsOnly}"/>
 
 <form:form method="post" action="${formAction}" commandName="siteCredential">
-    <h1>${siteCredential.siteKey}</h1>
+    <h2>Ändra inloggning - ${siteCredential.siteKey}</h2>
     <form:hidden path="uid" />
     <form:hidden path="id" />
     <form:hidden path="siteKey" />
 
     <label for="siteUser">Användarnamn</label>
+    <br/>
     <form:input path="siteUser" id="siteUser" disabled="${portletConfig.screenNameOnly}"/>
-    
+    <br/>
     <label for="sitePassword">Lösenord</label>
+    <br/>
     <form:password path="sitePassword" id="sitePassword" showPassword="true" />
-    
-    <input type="submit" value="Fortsätt" />
+    <br/>
+    <input type="submit" value="Spara" />
     <input type="submit" value="Avbryt" name="_cancel" />
 </form:form>
 
