@@ -20,11 +20,18 @@
 
 --%>
 
-
 <%@page pageEncoding="UTF-8"%>
 
-<portlet:renderURL portletMode="view" var="showView" secure="${portletConfig.sslUrlsOnly}"/>
-<%@include file="helpContent.jsp" %>
-    <span class="vgr-portlet-controlls-right">
-        <a class="vgr-portlet-view" href="${showView}">Tillbaka</a>
-    </span>
+<br />
+<div class="vgr-portlet-controlls-container" style="width: 600px; text-align: left;">
+    <h1>Användning</h1>
+
+    <p>Första gången man går in på sidan ges möjligheten att spara användarnamn och lösenord för en extern webplats.
+    Dessa uppgifter krypteras, sparas och återanvänds så att du därefter loggas in automatiskt.</p>
+
+    <p>Om du inte loggas in automatiskt eller behöver ändra inloggningsuppgifter, tryck på länken
+    "Ändra inloggning" uppe till vänster och skriv in de korrekta inloggningsuppgifterna.</p>
+
+    <img alt="Hjälp" src="${pageContext.request.contextPath}/images/help.png" />
+    <br />    
+</div>

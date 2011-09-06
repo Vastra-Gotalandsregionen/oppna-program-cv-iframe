@@ -28,7 +28,7 @@
 <portlet:actionURL var="formAction" escapeXml="false" secure="${portletConfig.sslUrlsOnly}"/>
 
 <form:form method="post" action="${formAction}" commandName="siteCredential">
-    <h1>SiteKey - ${siteCredential.siteKey}</h1>
+    <h1>${siteCredential.siteKey}</h1>
     <form:hidden path="uid" />
     <form:hidden path="id" />
     <form:hidden path="siteKey" />
@@ -42,3 +42,5 @@
     <input type="submit" value="Fortsätt" />
     <input type="submit" value="Avbryt" name="_cancel" />
 </form:form>
+
+<%@include file="helpContent.jsp" %>
