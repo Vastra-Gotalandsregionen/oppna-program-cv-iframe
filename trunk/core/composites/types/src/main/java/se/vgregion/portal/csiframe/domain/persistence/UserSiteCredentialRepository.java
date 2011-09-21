@@ -1,6 +1,9 @@
-package se.vgregion.portal.csiframe.domain;
+package se.vgregion.portal.csiframe.domain.persistence;
 
-import se.vgregion.portal.core.domain.patterns.repository.Repository;
+import se.vgregion.dao.domain.patterns.repository.Repository;
+import se.vgregion.portal.csiframe.domain.UserSiteCredential;
+
+import java.util.List;
 
 public interface UserSiteCredentialRepository extends Repository<UserSiteCredential, Long> {
 
@@ -13,7 +16,9 @@ public interface UserSiteCredentialRepository extends Repository<UserSiteCredent
      *            - site credental identifier.
      * @return credentials
      */
-    public UserSiteCredential getUserSiteCredential(String uid, String siteKey);
+    UserSiteCredential getUserSiteCredential(String uid, String siteKey);
+
+    List<UserSiteCredential> getAllSiteCredentials(String uid);
 
     /**
      * Store a credental. Password will be encrypted before storage.
@@ -21,5 +26,6 @@ public interface UserSiteCredentialRepository extends Repository<UserSiteCredent
      * @param siteCredential
      *            - credental to be stored
      */
-    public void addUserSiteCredential(UserSiteCredential siteCredential);
+    void save(UserSiteCredential siteCredential);
+
 }

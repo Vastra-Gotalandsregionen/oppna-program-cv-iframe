@@ -3,9 +3,9 @@ package se.vgregion.portal.csiframe.domain.persistence.jpa;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import se.vgregion.portal.core.infrastructure.persistence.jpa.DefaultJpaRepository;
+import se.vgregion.dao.domain.patterns.repository.db.jpa.DefaultJpaRepository;
 import se.vgregion.portal.csiframe.domain.UserSiteCredential;
-import se.vgregion.portal.csiframe.domain.UserSiteCredentialRepository;
+import se.vgregion.portal.csiframe.domain.persistence.UserSiteCredentialRepository;
 import se.vgregion.portal.csiframe.util.CryptoUtil;
 
 import javax.persistence.Query;
@@ -13,12 +13,12 @@ import java.security.GeneralSecurityException;
 import java.util.List;
 
 /**
- * This action do that and that, if it has something special it is.
+ * Jpa implementation of User-SiteCredential Repository.
  * 
  * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
  */
 @Repository
-public class JpaUserSiteCredentialRepository extends DefaultJpaRepository<UserSiteCredential> implements
+public class JpaUserSiteCredentialRepository extends DefaultJpaRepository<UserSiteCredential, Long> implements
         UserSiteCredentialRepository {
 
     @Autowired
@@ -57,11 +57,27 @@ public class JpaUserSiteCredentialRepository extends DefaultJpaRepository<UserSi
         return result;
     }
 
+    @Override
+    public List<UserSiteCredential> getAllSiteCredentials(String uid) {
+        String queryString = "SELECT s FROM UserSiteCredential s WHERE s.uid = :uid";
+        Query query = entityManager.createQuery(queryString).setParameter("uid", uid);
+
+        List<UserSiteCredential> result = query.getResultList();
+        for (UserSiteCredential credential : result) {
+            try {
+                decryptSitePwd(credential);
+            } catch (GeneralSecurityException e) {
+                credential.setValid(false);
+            }
+        }
+        return result;
+    }
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public void addUserSiteCredential(UserSiteCredential siteCredential) {
+    public void save(UserSiteCredential siteCredential) {
         encryptSitePwd(siteCredential);
         if (siteCredential.getId() == null) {
             entityManager.persist(siteCredential);
@@ -75,6 +91,7 @@ public class JpaUserSiteCredentialRepository extends DefaultJpaRepository<UserSi
         String clearPwd = null;
         clearPwd = cryptoUtils.decrypt(encryptedPwd);
         creds.setSitePassword(clearPwd);
+        creds.setValid(true);
     }
 
     private void encryptSitePwd(UserSiteCredential siteCredential) {

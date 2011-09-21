@@ -47,12 +47,10 @@ import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 import org.springframework.web.portlet.util.PortletUtils;
 
 import se.vgregion.portal.csiframe.domain.UserSiteCredential;
-import se.vgregion.portal.csiframe.service.UserSiteCredentialService;
+import se.vgregion.portal.csiframe.service.CredentialService;
 import se.vgregion.portal.iframe.model.PortletConfig;
 
 /**
- * This action do that and that, if it has something special it is.
- * 
  * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
  */
 @Controller
@@ -61,7 +59,7 @@ public class CSViewController {
     private Logger log = LoggerFactory.getLogger(CSViewController.class);
 
     @Autowired
-    private UserSiteCredentialService userSiteCredentialService;
+    private CredentialService credentialService;
 
     /**
      * Main controllermethod. Handling of user-sitecredential availability and iFrame source linking
@@ -224,7 +222,7 @@ public class CSViewController {
             throw new RuntimeException("CONFIGURATION ERROR: No site-key given. Cannot store user credential.");
         }
         if (!PortletUtils.hasSubmitParameter(req, "_cancel")) {
-            UserSiteCredential entToStore = userSiteCredentialService.getUserSiteCredential(
+            UserSiteCredential entToStore = credentialService.getUserSiteCredential(
                     siteCredential.getUid(), siteCredential.getSiteKey());
             if (entToStore == null || entToStore.getId() == null) {
                 entToStore = siteCredential;
@@ -232,8 +230,8 @@ public class CSViewController {
                 entToStore.setSiteUser(siteCredential.getSiteUser());
                 entToStore.setSitePassword(siteCredential.getSitePassword());
             }
-            // credentialStoreRepository.addUserSiteCredential(siteCredential);
-            userSiteCredentialService.addUserSiteCredential(entToStore);
+            // credentialStoreRepository.save(siteCredential);
+            credentialService.save(entToStore);
             // log.debug("storeUserCredential: {}", siteCredential);
         }
     }
@@ -288,7 +286,7 @@ public class CSViewController {
                 returnSiteCredential.setSiteUser(uid);
             }
 
-            UserSiteCredential siteCredential = userSiteCredentialService.getUserSiteCredential(uid,
+            UserSiteCredential siteCredential = credentialService.getUserSiteCredential(uid,
                     portletConfig.getSiteKey());
 
             if (siteCredential != null) {

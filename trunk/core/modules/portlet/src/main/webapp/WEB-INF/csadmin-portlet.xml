@@ -29,11 +29,11 @@
   <import resource="classpath:applicationContext.xml" />
   
   <context:annotation-config/>
-  <context:component-scan base-package="se.vgregion.portal.iframe.controller"/>
+  <context:component-scan base-package="se.vgregion.portal.admin.controller"/>
 
   <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
     <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
-    <property name="prefix" value="/WEB-INF/jsp/iFrame/"/>
+    <property name="prefix" value="/WEB-INF/jsp/Admin/"/>
     <property name="suffix" value=".jsp"/>
     <property name="contentType" value="text/html;charset=UTF-8"/>
   </bean>
