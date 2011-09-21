@@ -58,7 +58,7 @@
             </list>
         </property>
         <property name="persistenceUnitPostProcessors">
-            <bean class="se.vgregion.portal.persistance.MergingPersistenceUnitPostProcessor"/>
+            <bean class="se.vgregion.dao.infrastructure.persistence.jpa.MergingPersistenceUnitPostProcessor"/>
         </property>
         <property name="defaultDataSource" ref="dataSource"/>
     </bean>

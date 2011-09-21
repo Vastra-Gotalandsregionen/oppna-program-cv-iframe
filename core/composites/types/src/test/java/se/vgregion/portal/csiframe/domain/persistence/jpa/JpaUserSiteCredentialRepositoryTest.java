@@ -30,7 +30,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 
 import se.vgregion.portal.csiframe.domain.UserSiteCredential;
-import se.vgregion.portal.csiframe.domain.UserSiteCredentialRepository;
+import se.vgregion.portal.csiframe.domain.persistence.UserSiteCredentialRepository;
 
 /**
  * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
@@ -43,7 +43,6 @@ public class JpaUserSiteCredentialRepositoryTest extends AbstractTransactionalJU
 
     @Before
     public void setup() {
-
         executeSqlScript("classpath:dbsetup/test-data.sql", false);
     }
 
@@ -62,12 +61,12 @@ public class JpaUserSiteCredentialRepositoryTest extends AbstractTransactionalJU
         siteCredential.setSiteUser("new-site-user");
         siteCredential.setSitePassword("new-site-password");
 
-        repo.addUserSiteCredential(siteCredential);
+        repo.save(siteCredential);
 
         checkCredential(siteCredential);
 
         siteCredential.setSitePassword("changed-pw");
-        repo.addUserSiteCredential(siteCredential);
+        repo.save(siteCredential);
 
         checkCredential(siteCredential);
     }

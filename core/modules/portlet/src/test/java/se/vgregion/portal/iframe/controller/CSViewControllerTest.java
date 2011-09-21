@@ -55,21 +55,20 @@ import se.vgregion.portal.iframe.BaseTestSetup;
 import se.vgregion.portal.iframe.model.PortletConfig;
 
 /**
- * This action do that and that, if it has something special it is.
- * 
  * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
  */
 public class CSViewControllerTest extends BaseTestSetup {
 
     CSViewController controller;
-    MockUserSiteCredentialService storeService;
+    MockCredentialService storeService;
 
     @Before
     public void setUp() {
         controller = new CSViewController();
-        storeService = new MockUserSiteCredentialService();
+        storeService = new MockCredentialService();
         // Sets the private field userSiteCredentialService to our mock version.
-        ReflectionTestUtils.setField(controller, "userSiteCredentialService", storeService);
+
+        ReflectionTestUtils.setField(controller, "credentialService", storeService);
     }
 
     @After

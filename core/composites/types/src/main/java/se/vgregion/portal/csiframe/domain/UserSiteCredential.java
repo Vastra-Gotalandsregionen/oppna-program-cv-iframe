@@ -2,15 +2,9 @@ package se.vgregion.portal.csiframe.domain;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
-import se.vgregion.portal.core.domain.patterns.entity.AbstractEntity;
+import se.vgregion.dao.domain.patterns.entity.AbstractEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.*;
 
 /**
  * The persistent class for the vgr_user_site_credential database table.
@@ -20,7 +14,7 @@ import javax.persistence.UniqueConstraint;
         uniqueConstraints = {
                 @UniqueConstraint(columnNames = {"uid", "site_key"})
         })
-public class UserSiteCredential extends AbstractEntity<UserSiteCredential, Long> {
+public class UserSiteCredential extends AbstractEntity<Long> {
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -39,6 +33,9 @@ public class UserSiteCredential extends AbstractEntity<UserSiteCredential, Long>
 
     @Column(length = 256, name = "site_password")
     private String sitePassword;
+
+    @Transient
+    private boolean valid;
 
     /**
      * Empty default constructor.
@@ -87,6 +84,14 @@ public class UserSiteCredential extends AbstractEntity<UserSiteCredential, Long>
 
     public void setSitePassword(String sitePassword) {
         this.sitePassword = sitePassword;
+    }
+
+    public boolean isValid() {
+        return valid;
+    }
+
+    public void setValid(boolean valid) {
+        this.valid = valid;
     }
 
     @Override

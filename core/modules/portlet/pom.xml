@@ -30,21 +30,6 @@ Generation time : 2009-10-28 12:45:52 CET
           <wtpContextName>${project.artifactId}</wtpContextName>
         </configuration>
       </plugin>
-
-      <plugin>
-        <groupId>org.zeroturnaround</groupId>
-        <artifactId>jrebel-maven-plugin</artifactId>
-        <version>1.0.7</version>
-        <executions>
-          <execution>
-            <id>generate-rebel-xml</id>
-            <phase>process-resources</phase>
-            <goals>
-              <goal>generate</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
     </plugins>
   </build>
   
@@ -54,6 +39,7 @@ Generation time : 2009-10-28 12:45:52 CET
       <artifactId>cs-iframe-core-composite-svc</artifactId>
 	  <version>${project.version}</version>
     </dependency>
+
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>servlet-api</artifactId>
@@ -62,10 +48,11 @@ Generation time : 2009-10-28 12:45:52 CET
       <groupId>javax.portlet</groupId>
       <artifactId>portlet-api</artifactId>
     </dependency>
-    <!--<dependency>-->
-      <!--<groupId>com.sun.portal</groupId>-->
-      <!--<artifactId>portlet-container</artifactId>-->
-    <!--</dependency>-->
+    <dependency>
+      <groupId>com.sun.portal</groupId>
+      <artifactId>portlet-container</artifactId>
+    </dependency>
+
     <dependency>
       <groupId>taglibs</groupId>
       <artifactId>standard</artifactId>
@@ -155,6 +142,13 @@ Generation time : 2009-10-28 12:45:52 CET
       <groupId>org.htmlparser</groupId>
       <artifactId>htmlparser</artifactId>
       <version>1.6</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.liferay.portal</groupId>
+      <artifactId>portal-service</artifactId>
+      <version>6.0.5</version>
+      <scope>provided</scope>
     </dependency>
 
     <!-- Test -->

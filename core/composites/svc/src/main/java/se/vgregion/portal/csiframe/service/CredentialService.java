@@ -1,8 +1,11 @@
 package se.vgregion.portal.csiframe.service;
 
+import se.vgregion.portal.csiframe.domain.SiteKey;
 import se.vgregion.portal.csiframe.domain.UserSiteCredential;
 
-public interface UserSiteCredentialService {
+import java.util.List;
+
+public interface CredentialService {
 
     /**
      * Retrive user credentials. If no credentals are stored, null will be returned.
@@ -13,7 +16,11 @@ public interface UserSiteCredentialService {
      *            - site credental identifier.
      * @return credentials
      */
-    public UserSiteCredential getUserSiteCredential(String uid, String siteKey);
+    UserSiteCredential getUserSiteCredential(String uid, String siteKey);
+
+    List<UserSiteCredential> getAllSiteCredentials(String uid);
+
+    List<SiteKey> getAllSiteKeys();
 
     /**
      * Store a credental. Password will be encrypted before storage.
@@ -21,5 +28,11 @@ public interface UserSiteCredentialService {
      * @param siteCredential
      *            - credental to be stored
      */
-    public void addUserSiteCredential(UserSiteCredential siteCredential);
+    void save(UserSiteCredential siteCredential);
+
+    void save(SiteKey siteKey);
+
+    void remove(UserSiteCredential siteCredential);
+
+    void remove(SiteKey siteKey);
 }

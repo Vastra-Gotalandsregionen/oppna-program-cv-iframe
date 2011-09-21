@@ -4,7 +4,6 @@
 package se.vgregion.portal.csiframe.service;
 
 import static org.junit.Assert.*;
-import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.Before;
@@ -14,7 +13,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import se.vgregion.portal.csiframe.domain.UserSiteCredential;
-import se.vgregion.portal.csiframe.domain.UserSiteCredentialRepository;
+import se.vgregion.portal.csiframe.domain.persistence.UserSiteCredentialRepository;
 
 /**
  * @author anders.bergkvist@omegapoint.se
@@ -22,7 +21,7 @@ import se.vgregion.portal.csiframe.domain.UserSiteCredentialRepository;
  */
 public class UserSiteCredentialServiceImplTest {
 
-    UserSiteCredentialServiceImpl userSiteCredentialServiceImpl;
+    CredentialServiceImpl userSiteCredentialServiceImpl;
 
     @Mock
     UserSiteCredentialRepository userSiteCredentialRepository;
@@ -34,7 +33,7 @@ public class UserSiteCredentialServiceImplTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        userSiteCredentialServiceImpl = new UserSiteCredentialServiceImpl();
+        userSiteCredentialServiceImpl = new CredentialServiceImpl();
 
         ReflectionTestUtils.setField(userSiteCredentialServiceImpl, "userSiteCredentialRepository",
                 userSiteCredentialRepository);
@@ -42,7 +41,7 @@ public class UserSiteCredentialServiceImplTest {
 
     /**
      * Test method for
-     * {@link se.vgregion.portal.csiframe.service.UserSiteCredentialServiceImpl#getUserSiteCredential(java.lang.String, java.lang.String)}
+     * {@link CredentialServiceImpl#getUserSiteCredential(java.lang.String, java.lang.String)}
      * .
      */
     @Test
@@ -64,7 +63,7 @@ public class UserSiteCredentialServiceImplTest {
 
     /**
      * Test method for
-     * {@link se.vgregion.portal.csiframe.service.UserSiteCredentialServiceImpl#addUserSiteCredential(se.vgregion.portal.csiframe.domain.UserSiteCredential)}
+     * {@link CredentialServiceImpl#save(se.vgregion.portal.csiframe.domain.UserSiteCredential)}
      * .
      */
     @Test
@@ -77,8 +76,8 @@ public class UserSiteCredentialServiceImplTest {
         create.setSiteKey(siteKey);
         create.setId(Long.valueOf(1));
 
-        userSiteCredentialServiceImpl.addUserSiteCredential(create);
+        userSiteCredentialServiceImpl.save(create);
 
-        verify(userSiteCredentialRepository).addUserSiteCredential(any(UserSiteCredential.class));
+        verify(userSiteCredentialRepository).save(any(UserSiteCredential.class));
     }
 }

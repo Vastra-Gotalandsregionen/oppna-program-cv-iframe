@@ -48,6 +48,26 @@
     </security-role-ref>
   </portlet>
 
+  <portlet>
+    <portlet-name>cs-admin</portlet-name>
+    <display-name>Mina Inloggningar</display-name>
+    <portlet-class>org.springframework.web.portlet.DispatcherPortlet</portlet-class>
+    <expiration-cache>0</expiration-cache>
+
+    <supports>
+      <mime-type>text/html</mime-type>
+      <portlet-mode>view</portlet-mode>
+      <portlet-mode>edit</portlet-mode>
+    </supports>
+    <supported-locale>sv</supported-locale>
+
+    <portlet-info>
+      <title>Mina Inloggningar</title>
+      <short-title>Mina Inloggningar</short-title>
+      <keywords>cs credential store</keywords>
+    </portlet-info>
+  </portlet>
+
   <user-attribute>
     <description>User Login ID</description>
     <name>user.login.id</name>
