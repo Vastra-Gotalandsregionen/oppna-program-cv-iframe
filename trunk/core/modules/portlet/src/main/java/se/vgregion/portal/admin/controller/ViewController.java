@@ -4,15 +4,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
-import se.vgregion.portal.csiframe.service.CredentialService;
+import se.vgregion.portal.cs.domain.UserSiteCredential;
+import se.vgregion.portal.cs.service.CredentialService;
 
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletSecurityException;
 import javax.portlet.RenderRequest;
 import java.security.Principal;
+import java.util.Collection;
 import java.util.Map;
+
+import static javax.portlet.PortletRequest.P3PUserInfos.USER_LOGIN_ID;
+import static javax.portlet.PortletRequest.USER_INFO;
 
 /**
  * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
@@ -26,22 +32,21 @@ public class ViewController {
     private CredentialService userSiteCredentialService;
 
     @RenderMapping
-    public String showView(RenderRequest req) {
+    public String showView(RenderRequest req, ModelMap model) {
         String uid = lookupUid(req);
 
-        userSiteCredentialService.getUserSiteCredential(uid, "");
+        Collection<UserSiteCredential> userCredentials = userSiteCredentialService.getAllSiteCredentials(uid);
+        model.addAttribute("userCredentials", userCredentials);
 
         return "view";
     }
 
 
     private String lookupUid(PortletRequest req) {
-        Map<String, ?> userInfo = (Map<String, ?>) req.getAttribute(PortletRequest.USER_INFO);
-        String userId;
-        if (userInfo != null) {
-            userId = (String) userInfo.get(PortletRequest.P3PUserInfos.USER_LOGIN_ID.toString());
-        } else {
-            userId = "";
+        Map<String, ?> userInfo = (Map<String, ?>) req.getAttribute(USER_INFO);
+        String userId = "";
+        if (userInfo != null && userInfo.get(USER_LOGIN_ID.toString()) != null) {
+            userId = (String) userInfo.get(USER_LOGIN_ID.toString());
         }
         return userId;
     }

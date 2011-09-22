@@ -46,8 +46,8 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 import org.springframework.web.portlet.util.PortletUtils;
 
-import se.vgregion.portal.csiframe.domain.UserSiteCredential;
-import se.vgregion.portal.csiframe.service.CredentialService;
+import se.vgregion.portal.cs.domain.UserSiteCredential;
+import se.vgregion.portal.cs.service.CredentialService;
 import se.vgregion.portal.iframe.model.PortletConfig;
 
 /**

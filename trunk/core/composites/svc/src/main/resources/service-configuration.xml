@@ -6,6 +6,6 @@
 
   <import resource="classpath*:types-configuration.xml" />
   <context:annotation-config/>
-  <context:component-scan base-package="se.vgregion.portal.csiframe.service"/>
+  <context:component-scan base-package="se.vgregion.portal.cs.service"/>
 
 </beans>

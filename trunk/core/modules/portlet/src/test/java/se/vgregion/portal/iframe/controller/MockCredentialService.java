@@ -1,8 +1,8 @@
 package se.vgregion.portal.iframe.controller;
 
-import se.vgregion.portal.csiframe.domain.SiteKey;
-import se.vgregion.portal.csiframe.domain.UserSiteCredential;
-import se.vgregion.portal.csiframe.service.CredentialService;
+import se.vgregion.portal.cs.domain.SiteKey;
+import se.vgregion.portal.cs.domain.UserSiteCredential;
+import se.vgregion.portal.cs.service.CredentialService;
 
 import java.util.List;
 
@@ -37,6 +37,11 @@ class MockCredentialService implements CredentialService {
     }
 
     @Override
+    public SiteKey getSiteKey(Long siteKeyId) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
     public void save(UserSiteCredential siteCredential) {
         storeCalled++;
     }
@@ -52,7 +57,7 @@ class MockCredentialService implements CredentialService {
     }
 
     @Override
-    public void remove(SiteKey siteKey) {
+    public void remove(Long siteKeyId) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 

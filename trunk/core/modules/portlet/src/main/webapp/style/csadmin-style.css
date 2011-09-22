@@ -1,0 +1,19 @@
+.cs-admin table {
+    border-width: 1px;
+    border-style: solid;
+}
+
+.cs-odd {
+    background-color: #d3d3d3;
+    border-bottom: 1px solid;
+}
+
+.cs-even {
+    background-color: #fff;
+    border-bottom: 1px solid;
+}
+
+.cs-head {
+    background-color: gray;
+    border-bottom: 1px solid;
+}
