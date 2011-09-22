@@ -50,7 +50,7 @@ import org.springframework.mock.web.portlet.MockResourceURL;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.ui.ModelMap;
 
-import se.vgregion.portal.csiframe.domain.UserSiteCredential;
+import se.vgregion.portal.cs.domain.UserSiteCredential;
 import se.vgregion.portal.iframe.BaseTestSetup;
 import se.vgregion.portal.iframe.model.PortletConfig;
 
