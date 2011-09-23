@@ -11,4 +11,6 @@ import se.vgregion.portal.cs.domain.SiteKey;
 public interface SiteKeyRepository extends Repository<SiteKey, Long> {
 
     void save(SiteKey siteKey);
+
+    SiteKey findBySiteKey(String siteKey);
 }

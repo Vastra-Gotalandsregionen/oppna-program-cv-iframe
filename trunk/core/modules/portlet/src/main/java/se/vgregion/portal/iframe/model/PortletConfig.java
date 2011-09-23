@@ -49,8 +49,8 @@ public class PortletConfig implements Serializable {
     private String authType;
     private String formMethod;
     private String formAction;
-    private boolean screenNameOnly;
-    private boolean suggestScreenName = true;
+//    private boolean screenNameOnly;
+//    private boolean suggestScreenName = true;
     private boolean sslUrlsOnly;
     private String siteUserNameField;
     private String sitePasswordField;
@@ -86,8 +86,8 @@ public class PortletConfig implements Serializable {
         portletConfig.setAuthType(prefs.getValue("auth-type", ""));
         portletConfig.setFormAction(prefs.getValue("form-action", ""));
         portletConfig.setFormMethod(prefs.getValue("form-method", ""));
-        portletConfig.setScreenNameOnly(Boolean.valueOf(prefs.getValue("screenNameOnly", "false")));
-        portletConfig.setSuggestScreenName(Boolean.valueOf(prefs.getValue("suggestScreenName", "true")));
+//        portletConfig.setScreenNameOnly(Boolean.valueOf(prefs.getValue("screenNameOnly", "false")));
+//        portletConfig.setSuggestScreenName(Boolean.valueOf(prefs.getValue("suggestScreenName", "true")));
         portletConfig.setSslUrlsOnly(Boolean.valueOf(prefs.getValue("sslUrlsOnly", "false")));
         portletConfig.setSiteUserNameField(prefs.getValue("user-name-field", ""));
         portletConfig.setSitePasswordField(prefs.getValue("password-field", ""));
@@ -117,8 +117,8 @@ public class PortletConfig implements Serializable {
             prefs.setValue("auth-type", getAuthType());
             prefs.setValue("form-action", getFormAction());
             prefs.setValue("form-method", getFormMethod());
-            prefs.setValue("screenNameOnly", String.valueOf(isScreenNameOnly()));
-            prefs.setValue("suggestScreenName", String.valueOf(isSuggestScreenName()));
+//            prefs.setValue("screenNameOnly", String.valueOf(isScreenNameOnly()));
+//            prefs.setValue("suggestScreenName", String.valueOf(isSuggestScreenName()));
             prefs.setValue("sslUrlsOnly", String.valueOf(isSslUrlsOnly()));
             prefs.setValue("user-name-field", getSiteUserNameField());
             prefs.setValue("password-field", getSitePasswordField());
@@ -219,21 +219,21 @@ public class PortletConfig implements Serializable {
         this.formMethod = formMethod;
     }
 
-    public boolean isScreenNameOnly() {
-        return screenNameOnly;
-    }
+//    public boolean isScreenNameOnly() {
+//        return screenNameOnly;
+//    }
+//
+//    public void setScreenNameOnly(boolean screenNameOnly) {
+//        this.screenNameOnly = screenNameOnly;
+//    }
 
-    public void setScreenNameOnly(boolean screenNameOnly) {
-        this.screenNameOnly = screenNameOnly;
-    }
-
-    public boolean isSuggestScreenName() {
-        return suggestScreenName;
-    }
-
-    public void setSuggestScreenName(boolean suggestScreenName) {
-        this.suggestScreenName = suggestScreenName;
-    }
+//    public boolean isSuggestScreenName() {
+//        return suggestScreenName;
+//    }
+//
+//    public void setSuggestScreenName(boolean suggestScreenName) {
+//        this.suggestScreenName = suggestScreenName;
+//    }
 
     public boolean isSslUrlsOnly() {
         return sslUrlsOnly;
@@ -328,7 +328,7 @@ public class PortletConfig implements Serializable {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).append("siteKey", siteKey)
                 .append("src", src).append("relative", relative).append("auth", auth).append("authType", authType)
                 .append("formAction", formAction).append("formMethod", formMethod)
-                .append("screenNameOnly", screenNameOnly).append("suggestScreenName", suggestScreenName)
+//                .append("screenNameOnly", screenNameOnly).append("suggestScreenName", suggestScreenName)
                 .append("sslUrlsOnly", sslUrlsOnly).append("siteUserNameField", siteUserNameField)
                 .append("sitePasswordField", sitePasswordField).append("hiddenVariables", hiddenVariables)
                 .append("preIFrameAction", preIFrameAction).append("htmlAttributes", htmlAttributes).toString();

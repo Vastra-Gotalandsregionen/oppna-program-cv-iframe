@@ -42,6 +42,14 @@ class MockCredentialService implements CredentialService {
     }
 
     @Override
+    public SiteKey getSiteKey(String siteKey) {
+        return new SiteKey("apa", "ApA", "Apa describe", true, false, true);
+        // use File |
+        // Settings | File
+        // Templates.
+    }
+
+    @Override
     public void save(UserSiteCredential siteCredential) {
         storeCalled++;
     }

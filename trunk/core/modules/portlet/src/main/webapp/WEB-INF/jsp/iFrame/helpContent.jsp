@@ -22,7 +22,6 @@
 
 <%@page pageEncoding="UTF-8"%>
 
-<br />
 <div class="vgr-portlet-controlls-container" style="width: 600px; text-align: left;">
     <h2>Användning</h2>
 

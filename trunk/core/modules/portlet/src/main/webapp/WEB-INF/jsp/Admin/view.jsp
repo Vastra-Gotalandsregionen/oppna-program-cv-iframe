@@ -42,7 +42,7 @@
                            type="hidden"/>
                     <table class="lfr-table">
                         <tr>
-                            <td><label for="credential_${cnt.index}.siteUser">Inloggnings namn</label></td>
+                            <td><label for="credential_${cnt.index}.siteUser">Användarnamn</label></td>
                             <td>
                                 <input id="credential_${cnt.index}.siteUser"
                                        name="siteUser"

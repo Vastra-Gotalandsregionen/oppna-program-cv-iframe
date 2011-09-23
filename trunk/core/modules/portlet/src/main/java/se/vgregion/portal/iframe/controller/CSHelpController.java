@@ -24,11 +24,15 @@ package se.vgregion.portal.iframe.controller;
 
 import javax.portlet.PortletPreferences;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
+import se.vgregion.portal.cs.domain.SiteKey;
+import se.vgregion.portal.cs.service.CredentialService;
 import se.vgregion.portal.iframe.model.PortletConfig;
 
 /**
@@ -38,10 +42,18 @@ import se.vgregion.portal.iframe.model.PortletConfig;
 @Controller
 @RequestMapping("HELP")
 public class CSHelpController {
+
+    @Autowired
+    private CredentialService credentialService;
+
     @RenderMapping
-    public String showHelp(ModelMap model, PortletPreferences prefs) {
+    public String showHelp(Model model, PortletPreferences prefs) {
         PortletConfig portletConfig = se.vgregion.portal.iframe.model.PortletConfig.getInstance(prefs);
         model.addAttribute("portletConfig", portletConfig);
+
+        SiteKey siteKey = credentialService.getSiteKey(portletConfig.getSiteKey());
+        model.addAttribute("siteKey", siteKey);
+
         return "help";
     }
 }

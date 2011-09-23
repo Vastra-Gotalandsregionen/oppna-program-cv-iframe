@@ -45,6 +45,11 @@ public class CredentialServiceImpl implements CredentialService {
         return siteKeyRepository.find(siteKeyId);
     }
 
+    @Override
+    public SiteKey getSiteKey(String siteKey) {
+        return siteKeyRepository.findBySiteKey(siteKey);
+    }
+
     @Transactional
     @Override
     public void save(UserSiteCredential siteCredential) {

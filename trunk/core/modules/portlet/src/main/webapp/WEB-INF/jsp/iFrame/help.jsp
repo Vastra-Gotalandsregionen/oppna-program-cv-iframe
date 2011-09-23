@@ -21,7 +21,7 @@
 --%>
 
 
-<%@page pageEncoding="UTF-8"%>
+<%@page pageEncoding="UTF-8" %>
 
 <portlet:renderURL portletMode="view" var="showView" secure="${portletConfig.sslUrlsOnly}"/>
 <%@include file="helpContent.jsp" %>
