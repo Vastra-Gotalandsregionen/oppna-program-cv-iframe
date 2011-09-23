@@ -29,6 +29,8 @@ public interface CredentialService {
 
     SiteKey getSiteKey(Long siteKeyId);
 
+    SiteKey getSiteKey(String siteKey);
+
     /**
      * Store a credental. Password will be encrypted before storage.
      * 

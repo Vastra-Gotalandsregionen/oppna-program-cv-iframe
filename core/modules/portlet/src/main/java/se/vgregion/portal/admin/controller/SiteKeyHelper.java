@@ -11,6 +11,10 @@ public class SiteKeyHelper {
         this.siteKeys = value;
     }
 
+    public SiteKeyHelper(Collection<SiteKey> value) {
+        this(new ArrayList<SiteKey>(value));
+    }
+
     public List<SiteKey> get() {
         return siteKeys;
     }

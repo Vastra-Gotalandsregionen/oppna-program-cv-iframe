@@ -31,12 +31,16 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
+import se.vgregion.portal.admin.controller.SiteKeyHelper;
+import se.vgregion.portal.cs.domain.SiteKey;
+import se.vgregion.portal.cs.service.CredentialService;
 import se.vgregion.portal.iframe.model.PortletConfig;
 import se.vgregion.portal.iframe.util.LoginScreenScraper;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.PortletPreferences;
 import javax.portlet.ValidatorException;
+import java.util.List;
 
 /**
  * Portlet mode=EDIT controller.
@@ -45,6 +49,9 @@ import javax.portlet.ValidatorException;
 @RequestMapping("EDIT")
 public class CSEditController {
     private static Logger log = LoggerFactory.getLogger(CSEditController.class);
+
+    @Autowired
+    private CredentialService credentialService;
 
     @Autowired
     private LoginScreenScraper loginScreenScraper;
@@ -66,8 +73,11 @@ public class CSEditController {
     public String editPreferences(ModelMap model, PortletPreferences prefs) {
         PortletConfig portletConfig = PortletConfig.getInstance(prefs);
         log.debug("editPreferences: {}", portletConfig);
-
         model.addAttribute("portletConfig", portletConfig);
+
+        List<SiteKey> siteKeys = new SiteKeyHelper(credentialService.getAllSiteKeys()).filterActive()
+                .orderBySiteKey().get();
+        model.addAttribute("siteKeys", siteKeys);
 
         loginScreenScraper.advancedScraping(portletConfig);
 

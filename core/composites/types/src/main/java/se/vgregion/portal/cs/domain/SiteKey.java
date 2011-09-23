@@ -43,6 +43,15 @@ public class SiteKey extends AbstractEntity<Long> {
     public SiteKey() {
     }
 
+    public SiteKey(String siteKey, String title, String description, Boolean suggestScreenName, Boolean screenNameOnly, Boolean active) {
+        this.title = title;
+        this.suggestScreenName = suggestScreenName;
+        this.siteKey = siteKey;
+        this.screenNameOnly = screenNameOnly;
+        this.description = description;
+        this.active = active;
+    }
+
     public Boolean getActive() {
         return active;
     }

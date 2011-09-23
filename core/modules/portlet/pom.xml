@@ -160,6 +160,10 @@ Generation time : 2009-10-28 12:45:52 CET
       <groupId>org.springframework</groupId>
       <artifactId>spring-test</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-all</artifactId>
+    </dependency>
 
   </dependencies>
 

@@ -21,9 +21,14 @@ package se.vgregion.portal.iframe.controller;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.mock.web.portlet.MockActionRequest;
 import org.springframework.mock.web.portlet.MockPortletPreferences;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.ui.ModelMap;
+import se.vgregion.portal.cs.domain.SiteKey;
+import se.vgregion.portal.cs.service.CredentialService;
 import se.vgregion.portal.iframe.BaseTestSetup;
 import se.vgregion.portal.iframe.model.PortletConfig;
 import se.vgregion.portal.iframe.util.LoginScreenScraper;
@@ -31,8 +36,12 @@ import se.vgregion.portal.iframe.util.LoginScreenScraper;
 import javax.portlet.ReadOnlyException;
 import javax.portlet.ValidatorException;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
 
 /**
  * This action do that and that, if it has something special it is.
@@ -59,6 +68,13 @@ public class CSEditControllerTest extends BaseTestSetup {
     public void testEditPreferences() {
         CSEditController controller = new CSEditController();
         controller.setLoginScreenScraper(stubLoginScreenScraper);
+        CredentialService credentialService = Mockito.mock(CredentialService.class);
+        ReflectionTestUtils.setField(controller, "credentialService", credentialService);
+
+        Collection<SiteKey> siteKeys = Arrays.asList();
+
+        when(credentialService.getAllSiteKeys()).thenReturn(siteKeys);
+
         String result = controller.editPreferences(model, stubPrefs);
         assertEquals("edit", result);
 

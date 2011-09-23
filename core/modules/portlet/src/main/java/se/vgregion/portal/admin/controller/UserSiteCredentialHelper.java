@@ -3,16 +3,17 @@ package se.vgregion.portal.admin.controller;
 import se.vgregion.portal.cs.domain.SiteKey;
 import se.vgregion.portal.cs.domain.UserSiteCredential;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class UserSiteCredentialHelper {
     private final List<UserSiteCredential> userSiteCredentials;
 
     public UserSiteCredentialHelper(List<UserSiteCredential> value) {
         this.userSiteCredentials = value;
+    }
+
+    public UserSiteCredentialHelper(Collection<UserSiteCredential> value) {
+        this(new ArrayList<UserSiteCredential>(value));
     }
 
     public List<UserSiteCredential> get() {

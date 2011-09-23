@@ -24,25 +24,53 @@
 
 <%@ taglib prefix="portlet" uri="http://java.sun.com/portlet_2_0" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<style type="text/css">
+    <%@ include file="/style/csadmin-style.css"%>
+</style>
 
 <portlet:actionURL var="formAction" escapeXml="false" secure="${portletConfig.sslUrlsOnly}"/>
 
-<form:form method="post" action="${formAction}" commandName="siteCredential">
-    <h2>Ändra inloggning - ${siteCredential.siteKey}</h2>
-    <form:hidden path="uid" />
-    <form:hidden path="id" />
-    <form:hidden path="siteKey" />
+<div class="cs-admin">
+    <h2>Ändra inloggning - ${siteKey.title}</h2>
+    <fieldset>
+        <div class="values">
+            <form:form method="post" action="${formAction}" commandName="siteCredential">
 
-    <label for="siteUser">Användarnamn</label>
-    <br/>
-    <form:input path="siteUser" id="siteUser" disabled="${portletConfig.screenNameOnly}"/>
-    <br/>
-    <label for="sitePassword">Lösenord</label>
-    <br/>
-    <form:password path="sitePassword" id="sitePassword" showPassword="true" />
-    <br/>
-    <input type="submit" value="Spara" />
-    <input type="submit" value="Avbryt" name="_cancel" />
-</form:form>
+                <form:hidden path="id"/>
+                <form:hidden path="uid"/>
+                <form:hidden path="siteKey"/>
+                <table class="lfr-table">
+                    <tr>
+                        <td>
+                            <label for="siteUser">Användarnamn</label>
+                        </td>
+                        <td>
+                            <form:input path="siteUser" id="siteUser" disabled="${siteKey.screenNameOnly}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="sitePassword">Lösenord</label>
+                        </td>
+                        <td>
+                            <form:password path="sitePassword" id="sitePassword" showPassword="true"/>
+                        </td>
+                    </tr>
+                </table>
+                <div class="buttons">
+                    <input type="submit" value="Spara"/>
+                    <input type="submit" value="Avbryt" name="_cancel"/>
+                </div>
+            </form:form>
+        </div>
+        <div class="description">
+            <div class="portlet-msg-info">
+                <c:out value="${siteKey.description}" escapeXml="false"/>
+            </div>
+        </div>
+    </fieldset>
+</div>
 
 <%@include file="helpContent.jsp" %>

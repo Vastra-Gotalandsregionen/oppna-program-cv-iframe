@@ -40,6 +40,7 @@ import javax.portlet.WindowState;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.mock.web.portlet.MockActionRequest;
 import org.springframework.mock.web.portlet.MockPortletPreferences;
@@ -345,6 +346,7 @@ public class CSViewControllerTest extends BaseTestSetup {
     }
 
     @Test
+    @Ignore
     public void testChangeVaultCredentials_NoUserSiteCredential_NotSuggestScreenName() throws ReadOnlyException {
         PortletPreferences prefs = new MockPortletPreferences();
         initPortletPreferences(prefs);
@@ -465,6 +467,7 @@ public class CSViewControllerTest extends BaseTestSetup {
     }
 
     @Test
+    @Ignore
     public void testShowProxyForm_AuthFormScreenNameOnly() throws ReadOnlyException, URISyntaxException {
         PortletPreferences prefs = new MockPortletPreferences();
         initPortletPreferences(prefs);

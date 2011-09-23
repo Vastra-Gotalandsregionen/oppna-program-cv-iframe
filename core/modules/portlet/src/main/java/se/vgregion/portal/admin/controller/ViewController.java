@@ -39,11 +39,11 @@ public class ViewController {
         String uid = lookupUid(req);
 
         List<UserSiteCredential> userCredentials =
-                new UserSiteCredentialHelper(new ArrayList(credentialService.getAllSiteCredentials(uid))).
-                        orderBySiteKey().get();
+                new UserSiteCredentialHelper(credentialService.getAllSiteCredentials(uid))
+                        .orderBySiteKey().get();
 
-        List<SiteKey> siteKeys = new SiteKeyHelper(new ArrayList(credentialService.getAllSiteKeys())).
-                orderBySiteKey().filterActive().get();
+        List<SiteKey> siteKeys = new SiteKeyHelper(credentialService.getAllSiteKeys())
+                .orderBySiteKey().filterActive().get();
 
         List<CredentialSiteKey> credentials = new ArrayList<CredentialSiteKey>();
         for (UserSiteCredential credential : userCredentials) {

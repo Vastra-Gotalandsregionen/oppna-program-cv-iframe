@@ -46,6 +46,7 @@ import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 import org.springframework.web.portlet.util.PortletUtils;
 
+import se.vgregion.portal.cs.domain.SiteKey;
 import se.vgregion.portal.cs.domain.UserSiteCredential;
 import se.vgregion.portal.cs.service.CredentialService;
 import se.vgregion.portal.iframe.model.PortletConfig;
@@ -77,11 +78,12 @@ public class CSViewController {
     @RenderMapping
     public String showView(PortletPreferences prefs, RenderRequest req, RenderResponse resp, ModelMap model) {
         PortletConfig portletConfig = PortletConfig.getInstance(prefs);
-
         log.debug("Creds: {}", portletConfig);
 
+        SiteKey siteKey = credentialService.getSiteKey(portletConfig.getSiteKey());
+
         UserSiteCredential siteCredential = new UserSiteCredential();
-        if (!credentialsAvailable(req, model, portletConfig, siteCredential)) {
+        if (!credentialsAvailable(req, model, portletConfig, siteCredential, siteKey)) {
             model.addAttribute("portletConfig", portletConfig);
             return "userCredentialForm";
         }
@@ -136,8 +138,11 @@ public class CSViewController {
             return "view";
         }
 
+        SiteKey siteKey = credentialService.getSiteKey(portletConfig.getSiteKey());
+        model.addAttribute("siteKey", siteKey);
+
         UserSiteCredential siteCredential = new UserSiteCredential();
-        credentialsAvailable(req, model, portletConfig, siteCredential);
+        credentialsAvailable(req, model, portletConfig, siteCredential, siteKey);
 
         return "userCredentialForm";
     }
@@ -163,8 +168,10 @@ public class CSViewController {
             return "view";
         }
 
+        SiteKey siteKey = credentialService.getSiteKey(portletConfig.getSiteKey());
+
         UserSiteCredential siteCredential = new UserSiteCredential();
-        credentialsAvailable(req, model, portletConfig, siteCredential);
+        credentialsAvailable(req, model, portletConfig, siteCredential, siteKey);
 
         URI src = new URI(portletConfig.getSrc());
 
@@ -276,13 +283,13 @@ public class CSViewController {
     }
 
     private boolean credentialsAvailable(PortletRequest req, ModelMap model, PortletConfig portletConfig,
-            UserSiteCredential returnSiteCredential) {
+            UserSiteCredential returnSiteCredential, SiteKey siteKey) {
         boolean userSiteCredentialExist = true;
         if (portletConfig.isAuth()) {
             String uid = lookupUid(req);
             returnSiteCredential.setUid(uid);
             returnSiteCredential.setSiteKey(portletConfig.getSiteKey());
-            if (portletConfig.isScreenNameOnly() || portletConfig.isSuggestScreenName()) {
+            if (siteKey.getScreenNameOnly() || siteKey.getSuggestScreenName()) {
                 returnSiteCredential.setSiteUser(uid);
             }
 
@@ -291,7 +298,7 @@ public class CSViewController {
 
             if (siteCredential != null) {
                 returnSiteCredential.setId(siteCredential.getId());
-                if (!portletConfig.isScreenNameOnly()) {
+                if (!siteKey.getScreenNameOnly()) {
                     returnSiteCredential.setSiteUser(siteCredential.getSiteUser());
                 }
                 returnSiteCredential.setSitePassword(siteCredential.getSitePassword());
