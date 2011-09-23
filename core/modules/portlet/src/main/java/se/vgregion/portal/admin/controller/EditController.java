@@ -29,19 +29,10 @@ public class EditController {
 
     @RenderMapping
     public String showEdit(Model model) {
-        List<SiteKey> allSiteKeys = new ArrayList(credentialService.getAllSiteKeys());
-        Collections.sort(allSiteKeys, new Comparator<SiteKey>() {
-            @Override
-            public int compare(SiteKey one, SiteKey other) {
-                return one.getSiteKey().compareTo(other.getSiteKey());
-            }
-        });
+        List<SiteKey> siteKeys = new SiteKeyHelper(new ArrayList(credentialService.getAllSiteKeys())).
+                orderBySiteKey().descriptionElipsis(45).get();
 
-        for (SiteKey siteKey : allSiteKeys) {
-            siteKey.setDescription(ellipsis(siteKey.getDescription(), 25));
-        }
-
-        model.addAttribute("siteKeys", allSiteKeys);
+        model.addAttribute("siteKeys", siteKeys);
 
         return "edit";
     }
@@ -70,7 +61,6 @@ public class EditController {
         credentialService.save(siteKey);
     }
 
-
     @ActionMapping("deleteSiteKey")
     public void deleteSiteKey(@RequestParam("siteKeyId") Long siteKeyId) {
         credentialService.remove(siteKeyId);
@@ -88,11 +78,4 @@ public class EditController {
         return text.replace(" ", "-");
     }
 
-    private String ellipsis(String text, int len) {
-        if (text.length() > len) {
-            return text.substring(0, len - 2) + "...";
-        } else {
-            return text;
-        }
-    }
 }

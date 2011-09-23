@@ -17,52 +17,64 @@
 
 <portlet:defineObjects/>
 
-<portlet:actionURL var="saveSiteKey" name="saveSiteKey" portletMode="EDIT" />
+<portlet:actionURL var="saveSiteKey" name="saveSiteKey" portletMode="EDIT"/>
 <portlet:actionURL var="deleteSiteKey" name="deleteSiteKey" portletMode="EDIT">
     <portlet:param name="siteKeyId" value="${currentSiteKey.id}"/>
 </portlet:actionURL>
 <portlet:renderURL var="abort" portletMode="EDIT"/>
 
 
-<div class="cs-sitekey">
-    <form:form method="POST" action="${saveSiteKey}" commandName="currentSiteKey" htmlEscape="false">
-        <form:errors path="*" cssClass="portlet-msg-error"/>
-        <form:hidden path="id"/>
-        <table>
-            <caption>
-                <c:choose>
-                    <c:when test="${currentSiteKey.id == null}">
-                        Skapa en ny SiteKey
-                    </c:when>
-                    <c:otherwise>
-                        Editera ${currentSiteKey.siteKey}
-                    </c:otherwise>
-                </c:choose>
-            </caption>
-            <tr>
-                <td>Nyckel</td>
-                <td><form:input path="siteKey"/> <form:errors path="siteKey" cssClass="portlet-msg-error"/></td>
-            </tr>
-            <tr>
-                <td>Titel</td>
-                <td><form:input path="title"/> <form:errors path="title" cssClass="portlet-msg-error"/></td>
-            </tr>
-            <tr>
-                <td>Beskrivning (html är tillåtet)</td>
-                <td><form:textarea cols="80" rows="5" path="description"/> <form:errors path="description"
-                                                                      cssClass="portlet-msg-error"/></td>
-            </tr>
-            <tr>
-                <td>Aktiv</td>
-                <td><form:checkbox path="active"/></td>
-            </tr>
-        </table>
-        <div>
-            <input type="submit" value="Spara"/>
-            <input type="button" value="Ta bort" onclick="confirmDelete('${deleteItSystem}');"/>
-            <a href="${abort}"><input type="button" value="Avbryt"/></a>
-        </div>
-    </form:form>
+<div class="cs-admin">
+    <fieldset>
+        <legend>
+            <c:choose>
+                <c:when test="${currentSiteKey.id == null}">
+                    Skapa en ny SiteKey
+                </c:when>
+                <c:otherwise>
+                    Editera ${currentSiteKey.siteKey}
+                </c:otherwise>
+            </c:choose>
+        </legend>
+        <form:form method="POST" action="${saveSiteKey}" commandName="currentSiteKey" htmlEscape="false">
+            <form:errors path="*" cssClass="portlet-msg-error"/>
+            <form:hidden path="id"/>
+
+            <table class="lfr-table">
+                <tr>
+                    <td><form:label path="siteKey">Nyckel</form:label></td>
+                    <td><form:input path="siteKey"/> <form:errors path="siteKey" cssClass="portlet-msg-error"/></td>
+                </tr>
+                <tr>
+                    <td><form:label path="title">Titel</form:label></td>
+                    <td><form:input path="title"/> <form:errors path="title" cssClass="portlet-msg-error"/></td>
+                </tr>
+                <tr>
+                    <td><form:label path="description">Beskrivning<br/>(html är tillåtet)</form:label></td>
+                    <td><form:textarea cols="80" rows="5" path="description"/> <form:errors path="description"
+                                                                                            cssClass="portlet-msg-error"/></td>
+                </tr>
+                <tr>
+                    <td><form:label path="suggestScreenName">Föreslå vgrId</form:label></td>
+                    <td><form:checkbox path="suggestScreenName"/></td>
+                </tr>
+                <tr>
+                    <td><form:label path="screenNameOnly">Acceptera enbart vgrId</form:label></td>
+                    <td><form:checkbox path="screenNameOnly"/></td>
+                </tr>
+                <tr>
+                    <td><form:label path="active">Aktiv</form:label></td>
+                    <td><form:checkbox path="active"/></td>
+                </tr>
+            </table>
+
+            <div class="buttons">
+                <input type="submit" value="Spara"/>
+                <input type="button" value="Ta bort" onclick="confirmDelete('${deleteItSystem}');"/>
+                <a href="${abort}"><input type="button" value="Avbryt"/></a>
+            </div>
+        </form:form>
+    </fieldset>
 </div>
 
 <script type="text/javascript">

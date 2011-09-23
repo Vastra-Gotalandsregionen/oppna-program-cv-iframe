@@ -17,21 +17,62 @@
 
 <portlet:defineObjects/>
 
+
 <div class="cs-admin">
-    <table>
-        <tr class="cs-head">
-            <th width="100">Site Key</th>
-            <th width="150">Site User</th>
-            <th width="150">Site Password</th>
-            <th width="50">Usable</th>
-        </tr>
-        <c:forEach var="credential" items="${userCredentials}" varStatus="cnt">
-            <tr class="${(cnt.count % 2 == 0) ? 'cs-even' : 'cs-odd'}">
-                <td>${credential.siteKey}</td>
-                <td>${credential.siteUser}</td>
-                <td>${credential.sitePassword}</td>
-                <td>${credential.valid}</td>
-            </tr>
-        </c:forEach>
-    </table>
+    <c:forEach var="credential" items="${userCredentials}" varStatus="cnt">
+        <portlet:actionURL var="updateCredential" name="updateCredential" portletMode="VIEW"/>
+        <portlet:actionURL var="refreshCredential" name="refreshCredential" portletMode="VIEW"/>
+        <fieldset>
+            <legend>${credential.siteKey.title}</legend>
+            <div class="values">
+                <form method="POST" action="${updateCredential}"
+                      name="credential_${cnt.index}"
+                      id="credential_${cnt.index}">
+                    <input id="credential_${cnt.index}.id"
+                           name="id"
+                           value="${credential.credential.id}"
+                           type="hidden"/>
+                    <input id="credential_${cnt.index}.uid"
+                           name="uid"
+                           value="${credential.credential.uid}"
+                           type="hidden"/>
+                    <input id="credential_${cnt.index}.siteKey"
+                           name="siteKey"
+                           value="${credential.credential.siteKey}"
+                           type="hidden"/>
+                    <table class="lfr-table">
+                        <tr>
+                            <td><label for="credential_${cnt.index}.siteUser">Inloggnings namn</label></td>
+                            <td>
+                                <input id="credential_${cnt.index}.siteUser"
+                                       name="siteUser"
+                                       value="${credential.credential.siteUser}"
+                                       type="text"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><label for="credential_${cnt.index}.siteUser">Lösenord</label></td>
+                            <td>
+                                <input id="credential_${cnt.index}.sitePassword"
+                                       name="sitePassword"
+                                       value="${credential.credential.sitePassword}"
+                                       type="password"/>
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="buttons">
+                        <input type="submit" value="Spara"/>
+                        <a href="${refreshCredential}"><input type="button" value="Avbryt"/></a>
+                    </div>
+                </form>
+            </div>
+            <div class="description">
+                <div class="portlet-msg-info">
+                    <c:out value="${credential.siteKey.description}" escapeXml="false"/>
+                </div>
+            </div>
+        </fieldset>
+
+    </c:forEach>
+
 </div>
