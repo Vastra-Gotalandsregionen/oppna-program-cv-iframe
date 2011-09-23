@@ -31,6 +31,10 @@ public class SiteKey extends AbstractEntity<Long> {
     @Column(length = 1024)
     private String description;
 
+    private Boolean suggestScreenName;
+
+    private Boolean screenNameOnly;
+
     private Boolean active;
 
     /**
@@ -45,6 +49,22 @@ public class SiteKey extends AbstractEntity<Long> {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public Boolean getScreenNameOnly() {
+        return screenNameOnly;
+    }
+
+    public void setScreenNameOnly(Boolean screenNameOnly) {
+        this.screenNameOnly = screenNameOnly;
+    }
+
+    public Boolean getSuggestScreenName() {
+        return suggestScreenName;
+    }
+
+    public void setSuggestScreenName(Boolean suggestScreenName) {
+        this.suggestScreenName = suggestScreenName;
     }
 
     public String getDescription() {
