@@ -13,37 +13,35 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import se.vgregion.portal.cs.domain.UserSiteCredential;
+import se.vgregion.portal.cs.domain.persistence.SiteKeyRepository;
 import se.vgregion.portal.cs.domain.persistence.UserSiteCredentialRepository;
 
 /**
  * @author anders.bergkvist@omegapoint.se
- * 
+ * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
  */
 public class UserSiteCredentialServiceImplTest {
 
-    CredentialServiceImpl userSiteCredentialServiceImpl;
+    CredentialServiceImpl credentialServiceImpl;
 
     @Mock
     UserSiteCredentialRepository userSiteCredentialRepository;
 
-    /**
-     * @throws java.lang.Exception
-     */
+    @Mock
+    SiteKeyRepository siteKeyRepository;
+
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        userSiteCredentialServiceImpl = new CredentialServiceImpl();
+        credentialServiceImpl = new CredentialServiceImpl();
 
-        ReflectionTestUtils.setField(userSiteCredentialServiceImpl, "userSiteCredentialRepository",
+        ReflectionTestUtils.setField(credentialServiceImpl, "userSiteCredentialRepository",
                 userSiteCredentialRepository);
+        ReflectionTestUtils.setField(credentialServiceImpl, "siteKeyRepository",
+                siteKeyRepository);
     }
 
-    /**
-     * Test method for
-     * {@link CredentialServiceImpl#getUserSiteCredential(java.lang.String, java.lang.String)}
-     * .
-     */
     @Test
     public final void testGetUserSiteCredential() {
         String uid = "screenName";
@@ -55,17 +53,12 @@ public class UserSiteCredentialServiceImplTest {
 
         when(userSiteCredentialRepository.getUserSiteCredential(anyString(), anyString())).thenReturn(expected);
 
-        UserSiteCredential returned = userSiteCredentialServiceImpl.getUserSiteCredential(uid, siteKey);
+        UserSiteCredential returned = credentialServiceImpl.getUserSiteCredential(uid, siteKey);
         assertEquals(uid, returned.getUid());
         assertEquals(siteKey, returned.getSiteKey());
         assertEquals(Long.valueOf(1), returned.getId());
     }
 
-    /**
-     * Test method for
-     * {@link CredentialServiceImpl#save(se.vgregion.portal.cs.domain.UserSiteCredential)}
-     * .
-     */
     @Test
     public final void testAddUserSiteCredential() {
         String uid = "screenName";
@@ -76,7 +69,7 @@ public class UserSiteCredentialServiceImplTest {
         create.setSiteKey(siteKey);
         create.setId(Long.valueOf(1));
 
-        userSiteCredentialServiceImpl.save(create);
+        credentialServiceImpl.save(create);
 
         verify(userSiteCredentialRepository).save(any(UserSiteCredential.class));
     }

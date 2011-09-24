@@ -35,7 +35,7 @@ import se.vgregion.portal.cs.domain.persistence.UserSiteCredentialRepository;
 /**
  * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
  */
-@ContextConfiguration("classpath:JpaUserSiteCredentialRepositoryTest-context.xml")
+@ContextConfiguration("classpath:JpaRepositoryTest-context.xml")
 public class JpaUserSiteCredentialRepositoryTest extends AbstractTransactionalJUnit4SpringContextTests {
 
     @Autowired
@@ -69,6 +69,12 @@ public class JpaUserSiteCredentialRepositoryTest extends AbstractTransactionalJU
         repo.save(siteCredential);
 
         checkCredential(siteCredential);
+    }
+
+    @Test
+    public void testAllSiteCredentials() throws Exception {
+        assertEquals(2, repo.getAllSiteCredentials("test-uid").size());
+        assertEquals(1, repo.getAllSiteCredentials("test-uid2").size());
     }
 
     private void checkCredential(UserSiteCredential siteCredential) {

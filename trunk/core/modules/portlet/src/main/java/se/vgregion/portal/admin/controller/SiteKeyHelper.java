@@ -45,8 +45,8 @@ public class SiteKeyHelper {
     }
 
     private String ellipsis(String text, int len) {
-        if (text.length() > len) {
-            return text.substring(0, len - 2) + "...";
+        if (text.length() > Math.max(3,len)) {
+            return text.substring(0, len - 3) + "...";
         } else {
             return text;
         }
