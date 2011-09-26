@@ -34,16 +34,34 @@
 }
 
 .cs-odd {
-    background-color: #d3d3d3;
-    border-bottom: 1px solid;
+    background-color: #fff;
+    border-bottom: 1px solid #999;
 }
 
 .cs-even {
-    background-color: #fff;
-    border-bottom: 1px solid;
+    background-color: #e3e3e3;
+    border-bottom: 1px solid #999;
 }
 
-.cs-head {
-    background-color: gray;
-    border-bottom: 1px solid;
+.cs-admin .cs-table {
+    border-style: solid;
+    border-color: #999;
+    border-width: 1px;
+}
+
+.cs-admin .cs-table .cs-head {
+    background-color: #aaa;
+    border-bottom: 1px solid #999;
+}
+
+.cs-admin .cs-table .cs-head th {
+    padding: 5px 4px 3px;
+}
+
+.cs-admin .cs-table .cs-row td {
+    padding: 4px 4px 2px;
+}
+
+.cs-admin .cs-table tr td div.tools {
+    padding: 6px;
 }

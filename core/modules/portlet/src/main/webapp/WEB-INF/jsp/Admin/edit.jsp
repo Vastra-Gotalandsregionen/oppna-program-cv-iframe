@@ -25,7 +25,7 @@
 <div class="cs-admin">
     <fieldset>
         <legend>SiteKeys</legend>
-        <table class="lfr-table">
+        <table class="lfr-table cs-table">
             <tr class="cs-head">
                 <th width="100">Nyckel</th>
                 <th width="150">Titel</th>
@@ -44,20 +44,26 @@
                 </portlet:actionURL>
 
 
-                <tr class="${(cnt.count % 2 == 0) ? 'cs-even' : 'cs-odd'}">
+                <tr class="${(cnt.count % 2 == 0) ? 'cs-even' : 'cs-odd'} cs-row">
                     <td>${siteKey.siteKey}</td>
                     <td>${siteKey.title}</td>
                     <td><c:out value="${siteKey.description}" escapeXml="true"/></td>
-                    <td>${siteKey.active}</td>
-                    <td><a href="${editSiteKey}">Ändra</a></td>
-                    <td><a href="${deleteSiteKey}">Ta bort</a></td>
+                    <td align="center"><img src="/vgr-theme/images/common/${siteKey.active ? 'checked.png' :
+                    'unchecked.png'}"
+                             alt="${siteKey.active ? 'Aktiv' : 'Inaktiv'}"/></td>
+                    <td><a class="edit" href="${editSiteKey}">Ändra</a></td>
+                    <td><a class="remove" href="${deleteSiteKey}">Ta bort</a></td>
                 </tr>
             </c:forEach>
+            <tr>
+                <td colspan="6">
+                    <div class="tools">
+                        <a class="add" title="Lägg till SiteKey" href="${addSiteKey}">SiteKey</a>
+                        <a class="undo" title="Tillbaka" href="${returnToView}">Tillbaka</a>
+                    </div>
+                </td>
+            </tr>
         </table>
         <br/>
-        <div class="buttons">
-            <a href="${addSiteKey}"><input type="button" value="Lägg till"/></a>
-            <a href="${returnToView}"><input type="button" value="Tillbaka"/></a>
-        </div>
     </fieldset>
 </div>

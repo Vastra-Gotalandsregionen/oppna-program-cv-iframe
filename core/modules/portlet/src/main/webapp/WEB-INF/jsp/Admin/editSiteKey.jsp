@@ -66,13 +66,18 @@
                     <td><form:label path="active">Aktiv</form:label></td>
                     <td><form:checkbox path="active"/></td>
                 </tr>
+                <%--<tr><td colspan="2">&nbsp;</td></tr>--%>
+                <tr>
+                    <td colspan="2">
+                        <div class="buttons">
+                            <input type="submit" value="Spara"/>
+                            <input type="button" value="Ta bort" onclick="confirmDelete('${deleteItSystem}');"/>
+                            <a href="${abort}"><input type="button" value="Avbryt"/></a>
+                        </div>
+                    </td>
+                </tr>
             </table>
 
-            <div class="buttons">
-                <input type="submit" value="Spara"/>
-                <input type="button" value="Ta bort" onclick="confirmDelete('${deleteItSystem}');"/>
-                <a href="${abort}"><input type="button" value="Avbryt"/></a>
-            </div>
         </form:form>
     </fieldset>
 </div>
