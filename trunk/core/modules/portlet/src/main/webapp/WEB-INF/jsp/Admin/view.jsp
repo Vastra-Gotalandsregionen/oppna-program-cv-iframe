@@ -19,11 +19,29 @@
 
 
 <div class="cs-admin">
+    <c:if test="${removeAction ne null}">
+        <div class="portlet-msg-success">Inloggnings uppgifterna för ${removeAction} har tagits bort.</div>
+    </c:if>
     <c:forEach var="credential" items="${userCredentials}" varStatus="cnt">
         <portlet:actionURL var="updateCredential" name="updateCredential" portletMode="VIEW"/>
         <portlet:actionURL var="refreshCredential" name="refreshCredential" portletMode="VIEW"/>
+        <portlet:actionURL var="removeCredential" name="removeCredential" portletMode="VIEW">
+            <portlet:param name="userCredentialId" value="${credential.credential.id}" />
+        </portlet:actionURL>
         <fieldset>
             <legend>${credential.siteKey.title}</legend>
+            <c:if test="${saveAction eq credential.siteKey.siteKey}">
+                <div class="portlet-msg-success">Ändringarna har sparats.</div>
+            </c:if>
+            <c:if test="${saveActionFailed eq credential.siteKey.siteKey}">
+                <div class="portlet-msg-error">Ändringen misslyckades.</div>
+            </c:if>
+            <c:if test="${removeActionFailed eq credential.siteKey.siteKey}">
+                <div class="portlet-msg-error">
+                    Borttagandet av inloggnings uppgifterna för ${removeAction} misslyckades.
+                </div>
+            </c:if>
+
             <div class="values">
                 <form method="POST" action="${updateCredential}"
                       name="credential_${cnt.index}"
@@ -59,11 +77,16 @@
                                        type="password"/>
                             </td>
                         </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div class="buttons">
+                                    <input type="submit" value="Spara"/>
+                                    <a href="${removeCredential}"><input type="button" value="Ta bort"/></a>
+                                    <a href="${refreshCredential}"><input type="button" value="Avbryt"/></a>
+                                </div>
+                            </td>
+                        </tr>
                     </table>
-                    <div class="buttons">
-                        <input type="submit" value="Spara"/>
-                        <a href="${refreshCredential}"><input type="button" value="Avbryt"/></a>
-                    </div>
                 </form>
             </div>
             <div class="description">
