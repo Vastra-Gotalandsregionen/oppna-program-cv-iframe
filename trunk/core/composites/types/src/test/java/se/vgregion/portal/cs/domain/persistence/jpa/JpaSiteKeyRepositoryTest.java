@@ -37,4 +37,42 @@ public class JpaSiteKeyRepositoryTest extends AbstractTransactionalJUnit4SpringC
         assertEquals(false, siteKey.getSuggestScreenName());
         assertEquals(true, siteKey.getActive());
     }
+
+    @Test
+    public void testUpdateSiteKey() {
+        SiteKey siteKey = repo.findBySiteKey("test-key");
+
+        assertEquals("Test key 1", siteKey.getTitle());
+
+        siteKey.setTitle("Test key updated");
+        repo.save(siteKey);
+
+        repo.flush();
+
+        String result = simpleJdbcTemplate.queryForObject(
+                "select title from vgr_site_key where site_key = 'test-key'",
+                String.class);
+        assertEquals("Test key updated", result);
+    }
+
+    @Test(expected = javax.persistence.NoResultException.class)
+    public void testInvalidSiteKey() {
+        SiteKey siteKey = repo.findBySiteKey("invalid-key");
+    }
+
+    @Test
+    public void testCreateSiteKey() {
+        SiteKey siteKey = new SiteKey("new-site-key", "Test key created", "descr", true, false, true);
+
+        repo.save(siteKey);
+        repo.flush();
+
+        String result = simpleJdbcTemplate.queryForObject(
+                "select title from vgr_site_key where site_key = 'new-site-key'",
+                String.class);
+        assertEquals("Test key created", result);
+
+        SiteKey newSiteKey = repo.findBySiteKey("new-site-key");
+        assertNotNull(newSiteKey.getId());
+    }
 }
