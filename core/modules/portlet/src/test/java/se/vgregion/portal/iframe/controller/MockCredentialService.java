@@ -27,6 +27,11 @@ class MockCredentialService implements CredentialService {
     }
 
     @Override
+    public UserSiteCredential getUserSiteCredential(Long siteCredentialId) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
     public List<UserSiteCredential> getAllSiteCredentials(String uid) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }

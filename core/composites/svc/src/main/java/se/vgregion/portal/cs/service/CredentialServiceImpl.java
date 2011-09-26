@@ -31,6 +31,11 @@ public class CredentialServiceImpl implements CredentialService {
     }
 
     @Override
+    public UserSiteCredential getUserSiteCredential(Long siteCredentialId) {
+        return userSiteCredentialRepository.find(siteCredentialId);
+    }
+
+    @Override
     public Collection<UserSiteCredential> getAllSiteCredentials(String uid) {
         return userSiteCredentialRepository.getAllSiteCredentials(uid);
     }
@@ -65,7 +70,7 @@ public class CredentialServiceImpl implements CredentialService {
     @Transactional
     @Override
     public void remove(UserSiteCredential siteCredential) {
-        userSiteCredentialRepository.remove(siteCredential);
+        userSiteCredentialRepository.remove(siteCredential.getId());
     }
 
     @Transactional

@@ -4,9 +4,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import se.vgregion.portal.cs.domain.SiteKey;
@@ -38,21 +40,7 @@ public class ViewController {
     public String showView(RenderRequest req, ModelMap model) {
         String uid = lookupUid(req);
 
-        List<UserSiteCredential> userCredentials =
-                new UserSiteCredentialHelper(credentialService.getAllSiteCredentials(uid))
-                        .orderBySiteKey().get();
-
-        List<SiteKey> siteKeys = new SiteKeyHelper(credentialService.getAllSiteKeys())
-                .orderBySiteKey().filterActive().get();
-
-        List<CredentialSiteKey> credentials = new ArrayList<CredentialSiteKey>();
-        for (UserSiteCredential credential : userCredentials) {
-            for (SiteKey siteKey: siteKeys) {
-                if (credential.getSiteKey().equals(siteKey.getSiteKey())) {
-                    credentials.add(new CredentialSiteKey(credential, siteKey));
-                }
-            }
-        }
+        List<CredentialSiteKey> credentials = prepareCredentials(uid);
 
         model.addAttribute("userCredentials", credentials);
 
@@ -60,12 +48,61 @@ public class ViewController {
     }
 
     @ActionMapping("updateCredential")
-    public void updateCredential(@ModelAttribute UserSiteCredential userCredential, ActionRequest actionRequest) {
-        credentialService.save(userCredential);
+    public void updateCredential(@ModelAttribute UserSiteCredential userCredential, Model model) {
+        try {
+            credentialService.save(userCredential);
+
+            model.addAttribute("saveAction", userCredential.getSiteKey());
+        } catch (Exception ex) {
+            model.addAttribute("saveActionFailed", userCredential.getSiteKey());
+        }
     }
 
     @ActionMapping("refreshCredential")
     public void refreshCredential() {
+    }
+
+    @ActionMapping("removeCredential")
+    public void deleteCredentials(@RequestParam("userCredentialId") Long userCredentialId, Model model) {
+        UserSiteCredential siteCredential = null;
+        try {
+            siteCredential = credentialService.getUserSiteCredential(userCredentialId);
+
+            credentialService.remove(siteCredential);
+
+            model.addAttribute("removeAction", siteCredential.getSiteKey());
+        } catch (Exception ex) {
+            if (siteCredential != null)
+                model.addAttribute("removeActionFailed", siteCredential.getSiteKey());
+            else
+                model.addAttribute("removeActionFailed", true);
+        }
+    }
+
+    private List<CredentialSiteKey> prepareCredentials(String uid) {
+        List<UserSiteCredential> userCredentials =
+                new UserSiteCredentialHelper(credentialService.getAllSiteCredentials(uid)).get();
+
+        List<SiteKey> siteKeys = new SiteKeyHelper(credentialService.getAllSiteKeys())
+                .orderBySiteKey().filterActive().get();
+
+        List<CredentialSiteKey> credentials = new ArrayList<CredentialSiteKey>();
+        for (UserSiteCredential credential : userCredentials) {
+            for (SiteKey siteKey : siteKeys) {
+                if (credential.getSiteKey().equals(siteKey.getSiteKey())) {
+                    credentials.add(new CredentialSiteKey(credential, siteKey));
+                }
+            }
+        }
+        // Sort credentials by SiteKey title
+        Collections.sort(credentials, new Comparator<CredentialSiteKey>() {
+            @Override
+            public int compare(CredentialSiteKey one, CredentialSiteKey other) {
+                return one.getSiteKey().getTitle().toLowerCase().compareTo(other.getSiteKey().getTitle().toLowerCase());
+            }
+        });
+
+        return credentials;
     }
 
     private String lookupUid(PortletRequest req) {

@@ -23,6 +23,8 @@ public interface CredentialService {
      */
     UserSiteCredential getUserSiteCredential(String uid, String siteKey);
 
+    UserSiteCredential getUserSiteCredential(Long siteCredentialId);
+
     Collection<UserSiteCredential> getAllSiteCredentials(String uid);
 
     Collection<SiteKey> getAllSiteKeys();
