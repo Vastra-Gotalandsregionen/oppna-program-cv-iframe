@@ -15,7 +15,6 @@ import se.vgregion.portal.cs.domain.SiteKey;
 import se.vgregion.portal.cs.domain.UserSiteCredential;
 import se.vgregion.portal.cs.service.CredentialService;
 
-import javax.portlet.ActionRequest;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletSecurityException;
 import javax.portlet.RenderRequest;
@@ -37,10 +36,10 @@ public class ViewController {
     private CredentialService credentialService;
 
     @RenderMapping
-    public String showView(RenderRequest req, ModelMap model) {
+    public String showView(RenderRequest req, Model model) {
         String uid = lookupUid(req);
 
-        List<CredentialSiteKey> credentials = prepareCredentials(uid);
+        List<CredentialSiteKeyFormBean> credentials = prepareCredentials(uid);
 
         model.addAttribute("userCredentials", credentials);
 
@@ -79,25 +78,26 @@ public class ViewController {
         }
     }
 
-    private List<CredentialSiteKey> prepareCredentials(String uid) {
+    private List<CredentialSiteKeyFormBean> prepareCredentials(String uid) {
         List<UserSiteCredential> userCredentials =
                 new UserSiteCredentialHelper(credentialService.getAllSiteCredentials(uid)).get();
 
         List<SiteKey> siteKeys = new SiteKeyHelper(credentialService.getAllSiteKeys())
-                .orderBySiteKey().filterActive().get();
+                .filterActive().get();
 
-        List<CredentialSiteKey> credentials = new ArrayList<CredentialSiteKey>();
+        List<CredentialSiteKeyFormBean> credentials = new ArrayList<CredentialSiteKeyFormBean>();
         for (UserSiteCredential credential : userCredentials) {
             for (SiteKey siteKey : siteKeys) {
                 if (credential.getSiteKey().equals(siteKey.getSiteKey())) {
-                    credentials.add(new CredentialSiteKey(credential, siteKey));
+                    credentials.add(new CredentialSiteKeyFormBean(credential, siteKey));
+                    break;
                 }
             }
         }
         // Sort credentials by SiteKey title
-        Collections.sort(credentials, new Comparator<CredentialSiteKey>() {
+        Collections.sort(credentials, new Comparator<CredentialSiteKeyFormBean>() {
             @Override
-            public int compare(CredentialSiteKey one, CredentialSiteKey other) {
+            public int compare(CredentialSiteKeyFormBean one, CredentialSiteKeyFormBean other) {
                 return one.getSiteKey().getTitle().toLowerCase().compareTo(other.getSiteKey().getTitle().toLowerCase());
             }
         });
