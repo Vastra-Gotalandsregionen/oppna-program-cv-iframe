@@ -23,6 +23,12 @@
 <portlet:renderURL var="returnToView" portletMode="VIEW"/>
 
 <div class="cs-admin">
+    <c:if test="${removeAction ne null}">
+        <div class="portlet-msg-success">SiteKey [${removeAction}] har tagits bort.</div>
+    </c:if>
+    <c:if test="${saveAction ne null}">
+        <div class="portlet-msg-success">Ändringarna på SiteKey [${saveAction}] har sparats.</div>
+    </c:if>
     <fieldset>
         <legend>SiteKeys</legend>
         <table class="lfr-table cs-table">

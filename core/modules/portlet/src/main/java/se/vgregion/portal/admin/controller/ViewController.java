@@ -113,15 +113,4 @@ public class ViewController {
         }
         return userId;
     }
-
-    private Long getCurrentUserId(PortletRequest request) throws PortletSecurityException {
-        final Principal userPrincipal = request.getUserPrincipal();
-        try {
-            String userIdStr = userPrincipal.getName();
-            return Long.parseLong(userIdStr);
-        } catch (Exception e) {
-            LOG.warn("No user session exists.");
-            throw new PortletSecurityException("No user session exists.", e);
-        }
-    }
 }
