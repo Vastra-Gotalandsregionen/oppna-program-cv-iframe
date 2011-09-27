@@ -29,7 +29,7 @@ public class EditController {
 
     @RenderMapping
     public String showEdit(Model model) {
-        List<SiteKey> siteKeys = new SiteKeyHelper(new ArrayList(credentialService.getAllSiteKeys())).
+        List<SiteKey> siteKeys = new SiteKeyHelper(credentialService.getAllSiteKeys()).
                 orderBySiteKey().descriptionElipsis(45).get();
 
         model.addAttribute("siteKeys", siteKeys);
@@ -54,16 +54,34 @@ public class EditController {
     @ActionMapping("saveSiteKey")
     public void saveSiteKey(@ModelAttribute("currentSiteKey") SiteKey siteKey,
             BindingResult result, Model model) {
+        try {
+            siteKey.setSiteKey(convertSpace(siteKey.getSiteKey()));
+            siteKey.setDescription(convertNewline(siteKey.getDescription()));
 
-        siteKey.setSiteKey(convertSpace(siteKey.getSiteKey()));
-        siteKey.setDescription(convertNewline(siteKey.getDescription()));
+            credentialService.save(siteKey);
 
-        credentialService.save(siteKey);
+            model.addAttribute("saveAction", siteKey.getSiteKey());
+        } catch (Exception ex) {
+            model.addAttribute("saveActionFailed", siteKey.getSiteKey());
+        }
     }
 
     @ActionMapping("deleteSiteKey")
-    public void deleteSiteKey(@RequestParam("siteKeyId") Long siteKeyId) {
-        credentialService.removeSiteKey(siteKeyId);
+    public void deleteSiteKey(@RequestParam("siteKeyId") Long siteKeyId, Model model) {
+        SiteKey siteKey = null;
+        try {
+            siteKey = credentialService.getSiteKey(siteKeyId);
+
+            credentialService.removeSiteKey(siteKeyId);
+
+            model.addAttribute("removeAction", siteKey.getSiteKey());
+        } catch (Exception ex) {
+            if (siteKey != null) {
+                model.addAttribute("removeActionFailed", siteKey.getSiteKey());
+            } else {
+                model.addAttribute("removeActionFailed", true);
+            }
+        }
     }
 
     private String convertNewline(String text) {
