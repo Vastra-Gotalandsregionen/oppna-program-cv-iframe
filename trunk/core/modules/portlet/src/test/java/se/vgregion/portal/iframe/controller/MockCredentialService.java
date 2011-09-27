@@ -65,12 +65,12 @@ class MockCredentialService implements CredentialService {
     }
 
     @Override
-    public void remove(UserSiteCredential siteCredential) {
+    public void removeUserSiteCredential(Long siteCredentialId) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
-    public void remove(Long siteKeyId) {
+    public void removeSiteKey(Long siteKeyId) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 

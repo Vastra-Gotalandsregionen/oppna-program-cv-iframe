@@ -63,7 +63,7 @@ public class EditController {
 
     @ActionMapping("deleteSiteKey")
     public void deleteSiteKey(@RequestParam("siteKeyId") Long siteKeyId) {
-        credentialService.remove(siteKeyId);
+        credentialService.removeSiteKey(siteKeyId);
     }
 
     private String convertNewline(String text) {

@@ -68,7 +68,7 @@ public class ViewController {
         try {
             siteCredential = credentialService.getUserSiteCredential(userCredentialId);
 
-            credentialService.remove(siteCredential);
+            credentialService.removeUserSiteCredential(userCredentialId);
 
             model.addAttribute("removeAction", siteCredential.getSiteKey());
         } catch (Exception ex) {
