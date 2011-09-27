@@ -69,13 +69,13 @@ public class CredentialServiceImpl implements CredentialService {
 
     @Transactional
     @Override
-    public void remove(UserSiteCredential siteCredential) {
-        userSiteCredentialRepository.remove(siteCredential.getId());
+    public void removeUserSiteCredential(Long siteCredentialId) {
+        userSiteCredentialRepository.remove(siteCredentialId);
     }
 
     @Transactional
     @Override
-    public void remove(Long siteKeyId) {
+    public void removeSiteKey(Long siteKeyId) {
         siteKeyRepository.remove(siteKeyId);
     }
 

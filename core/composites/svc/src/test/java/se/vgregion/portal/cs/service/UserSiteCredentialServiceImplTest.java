@@ -16,6 +16,11 @@ import se.vgregion.portal.cs.domain.UserSiteCredential;
 import se.vgregion.portal.cs.domain.persistence.SiteKeyRepository;
 import se.vgregion.portal.cs.domain.persistence.UserSiteCredentialRepository;
 
+import javax.jws.soap.SOAPBinding;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * @author anders.bergkvist@omegapoint.se
  * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
@@ -43,7 +48,7 @@ public class UserSiteCredentialServiceImplTest {
     }
 
     @Test
-    public final void testGetUserSiteCredential() {
+    public void testGetUserSiteCredential() {
         String uid = "screenName";
         String siteKey = "appName";
         UserSiteCredential expected = new UserSiteCredential();
@@ -60,7 +65,32 @@ public class UserSiteCredentialServiceImplTest {
     }
 
     @Test
-    public final void testAddUserSiteCredential() {
+    public void testGetAllSiteCredentials() {
+        when(userSiteCredentialRepository.getAllSiteCredentials("uid"))
+                .thenReturn(Collections.<UserSiteCredential>emptyList());
+
+        Collection<UserSiteCredential> result = credentialServiceImpl.getAllSiteCredentials("uid");
+
+        assertEquals(0, result.size());
+    }
+
+    @Test
+    public void testGetUserSiteCredentialById() {
+        when(userSiteCredentialRepository.find(0L)).thenReturn(new UserSiteCredential("uid", "siteKey"));
+
+        UserSiteCredential result = credentialServiceImpl.getUserSiteCredential(0L);
+
+        assertEquals("uid", result.getUid());
+        assertEquals("siteKey", result.getSiteKey());
+    }
+
+    @Test
+    public void test() {
+
+    }
+
+    @Test
+    public void testAddUserSiteCredential() {
         String uid = "screenName";
         String siteKey = "appName";
 

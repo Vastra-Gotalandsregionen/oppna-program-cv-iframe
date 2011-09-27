@@ -58,11 +58,15 @@
                             <form:password path="sitePassword" id="sitePassword" showPassword="true"/>
                         </td>
                     </tr>
+                    <tr>
+                        <td colspan="2">
+                            <div class="buttons">
+                                <input type="submit" value="Spara"/>
+                                <input type="submit" value="Avbryt" name="_cancel"/>
+                            </div>
+                        </td>
+                    </tr>
                 </table>
-                <div class="buttons">
-                    <input type="submit" value="Spara"/>
-                    <input type="submit" value="Avbryt" name="_cancel"/>
-                </div>
             </form:form>
         </div>
         <div class="description">

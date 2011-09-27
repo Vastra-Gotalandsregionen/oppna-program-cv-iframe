@@ -26,7 +26,7 @@
         <portlet:actionURL var="updateCredential" name="updateCredential" portletMode="VIEW"/>
         <portlet:actionURL var="refreshCredential" name="refreshCredential" portletMode="VIEW"/>
         <portlet:actionURL var="removeCredential" name="removeCredential" portletMode="VIEW">
-            <portlet:param name="userCredentialId" value="${credential.credential.id}" />
+            <portlet:param name="userCredentialId" value="${credential.credential.id}"/>
         </portlet:actionURL>
         <fieldset>
             <legend>${credential.siteKey.title}</legend>
@@ -81,7 +81,7 @@
                             <td colspan="2">
                                 <div class="buttons">
                                     <input type="submit" value="Spara"/>
-                                    <a href="${removeCredential}"><input type="button" value="Ta bort"/></a>
+                                    <a class="removeLink" href="${removeCredential}"><input type="button" value="Ta bort"/></a>
                                     <a href="${refreshCredential}"><input type="button" value="Avbryt"/></a>
                                 </div>
                             </td>
@@ -99,3 +99,44 @@
     </c:forEach>
 
 </div>
+
+<script type="text/javascript">
+    AUI().ready('aui-dialog', function(A) {
+        A.all('.removeLink').on('click', function(e) {
+            e.preventDefault();
+
+            var href = e.currentTarget.get('href');
+            var title = e.currentTarget.ancestor('fieldset').one('legend').get('innerHTML');
+            var message = '<div class="confirmDialog">' +
+                          '<p>Inloggnings uppgifterna till <span>'+title+'</span> kommer att  tas bort.</p>' +
+                          '<p>Är du verkligen säker?</p>' +
+                          '</div>';
+
+            var c = new A.Dialog({
+                title: 'Bekräfta borttagandet av '+ title,
+                bodyContent: message,
+                centered: true,
+                resizable: false,
+                height: 200,
+                width: 400,
+                destroyOnclose: true,
+                buttons: [
+                    {
+                        text: 'Ok',
+                        handler: function() {
+                            window.location = href;
+                            this.hide();
+                        }
+                    },
+                    {
+                        text: 'Avbryt',
+                        handler: function() {
+                            this.hide();
+                        }
+                    }
+                ]
+
+            }).render();
+        });
+    });
+</script>

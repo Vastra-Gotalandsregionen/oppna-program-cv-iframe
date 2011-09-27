@@ -81,6 +81,7 @@ public class CSViewController {
         log.debug("Creds: {}", portletConfig);
 
         SiteKey siteKey = credentialService.getSiteKey(portletConfig.getSiteKey());
+        model.addAttribute("siteKey", siteKey);
 
         UserSiteCredential siteCredential = new UserSiteCredential();
         if (!credentialsAvailable(req, model, portletConfig, siteCredential, siteKey)) {

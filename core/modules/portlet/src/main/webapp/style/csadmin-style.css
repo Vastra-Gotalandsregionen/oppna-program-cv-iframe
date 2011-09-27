@@ -64,3 +64,19 @@
 .cs-admin .cs-table tr td div.tools {
     padding: 6px;
 }
+
+.cs-admin a:link, .cs-admin a {
+    text-decoration: none;
+}
+
+.confirmDialog {
+    padding: 10px 20px;
+}
+
+.confirmDialog p {
+    font-size: 14px;
+}
+
+.confirmDialog p span {
+    font-weight: bold;
+}

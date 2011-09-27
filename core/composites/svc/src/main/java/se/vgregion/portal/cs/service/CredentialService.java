@@ -43,7 +43,7 @@ public interface CredentialService {
 
     void save(SiteKey siteKey);
 
-    void remove(UserSiteCredential siteCredential);
+    void removeUserSiteCredential(Long siteCredentialId);
 
-    void remove(Long siteKeyId);
+    void removeSiteKey(Long siteKeyId);
 }
