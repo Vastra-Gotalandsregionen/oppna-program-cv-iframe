@@ -118,6 +118,10 @@
                 <%--</td>--%>
                 <%--</tr>--%>
             <tr>
+                <td><label for="<portlet:namespace/>sslUrlsOnlyField">SSL URLs Only</label></td>
+                <td><form:checkbox path="sslUrlsOnly" id="${ns}sslUrlsOnly"/></td>
+            </tr>
+            <tr>
                 <td><label for="<portlet:namespace/>siteUserNameField">User Field Name</label></td>
                 <td><form:input path="siteUserNameField" id="${ns}siteUserNameField" size="80"/></td>
             </tr>
