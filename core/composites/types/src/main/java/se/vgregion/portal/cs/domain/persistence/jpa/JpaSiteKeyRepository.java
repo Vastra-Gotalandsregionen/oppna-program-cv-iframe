@@ -3,11 +3,10 @@ package se.vgregion.portal.cs.domain.persistence.jpa;
 import org.springframework.stereotype.Repository;
 import se.vgregion.dao.domain.patterns.repository.db.jpa.DefaultJpaRepository;
 import se.vgregion.portal.cs.domain.SiteKey;
-import se.vgregion.portal.cs.domain.UserSiteCredential;
 import se.vgregion.portal.cs.domain.persistence.SiteKeyRepository;
 
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
-import java.util.List;
 
 /**
  * Jpa implementation of SiteKey Repository.
@@ -31,6 +30,12 @@ public class JpaSiteKeyRepository extends DefaultJpaRepository<SiteKey, Long> im
         String queryString = "SELECT s FROM SiteKey s WHERE s.siteKey = :siteKey";
         Query query = entityManager.createQuery(queryString).setParameter("siteKey", siteKey);
 
-        return (SiteKey) query.getSingleResult();
+        try {
+            SiteKey singleResult = (SiteKey) query.getSingleResult();
+            return singleResult;
+        } catch (NoResultException ex) {
+            //ok, return null
+            return null;
+        }
     }
 }

@@ -84,7 +84,7 @@ public class CSViewController {
         model.addAttribute("siteKey", siteKey);
 
         UserSiteCredential siteCredential = new UserSiteCredential();
-        if (!credentialsAvailable(req, model, portletConfig, siteCredential, siteKey)) {
+        if (siteKey != null && !credentialsAvailable(req, model, portletConfig, siteCredential, siteKey)) {
             model.addAttribute("portletConfig", portletConfig);
             return "userCredentialForm";
         }

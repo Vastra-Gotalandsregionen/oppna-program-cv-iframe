@@ -21,7 +21,6 @@ package se.vgregion.portal.iframe.controller;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.mock.web.portlet.MockActionRequest;
 import org.springframework.mock.web.portlet.MockPortletPreferences;
@@ -31,14 +30,12 @@ import se.vgregion.portal.cs.domain.SiteKey;
 import se.vgregion.portal.cs.service.CredentialService;
 import se.vgregion.portal.iframe.BaseTestSetup;
 import se.vgregion.portal.iframe.model.PortletConfig;
-import se.vgregion.portal.iframe.util.LoginScreenScraper;
 
 import javax.portlet.ReadOnlyException;
 import javax.portlet.ValidatorException;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
@@ -51,23 +48,16 @@ import static org.mockito.Mockito.when;
 public class CSEditControllerTest extends BaseTestSetup {
     TestMockPortletPreferences stubPrefs;
     ModelMap model = new ModelMap();
-    LoginScreenScraper stubLoginScreenScraper;
 
     @Before
     public void setup() throws ReadOnlyException {
         stubPrefs = new TestMockPortletPreferences();
         initPortletPreferences(stubPrefs);
-        stubLoginScreenScraper = new LoginScreenScraper() {
-            public void advancedScraping(PortletConfig portletConfig) {
-                // nothing for now
-            }
-        };
     }
 
     @Test
     public void testEditPreferences() {
         CSEditController controller = new CSEditController();
-        controller.setLoginScreenScraper(stubLoginScreenScraper);
         CredentialService credentialService = Mockito.mock(CredentialService.class);
         ReflectionTestUtils.setField(controller, "credentialService", credentialService);
 

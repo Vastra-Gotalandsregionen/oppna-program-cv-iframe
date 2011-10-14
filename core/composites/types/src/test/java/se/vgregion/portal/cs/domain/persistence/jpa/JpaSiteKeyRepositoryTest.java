@@ -55,9 +55,10 @@ public class JpaSiteKeyRepositoryTest extends AbstractTransactionalJUnit4SpringC
         assertEquals("Test key updated", result);
     }
 
-    @Test(expected = javax.persistence.NoResultException.class)
+    @Test
     public void testInvalidSiteKey() {
         SiteKey siteKey = repo.findBySiteKey("invalid-key");
+        assertNull(siteKey);
     }
 
     @Test
