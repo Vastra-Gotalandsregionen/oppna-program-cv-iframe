@@ -35,7 +35,6 @@ import se.vgregion.portal.admin.controller.SiteKeyHelper;
 import se.vgregion.portal.cs.domain.SiteKey;
 import se.vgregion.portal.cs.service.CredentialService;
 import se.vgregion.portal.iframe.model.PortletConfig;
-import se.vgregion.portal.iframe.util.LoginScreenScraper;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.PortletPreferences;
@@ -52,13 +51,6 @@ public class CSEditController {
 
     @Autowired
     private CredentialService credentialService;
-
-    @Autowired
-    private LoginScreenScraper loginScreenScraper;
-
-    public void setLoginScreenScraper(LoginScreenScraper loginScreenScraper) {
-        this.loginScreenScraper = loginScreenScraper;
-    }
 
     /**
      * RenderMapping for edit page.
@@ -78,8 +70,6 @@ public class CSEditController {
         List<SiteKey> siteKeys = new SiteKeyHelper(credentialService.getAllSiteKeys()).filterActive()
                 .orderBySiteKey().get();
         model.addAttribute("siteKeys", siteKeys);
-
-        loginScreenScraper.advancedScraping(portletConfig);
 
         return "edit";
     }

@@ -72,6 +72,7 @@
                 <td>
                     <form:select path="siteKey"
                                  id="${ns}siteKeys">
+                        <form:option value="">-- Ingen SiteKey --</form:option>
                         <c:forEach var="siteKey" items="${siteKeys}">
                             <form:option value="${siteKey.siteKey}">${siteKey.title} (${siteKey.siteKey})</form:option>
                         </c:forEach>
