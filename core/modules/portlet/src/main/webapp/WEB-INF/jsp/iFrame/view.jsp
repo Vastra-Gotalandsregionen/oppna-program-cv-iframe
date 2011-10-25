@@ -76,15 +76,8 @@
             'aui-base',
             'aui-loading-mask',
             function(A) {
-
+                // ====== LoadMask ======
                 var iFrameWrap = A.one('#<portlet:namespace />iframeWrap');
-                var iFrame = A.one('#<portlet:namespace />iframe');
-                var iFrameSrc = '${iFrameSrc}';
-
-                if (iFrame.getAttribute('src') != iFrameSrc) {
-                    iFrame.setAttribute('src', iFrameSrc);
-                }
-
                 iFrameWrap.plug(A.LoadingMask, {
                     background: '#555',
                     strings: { loading: 'Laddar extern källa…' }
@@ -94,10 +87,21 @@
                 iFrameWrap.loadingmask.show();
 
                 // Hide loading mask after 2 seconds
-                A.later('2000', iFrameWrap, function() {
+                A.later('1500', iFrameWrap, function() {
                     iFrameWrap.loadingmask.hide();
                 });
+                // ======================
 
+                // ====== Do the real login if a PreAction was configured ======
+                var iFrame = A.one('#<portlet:namespace />iframe');
+                A.later('500', iFrame, function() {
+                    var iFrameSrc = '${iFrameSrc}';
+                    var preIFrameSrc = '${preIFrameSrc}';
+                    if (preIFrameSrc != iFrameSrc) {
+                        iFrame.setAttribute('src', iFrameSrc);
+                    }
+                });
+                // ======================
             }
     );
 

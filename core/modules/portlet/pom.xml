@@ -168,7 +168,7 @@ Generation time : 2009-10-28 12:45:52 CET
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
-      <version>10.0-rc3</version>
+      <version>10.0.1</version>
       <scope>test</scope>
     </dependency>
 
