@@ -26,6 +26,6 @@
     </property>
   </bean>
 
-  <bean name="loginScreenScraper" class="se.vgregion.portal.iframe.util.LoginScreenScraperImpl" />
+  <!--<bean name="loginScreenScraper" class="se.vgregion.portal.iframe.util.LoginScreenScraperImpl" />-->
 
 </beans>

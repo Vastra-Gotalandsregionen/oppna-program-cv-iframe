@@ -91,7 +91,7 @@ public class CSViewController {
 
         String iFrameSrc = prepareView(resp, req, portletConfig, siteCredential);
         String preIFrameSrc;
-        if (portletConfig.getPreIFrameAction() != null && portletConfig.getPreIFrameAction().length() > 0) {
+        if (StringUtils.isNotBlank(portletConfig.getPreIFrameAction())) {
             preIFrameSrc = portletConfig.getPreIFrameAction();
         } else {
             preIFrameSrc = iFrameSrc;
