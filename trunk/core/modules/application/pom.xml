@@ -84,7 +84,7 @@
               the Spring configuration because it must be possible to make a file system path to this file. It
               should instead be put in a folder named security in the same folder as the jar file. -->
               <exclude>
-                cv.key
+                *
               </exclude>
             </excludes>
           </resource>
