@@ -64,8 +64,7 @@ public class PasswordEncryptionMigrator {
 
         String path = PasswordEncryptionMigrator.class.getClassLoader().getResource(service.getKeyFilePath())
                 .getPath();
-        AesCtrCryptoUtilImpl aesCtrCryptoUtil = new AesCtrCryptoUtilImpl();
-        aesCtrCryptoUtil.setKeyFile(new File(path));
+        AesCtrCryptoUtilImpl aesCtrCryptoUtil = new AesCtrCryptoUtilImpl(new File(path));
 
         service.setCtrCryptoUtil(aesCtrCryptoUtil);
 

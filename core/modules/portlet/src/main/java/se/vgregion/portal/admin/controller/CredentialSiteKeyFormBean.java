@@ -13,6 +13,8 @@ import java.io.Serializable;
  */
 public class CredentialSiteKeyFormBean implements Serializable {
 
+    private static final long serialVersionUID = -2417191256232580482L;
+
     private UserSiteCredential credential;
 
     private SiteKey siteKey;

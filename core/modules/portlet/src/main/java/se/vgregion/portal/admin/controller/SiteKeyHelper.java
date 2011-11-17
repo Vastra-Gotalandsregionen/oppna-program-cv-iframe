@@ -20,13 +20,15 @@ public class SiteKeyHelper {
     }
 
     public SiteKeyHelper orderBySiteKey() {
-        Collections.sort(siteKeys, new Comparator<SiteKey>() {
-            @Override
-            public int compare(SiteKey one, SiteKey other) {
-                return one.getSiteKey().toLowerCase().compareTo(other.getSiteKey().toLowerCase());
-            }
-        });
+        Collections.sort(siteKeys, new SiteKeyComparator());
         return new SiteKeyHelper(siteKeys);
+    }
+
+    private static class SiteKeyComparator implements Comparator<SiteKey> {
+        @Override
+        public int compare(SiteKey one, SiteKey other) {
+            return one.getSiteKey().toLowerCase().compareTo(other.getSiteKey().toLowerCase());
+        }
     }
 
     public SiteKeyHelper filterActive() {

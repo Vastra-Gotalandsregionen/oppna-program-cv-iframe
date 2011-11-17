@@ -96,14 +96,16 @@ public class ViewController {
             }
         }
         // Sort credentials by SiteKey title
-        Collections.sort(credentials, new Comparator<CredentialSiteKeyFormBean>() {
-            @Override
-            public int compare(CredentialSiteKeyFormBean one, CredentialSiteKeyFormBean other) {
-                return one.getSiteKey().getTitle().toLowerCase().compareTo(other.getSiteKey().getTitle().toLowerCase());
-            }
-        });
+        Collections.sort(credentials, new CredentialSiteKeyFormBeanComparator());
 
         return credentials;
+    }
+
+    private static class CredentialSiteKeyFormBeanComparator implements Comparator<CredentialSiteKeyFormBean> {
+        @Override
+        public int compare(CredentialSiteKeyFormBean one, CredentialSiteKeyFormBean other) {
+            return one.getSiteKey().getTitle().toLowerCase().compareTo(other.getSiteKey().getTitle().toLowerCase());
+        }
     }
 
     private String lookupUid(PortletRequest req) {

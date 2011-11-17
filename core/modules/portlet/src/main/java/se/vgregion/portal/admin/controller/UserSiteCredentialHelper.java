@@ -21,13 +21,15 @@ public class UserSiteCredentialHelper {
     }
 
     public UserSiteCredentialHelper orderBySiteKey() {
-        Collections.sort(userSiteCredentials, new Comparator<UserSiteCredential>() {
-            @Override
-            public int compare(UserSiteCredential one, UserSiteCredential other) {
-                return one.getSiteKey().compareTo(other.getSiteKey());
-            }
-        });
+        Collections.sort(userSiteCredentials, new UserSiteCredentialComparator());
         return new UserSiteCredentialHelper(userSiteCredentials);
+    }
+
+    private static class UserSiteCredentialComparator implements Comparator<UserSiteCredential> {
+        @Override
+        public int compare(UserSiteCredential one, UserSiteCredential other) {
+            return one.getSiteKey().compareTo(other.getSiteKey());
+        }
     }
 
     public UserSiteCredentialHelper filterValid() {

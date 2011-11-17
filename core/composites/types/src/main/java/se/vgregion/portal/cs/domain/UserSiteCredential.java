@@ -5,6 +5,7 @@ import org.apache.commons.lang.builder.ToStringStyle;
 import se.vgregion.dao.domain.patterns.entity.AbstractEntity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * The persistent class for the vgr_user_site_credential database table.
@@ -14,9 +15,9 @@ import javax.persistence.*;
         uniqueConstraints = {
                 @UniqueConstraint(columnNames = { "uid", "site_key" })
         })
-public class UserSiteCredential extends AbstractEntity<Long> {
-    private static final long serialVersionUID = 1L;
+public class UserSiteCredential extends AbstractEntity<Long> implements Serializable {
 
+    private static final long serialVersionUID = 8956438223081653071L;
     private static final int N_50 = 50;
     private static final int N_256 = 256;
 

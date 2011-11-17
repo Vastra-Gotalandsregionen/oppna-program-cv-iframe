@@ -95,9 +95,8 @@ public class MigrationService {
      */
     @Transactional
     public File migrateAndUpdateKey() {
-        AesCtrCryptoUtilImpl aesCtrCryptoUtilNew = new AesCtrCryptoUtilImpl();
         File newKeyFile = new File(newCvKeyPath);
-        aesCtrCryptoUtilNew.setKeyFile(newKeyFile);
+        AesCtrCryptoUtilImpl aesCtrCryptoUtilNew = new AesCtrCryptoUtilImpl(newKeyFile);
         Collection<UserSiteCredential> all = findAll();
         for (UserSiteCredential usc : all) {
             String decrypt = null;
@@ -120,9 +119,8 @@ public class MigrationService {
      */
     @Transactional
     public void undoMigrateAndUpdateKey() {
-        AesCtrCryptoUtilImpl aesCtrCryptoUtilNew = new AesCtrCryptoUtilImpl();
         File newKeyFile = new File(newCvKeyPath);
-        aesCtrCryptoUtilNew.setKeyFile(newKeyFile);
+        AesCtrCryptoUtilImpl aesCtrCryptoUtilNew = new AesCtrCryptoUtilImpl(newKeyFile);
         Collection<UserSiteCredential> all = findAll();
         for (UserSiteCredential usc : all) {
             String decrypt = null;
