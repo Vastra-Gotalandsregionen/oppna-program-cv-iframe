@@ -35,23 +35,23 @@ public class MigrationServiceTest extends AbstractTransactionalJUnit4SpringConte
     @Autowired
     private MigrationService migrationService;
     @Autowired
-    private CryptoUtilImpl cryptoUtil;
-    private AesCtrCryptoUtilImpl aesCtrCryptoUtil;
+    private CryptoUtilImpl ecbCryptoUtil;
+    private AesCtrCryptoUtilImpl ctrCryptoUtil;
 
     private final String password = "v3ryS#Cret";
 
     @Before
     public void setUp() throws Exception {
-        aesCtrCryptoUtil = new AesCtrCryptoUtilImpl();
+        ctrCryptoUtil = new AesCtrCryptoUtilImpl();
         URL resource = this.getClass().getClassLoader().getResource(keyFilePath);
-        aesCtrCryptoUtil.setKeyFile(new File(resource.getPath()));
+        ctrCryptoUtil.setKeyFile(new File(resource.getPath()));
 
-        migrationService.setAesCtrCryptoUtil(aesCtrCryptoUtil);
+        migrationService.setCtrCryptoUtil(ctrCryptoUtil);
     }
 
     @Test
     public void testMigrateEcbToCtr() throws Exception {
-        String enc1 = cryptoUtil.encrypt(password);
+        String enc1 = ecbCryptoUtil.encrypt(password);
 
         UserSiteCredential usc1 = new UserSiteCredential("uid", "asdf");
 
@@ -63,7 +63,7 @@ public class MigrationServiceTest extends AbstractTransactionalJUnit4SpringConte
         Collection<UserSiteCredential> all = migrationService.findAll();
         UserSiteCredential credential = all.iterator().next();
 
-        assertEquals(password, aesCtrCryptoUtil.decrypt(credential.getSitePassword()));
+        assertEquals(password, ctrCryptoUtil.decrypt(credential.getSitePassword()));
     }
 
     @Test
@@ -76,7 +76,7 @@ public class MigrationServiceTest extends AbstractTransactionalJUnit4SpringConte
         Collection<UserSiteCredential> all = migrationService.findAll();
         UserSiteCredential credential = all.iterator().next();
 
-        assertEquals(password, cryptoUtil.decrypt(credential.getSitePassword()));
+        assertEquals(password, ecbCryptoUtil.decrypt(credential.getSitePassword()));
     }
 
     @Test
@@ -116,7 +116,7 @@ public class MigrationServiceTest extends AbstractTransactionalJUnit4SpringConte
         UserSiteCredential credential = all.iterator().next();
 
         //verify we can decrypt with our "old" AesCtrCryptoUtilImpl
-        String decrypt = aesCtrCryptoUtil.decrypt(credential.getSitePassword());
+        String decrypt = ctrCryptoUtil.decrypt(credential.getSitePassword());
 
         assertEquals(password, decrypt);
     }

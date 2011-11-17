@@ -27,14 +27,14 @@ public class MigrationService {
     @Autowired
     private UserSiteCredentialRepository repository;
     @Resource(name = "cryptoUtil")
-    private CryptoUtilImpl cryptoUtil;
+    private CryptoUtilImpl ecbCryptoUtil;
     // AesCtrCryptoUtilImpl is not created by Spring context since two CryptoUtil's cause problems to the
     // autowiring (which we don't want to change just because of this migration application)
-    private AesCtrCryptoUtilImpl aesCtrCryptoUtil;
+    private AesCtrCryptoUtilImpl ctrCryptoUtil;
     final String pathname = "newCv.key"; //default access for the tests
 
-    public void setAesCtrCryptoUtil(AesCtrCryptoUtilImpl aesCtrCryptoUtil) {
-        this.aesCtrCryptoUtil = aesCtrCryptoUtil;
+    public void setCtrCryptoUtil(AesCtrCryptoUtilImpl ctrCryptoUtil) {
+        this.ctrCryptoUtil = ctrCryptoUtil;
     }
 
     @Transactional
@@ -43,8 +43,8 @@ public class MigrationService {
         for (UserSiteCredential usc : all) {
             String decrypt = null;
             try {
-                decrypt = cryptoUtil.decrypt(usc.getSitePassword());
-                String ctrEncrypt = aesCtrCryptoUtil.encrypt(decrypt);
+                decrypt = ecbCryptoUtil.decrypt(usc.getSitePassword());
+                String ctrEncrypt = ctrCryptoUtil.encrypt(decrypt);
                 usc.setSitePassword(ctrEncrypt);
                 merge(usc);
                 LOGGER.info("CTR encrypted: " + ctrEncrypt + " - saved.");
@@ -60,8 +60,8 @@ public class MigrationService {
         for (UserSiteCredential usc : all) {
             String decrypt = null;
             try {
-                decrypt = aesCtrCryptoUtil.decrypt(usc.getSitePassword());
-                String ecbEncrypt = cryptoUtil.encrypt(decrypt);
+                decrypt = ctrCryptoUtil.decrypt(usc.getSitePassword());
+                String ecbEncrypt = ecbCryptoUtil.encrypt(decrypt);
                 usc.setSitePassword(ecbEncrypt);
                 merge(usc);
                 LOGGER.info("ECB encrypted: " + ecbEncrypt + " - saved.");
@@ -80,7 +80,7 @@ public class MigrationService {
         for (UserSiteCredential usc : all) {
             String decrypt = null;
             try {
-                decrypt = aesCtrCryptoUtil.decrypt(usc.getSitePassword());
+                decrypt = ctrCryptoUtil.decrypt(usc.getSitePassword());
                 String ecbEncrypt = aesCtrCryptoUtilNew.encrypt(decrypt);
                 usc.setSitePassword(ecbEncrypt);
                 merge(usc);
@@ -102,7 +102,7 @@ public class MigrationService {
             String decrypt = null;
             try {
                 decrypt = aesCtrCryptoUtilNew.decrypt(usc.getSitePassword());
-                String ecbEncrypt = aesCtrCryptoUtil.encrypt(decrypt);
+                String ecbEncrypt = ctrCryptoUtil.encrypt(decrypt);
                 usc.setSitePassword(ecbEncrypt);
                 merge(usc);
                 LOGGER.info("Old ECB encrypted: " + ecbEncrypt + " - saved.");
