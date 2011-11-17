@@ -16,6 +16,7 @@ import se.vgregion.portal.cs.service.CredentialService;
 
 import javax.portlet.PortletRequest;
 import javax.portlet.RenderRequest;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -101,7 +102,8 @@ public class ViewController {
         return credentials;
     }
 
-    private static class CredentialSiteKeyFormBeanComparator implements Comparator<CredentialSiteKeyFormBean> {
+    private static class CredentialSiteKeyFormBeanComparator implements Comparator<CredentialSiteKeyFormBean>,
+            Serializable {
         @Override
         public int compare(CredentialSiteKeyFormBean one, CredentialSiteKeyFormBean other) {
             return one.getSiteKey().getTitle().toLowerCase().compareTo(other.getSiteKey().getTitle().toLowerCase());

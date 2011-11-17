@@ -3,6 +3,7 @@ package se.vgregion.portal.admin.controller;
 import se.vgregion.portal.cs.domain.SiteKey;
 import se.vgregion.portal.cs.domain.UserSiteCredential;
 
+import java.io.Serializable;
 import java.util.*;
 
 public class UserSiteCredentialHelper {
@@ -25,7 +26,7 @@ public class UserSiteCredentialHelper {
         return new UserSiteCredentialHelper(userSiteCredentials);
     }
 
-    private static class UserSiteCredentialComparator implements Comparator<UserSiteCredential> {
+    private static class UserSiteCredentialComparator implements Comparator<UserSiteCredential>, Serializable {
         @Override
         public int compare(UserSiteCredential one, UserSiteCredential other) {
             return one.getSiteKey().compareTo(other.getSiteKey());
