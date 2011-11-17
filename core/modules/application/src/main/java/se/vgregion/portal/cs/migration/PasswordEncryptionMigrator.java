@@ -30,21 +30,7 @@ public class PasswordEncryptionMigrator {
         }
         String cmd = args[0];
 
-        ApplicationContext ctx = new ClassPathXmlApplicationContext(
-                "classpath:migration-jpa-infrastructure.xml",
-                "classpath:crypto-util.xml");
-
-        MigrationService service = ctx.getBean(MigrationService.class);
-
-        String path = PasswordEncryptionMigrator.class.getClassLoader().getResource(service.getKeyFilePath())
-                .getPath();
-        AesCtrCryptoUtilImpl aesCtrCryptoUtil = new AesCtrCryptoUtilImpl();
-        aesCtrCryptoUtil.setKeyFile(new File(path));
-
-        service.setAesCtrCryptoUtil(aesCtrCryptoUtil);
-
-        PasswordEncryptionMigrator migrator = new PasswordEncryptionMigrator();
-        migrator.setMigrationService(service);
+        PasswordEncryptionMigrator migrator = setupApplicationContext();
 
         //Do it
         if (cmd.equalsIgnoreCase("ecb2ctr")) {
@@ -59,6 +45,25 @@ public class PasswordEncryptionMigrator {
         } else {
             throw new IllegalArgumentException("wrong arguments");
         }
+    }
+
+    private static PasswordEncryptionMigrator setupApplicationContext() {
+        ApplicationContext ctx = new ClassPathXmlApplicationContext(
+                "classpath:migration-jpa-infrastructure.xml",
+                "classpath:crypto-util.xml");
+
+        MigrationService service = ctx.getBean(MigrationService.class);
+
+        String path = PasswordEncryptionMigrator.class.getClassLoader().getResource(service.getKeyFilePath())
+                .getPath();
+        AesCtrCryptoUtilImpl aesCtrCryptoUtil = new AesCtrCryptoUtilImpl();
+        aesCtrCryptoUtil.setKeyFile(new File(path));
+
+        service.setCtrCryptoUtil(aesCtrCryptoUtil);
+
+        PasswordEncryptionMigrator migrator = new PasswordEncryptionMigrator();
+        migrator.setMigrationService(service);
+        return migrator;
     }
 
     private void undoMigrateAndUpdateKey() {
