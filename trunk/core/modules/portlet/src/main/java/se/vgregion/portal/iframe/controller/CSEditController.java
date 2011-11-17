@@ -75,7 +75,8 @@ public class CSEditController {
     }
 
     /**
-     * 
+     * Save an instance of {@link PortletPreferences}.
+     *
      * @param actionRequest
      *            - action request
      * @param prefs

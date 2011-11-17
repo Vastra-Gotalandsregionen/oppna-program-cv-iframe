@@ -6,10 +6,12 @@ import se.vgregion.portal.cs.migration.service.MigrationService;
 import se.vgregion.portal.cs.util.AesCtrCryptoUtilImpl;
 
 import java.io.File;
-import java.security.GeneralSecurityException;
 import java.util.logging.Logger;
 
 /**
+ * This is the starting point of a standalone application used for migration of cipher texts from one cipher to
+ * another or from one key to another.
+ *
  * @author Patrik Bergström
  */
 public class PasswordEncryptionMigrator {
@@ -18,7 +20,13 @@ public class PasswordEncryptionMigrator {
 
     private MigrationService migrationService;
 
-    public static void main(String[] args) throws GeneralSecurityException, NoSuchFieldException, IllegalAccessException {
+    /**
+     * Main method which performs a given migration of cipher texts.
+     *
+     * @param args Takes exactly one argument which should equal "ecb2ctr", "ctr2ecb", "updatekey" or
+     * "undoupdatekey".
+     */
+    public static void main(String[] args) {
 
         LOGGER.info("Starting...");
 

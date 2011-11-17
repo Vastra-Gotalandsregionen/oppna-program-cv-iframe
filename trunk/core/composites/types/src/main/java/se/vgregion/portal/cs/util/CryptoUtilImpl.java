@@ -40,6 +40,8 @@ import javax.crypto.spec.SecretKeySpec;
 import org.springframework.stereotype.Component;
 
 /**
+ * This implementation uses AES encryption with ECB block mode.
+ *
  * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
  */
 @Component
@@ -48,6 +50,7 @@ public class CryptoUtilImpl implements CryptoUtil {
     private static final String AES = "AES";
 
     private File keyFile;
+    private final int keySize = 128;
 
     public void setKeyFile(File keyFile) {
         this.keyFile = keyFile;
@@ -66,7 +69,7 @@ public class CryptoUtilImpl implements CryptoUtil {
     public String encrypt(String value) throws GeneralSecurityException {
         if (!keyFile.exists()) {
             KeyGenerator keyGen = KeyGenerator.getInstance(AES);
-            keyGen.init(128);
+            keyGen.init(keySize);
             SecretKey sk = keyGen.generateKey();
             FileWriter fw = null;
             try {
@@ -132,10 +135,12 @@ public class CryptoUtilImpl implements CryptoUtil {
     }
 
     private String byteArrayToHexString(byte[] b) {
+        final int ffHex = 0xff;
+        final int n16 = 16;
         StringBuffer sb = new StringBuffer(b.length * 2);
         for (int i = 0; i < b.length; i++) {
-            int v = b[i] & 0xff;
-            if (v < 16) {
+            int v = b[i] & ffHex;
+            if (v < n16) {
                 sb.append('0');
             }
             sb.append(Integer.toHexString(v));
@@ -144,10 +149,11 @@ public class CryptoUtilImpl implements CryptoUtil {
     }
 
     private byte[] hexStringToByteArray(String s) {
+        final int radix = 16;
         byte[] b = new byte[s.length() / 2];
         for (int i = 0; i < b.length; i++) {
             int index = i * 2;
-            int v = Integer.parseInt(s.substring(index, index + 2), 16);
+            int v = Integer.parseInt(s.substring(index, index + 2), radix);
             b[i] = (byte) v;
         }
         return b;
@@ -160,11 +166,11 @@ public class CryptoUtilImpl implements CryptoUtil {
      *            - not used
      */
     public static void main(String[] args) {
-        final String KEY_FILE = "./howto.key";
-        final String PWD_FILE = "./howto.properties";
+        final String keyFile = "./howto.key";
+        final String pwdFile = "./howto.properties";
 
         CryptoUtilImpl cryptoUtils = new CryptoUtilImpl();
-        cryptoUtils.setKeyFile(new File(KEY_FILE));
+        cryptoUtils.setKeyFile(new File(keyFile));
 
         String clearPwd = "my_cleartext_pwd";
 
@@ -174,7 +180,7 @@ public class CryptoUtilImpl implements CryptoUtil {
             p1.put("user", "liferay");
             String encryptedPwd = cryptoUtils.encrypt(clearPwd);
             p1.put("pwd", encryptedPwd);
-            w = new FileWriter(PWD_FILE);
+            w = new FileWriter(pwdFile);
             p1.store(w, "");
         } catch (GeneralSecurityException e) {
             e.printStackTrace();
@@ -194,7 +200,7 @@ public class CryptoUtilImpl implements CryptoUtil {
         Properties p2 = new Properties();
         Reader r = null;
         try {
-            r = new FileReader(PWD_FILE);
+            r = new FileReader(pwdFile);
             p2.load(r);
             String encryptedPwd = p2.getProperty("pwd");
             System.out.println(encryptedPwd);

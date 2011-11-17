@@ -13,6 +13,7 @@
   <groupId>se.vgregion.cs-iframe</groupId>
   <artifactId>cs-iframe-core-module-application</artifactId>
   <packaging>jar</packaging>
+  <name>${project.artifactId}</name>
 
   <build>
     <plugins>

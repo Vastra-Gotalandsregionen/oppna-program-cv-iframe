@@ -57,6 +57,8 @@ public class AesCtrCryptoUtilImpl implements CryptoUtil {
 
     private File keyFile;
 
+    private final int keySize = 128;
+
     public void setKeyFile(File keyFile) {
         this.keyFile = keyFile;
     }
@@ -74,7 +76,7 @@ public class AesCtrCryptoUtilImpl implements CryptoUtil {
     public String encrypt(String value) throws GeneralSecurityException {
         if (!keyFile.exists()) {
             KeyGenerator keyGen = KeyGenerator.getInstance(AES);
-            keyGen.init(128);
+            keyGen.init(keySize);
             SecretKey sk = keyGen.generateKey();
             FileWriter fw = null;
             try {
@@ -171,9 +173,11 @@ public class AesCtrCryptoUtilImpl implements CryptoUtil {
 
     private String byteArrayToHexString(byte[] b) {
         StringBuffer sb = new StringBuffer(b.length * 2);
+        final int ffHex = 0xff;
+        final int n16 = 16;
         for (int i = 0; i < b.length; i++) {
-            int v = b[i] & 0xff;
-            if (v < 16) {
+            int v = b[i] & ffHex;
+            if (v < n16) {
                 sb.append('0');
             }
             sb.append(Integer.toHexString(v));
@@ -182,10 +186,11 @@ public class AesCtrCryptoUtilImpl implements CryptoUtil {
     }
 
     private byte[] hexStringToByteArray(String s) {
+        final int radix = 16;
         byte[] b = new byte[s.length() / 2];
         for (int i = 0; i < b.length; i++) {
             int index = i * 2;
-            int v = Integer.parseInt(s.substring(index, index + 2), 16);
+            int v = Integer.parseInt(s.substring(index, index + 2), radix);
             b[i] = (byte) v;
         }
         return b;
@@ -197,11 +202,11 @@ public class AesCtrCryptoUtilImpl implements CryptoUtil {
      * @param args - not used
      */
     public static void main(String[] args) {
-        final String KEY_FILE = "./howto.key";
-        final String PWD_FILE = "./howto.properties";
+        final String keyFile = "./howto.key";
+        final String pwdFile = "./howto.properties";
 
         AesCtrCryptoUtilImpl cryptoUtils = new AesCtrCryptoUtilImpl();
-        cryptoUtils.setKeyFile(new File(KEY_FILE));
+        cryptoUtils.setKeyFile(new File(keyFile));
 
         String clearPwd = "0123456789abcdef0123456789abcdef";
 
@@ -212,7 +217,7 @@ public class AesCtrCryptoUtilImpl implements CryptoUtil {
             String encryptedPwd = cryptoUtils.encrypt(clearPwd);
             System.out.println(encryptedPwd);
             p1.put("pwd", encryptedPwd);
-            w = new FileWriter(PWD_FILE);
+            w = new FileWriter(pwdFile);
             p1.store(w, "");
         } catch (GeneralSecurityException e) {
             e.printStackTrace();
@@ -232,7 +237,7 @@ public class AesCtrCryptoUtilImpl implements CryptoUtil {
         Properties p2 = new Properties();
         Reader r = null;
         try {
-            r = new FileReader(PWD_FILE);
+            r = new FileReader(pwdFile);
             p2.load(r);
             String encryptedPwd = p2.getProperty("pwd");
             System.out.println(encryptedPwd);

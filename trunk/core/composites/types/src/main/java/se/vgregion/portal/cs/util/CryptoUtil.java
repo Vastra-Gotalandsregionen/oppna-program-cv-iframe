@@ -22,7 +22,7 @@ package se.vgregion.portal.cs.util;
 import java.security.GeneralSecurityException;
 
 /**
- * This action do that and that, if it has something special it is.
+ * Interface for encryption and decryption.
  * 
  * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
  */
