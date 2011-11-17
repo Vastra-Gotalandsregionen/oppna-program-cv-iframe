@@ -2,6 +2,7 @@ package se.vgregion.portal.admin.controller;
 
 import se.vgregion.portal.cs.domain.SiteKey;
 
+import java.io.Serializable;
 import java.util.*;
 
 public class SiteKeyHelper {
@@ -24,7 +25,7 @@ public class SiteKeyHelper {
         return new SiteKeyHelper(siteKeys);
     }
 
-    private static class SiteKeyComparator implements Comparator<SiteKey> {
+    private static class SiteKeyComparator implements Comparator<SiteKey>, Serializable {
         @Override
         public int compare(SiteKey one, SiteKey other) {
             return one.getSiteKey().toLowerCase().compareTo(other.getSiteKey().toLowerCase());

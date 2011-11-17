@@ -47,7 +47,7 @@
         class="se.vgregion.portal.cs.domain.persistence.jpa.JpaSiteKeyRepository">
   </bean>
 
-  <bean name="migrationService" class="se.vgregion.portal.cs.migration.service.MigrationService" />
+  <bean name="migrationService" class="se.vgregion.portal.cs.migration.service.MigrationServiceImpl" />
 
   <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
     <property name="entityManagerFactory" ref="entityManagerFactory"/>

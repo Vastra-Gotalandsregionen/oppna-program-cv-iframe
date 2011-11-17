@@ -19,8 +19,6 @@
 
 package se.vgregion.portal.cs.util;
 
-import org.springframework.stereotype.Component;
-
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
@@ -58,6 +56,11 @@ public class AesCtrCryptoUtilImpl implements CryptoUtil {
 
     private File keyFile;
 
+    /**
+     * Constructor.
+     *
+     * @param keyFile file where the key is stored
+     */
     public AesCtrCryptoUtilImpl(File keyFile) {
         this.keyFile = keyFile;
     }
