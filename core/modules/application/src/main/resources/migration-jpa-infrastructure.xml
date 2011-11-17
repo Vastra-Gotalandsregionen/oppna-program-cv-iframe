@@ -35,6 +35,7 @@
     <property name="locations">
       <list>
         <value>classpath:all.properties</value>
+        <value>classpath:security.properties</value>
       </list>
     </property>
   </bean>
