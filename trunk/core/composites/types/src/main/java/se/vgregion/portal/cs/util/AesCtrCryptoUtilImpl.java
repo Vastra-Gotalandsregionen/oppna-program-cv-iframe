@@ -46,7 +46,6 @@ import java.util.Scanner;
  * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
  * @author <a href="mailto:patrik.bergstrom@knowit.se">Patrik Bergström</a>
  */
-@Component
 public class AesCtrCryptoUtilImpl implements CryptoUtil {
 
     private static final String AES = "AES";
@@ -55,11 +54,11 @@ public class AesCtrCryptoUtilImpl implements CryptoUtil {
 
     private static final String CHARSET_NAME = "UTF-8";
 
+    private static final int KEY_SIZE = 128;
+
     private File keyFile;
 
-    private final int keySize = 128;
-
-    public void setKeyFile(File keyFile) {
+    public AesCtrCryptoUtilImpl(File keyFile) {
         this.keyFile = keyFile;
     }
 
@@ -76,7 +75,7 @@ public class AesCtrCryptoUtilImpl implements CryptoUtil {
     public String encrypt(String value) throws GeneralSecurityException {
         if (!keyFile.exists()) {
             KeyGenerator keyGen = KeyGenerator.getInstance(AES);
-            keyGen.init(keySize);
+            keyGen.init(KEY_SIZE);
             SecretKey sk = keyGen.generateKey();
             FileWriter fw = null;
             try {
@@ -167,7 +166,7 @@ public class AesCtrCryptoUtilImpl implements CryptoUtil {
             return hexStringToByteArray(keyValue);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            return null;
+            return new byte[0];
         }
     }
 
@@ -205,8 +204,7 @@ public class AesCtrCryptoUtilImpl implements CryptoUtil {
         final String keyFile = "./howto.key";
         final String pwdFile = "./howto.properties";
 
-        AesCtrCryptoUtilImpl cryptoUtils = new AesCtrCryptoUtilImpl();
-        cryptoUtils.setKeyFile(new File(keyFile));
+        AesCtrCryptoUtilImpl cryptoUtils = new AesCtrCryptoUtilImpl(new File(keyFile));
 
         String clearPwd = "0123456789abcdef0123456789abcdef";
 

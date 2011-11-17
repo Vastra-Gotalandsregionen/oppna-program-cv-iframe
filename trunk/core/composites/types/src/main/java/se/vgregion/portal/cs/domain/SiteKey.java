@@ -4,8 +4,13 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import se.vgregion.dao.domain.patterns.entity.AbstractEntity;
 
-import javax.persistence.*;
-import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.io.Serializable;
 
 /**
  * SiteKey domain object.
@@ -14,8 +19,9 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "vgr_site_key")
-public class SiteKey extends AbstractEntity<Long> {
-    private static final long serialVersionUID = 2L;
+public class SiteKey extends AbstractEntity<Long> implements Serializable {
+
+    private static final long serialVersionUID = -7040534908217689248L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

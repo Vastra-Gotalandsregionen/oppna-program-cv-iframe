@@ -49,8 +49,9 @@ public class CryptoUtilImpl implements CryptoUtil {
 
     private static final String AES = "AES";
 
+    private static final int KEY_SIZE = 128;
+
     private File keyFile;
-    private final int keySize = 128;
 
     public void setKeyFile(File keyFile) {
         this.keyFile = keyFile;
@@ -69,7 +70,7 @@ public class CryptoUtilImpl implements CryptoUtil {
     public String encrypt(String value) throws GeneralSecurityException {
         if (!keyFile.exists()) {
             KeyGenerator keyGen = KeyGenerator.getInstance(AES);
-            keyGen.init(keySize);
+            keyGen.init(KEY_SIZE);
             SecretKey sk = keyGen.generateKey();
             FileWriter fw = null;
             try {
@@ -130,7 +131,7 @@ public class CryptoUtilImpl implements CryptoUtil {
             return hexStringToByteArray(keyValue);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            return null;
+            return new byte[0];
         }
     }
 

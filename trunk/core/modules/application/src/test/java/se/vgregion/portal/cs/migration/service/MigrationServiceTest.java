@@ -42,9 +42,8 @@ public class MigrationServiceTest extends AbstractTransactionalJUnit4SpringConte
 
     @Before
     public void setUp() throws Exception {
-        ctrCryptoUtil = new AesCtrCryptoUtilImpl();
         URL resource = this.getClass().getClassLoader().getResource(keyFilePath);
-        ctrCryptoUtil.setKeyFile(new File(resource.getPath()));
+        ctrCryptoUtil = new AesCtrCryptoUtilImpl(new File(resource.getPath()));
 
         migrationService.setCtrCryptoUtil(ctrCryptoUtil);
     }
@@ -93,8 +92,7 @@ public class MigrationServiceTest extends AbstractTransactionalJUnit4SpringConte
         UserSiteCredential credential = all.iterator().next();
 
         //verify we can decrypt with the new key
-        AesCtrCryptoUtilImpl newCryptoUtil = new AesCtrCryptoUtilImpl();
-        newCryptoUtil.setKeyFile(file);
+        AesCtrCryptoUtilImpl newCryptoUtil = new AesCtrCryptoUtilImpl(file);
 
         String decrypt = newCryptoUtil.decrypt(credential.getSitePassword());
 
