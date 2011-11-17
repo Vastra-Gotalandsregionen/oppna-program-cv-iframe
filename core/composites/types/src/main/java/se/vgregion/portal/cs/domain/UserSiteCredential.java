@@ -12,26 +12,28 @@ import javax.persistence.*;
 @Entity
 @Table(name = "vgr_user_site_credential",
         uniqueConstraints = {
-                @UniqueConstraint(columnNames = {"uid", "site_key"})
+                @UniqueConstraint(columnNames = { "uid", "site_key" })
         })
 public class UserSiteCredential extends AbstractEntity<Long> {
     private static final long serialVersionUID = 1L;
+
+    private static final int N_50 = 50;
+    private static final int N_256 = 256;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", unique = true, nullable = false)
     private Long id;
 
-    @Column(nullable = false, length = 50, name = "uid")
+    @Column(nullable = false, length = N_50, name = "uid")
     private String uid;
 
-    @Column(nullable = false, length = 50, name = "site_key")
+    @Column(nullable = false, length = N_50, name = "site_key")
     private String siteKey;
-
-    @Column(length = 256, name = "site_user")
+    @Column(length = N_256, name = "site_user")
     private String siteUser;
 
-    @Column(length = 256, name = "site_password")
+    @Column(length = N_256, name = "site_password")
     private String sitePassword;
 
     @Transient
