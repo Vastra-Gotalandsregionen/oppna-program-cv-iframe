@@ -27,6 +27,8 @@ public class UserSiteCredentialHelper {
     }
 
     private static class UserSiteCredentialComparator implements Comparator<UserSiteCredential>, Serializable {
+        private static final long serialVersionUID = 9051962582752211347L;
+
         @Override
         public int compare(UserSiteCredential one, UserSiteCredential other) {
             return one.getSiteKey().compareTo(other.getSiteKey());

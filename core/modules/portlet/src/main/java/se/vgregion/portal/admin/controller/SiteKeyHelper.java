@@ -26,6 +26,8 @@ public class SiteKeyHelper {
     }
 
     private static class SiteKeyComparator implements Comparator<SiteKey>, Serializable {
+        private static final long serialVersionUID = -4400606224805136030L;
+
         @Override
         public int compare(SiteKey one, SiteKey other) {
             return one.getSiteKey().toLowerCase().compareTo(other.getSiteKey().toLowerCase());
