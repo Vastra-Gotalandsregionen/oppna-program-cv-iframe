@@ -104,6 +104,8 @@ public class ViewController {
 
     private static class CredentialSiteKeyFormBeanComparator implements Comparator<CredentialSiteKeyFormBean>,
             Serializable {
+        private static final long serialVersionUID = 5880281199565660993L;
+
         @Override
         public int compare(CredentialSiteKeyFormBean one, CredentialSiteKeyFormBean other) {
             return one.getSiteKey().getTitle().toLowerCase().compareTo(other.getSiteKey().getTitle().toLowerCase());
