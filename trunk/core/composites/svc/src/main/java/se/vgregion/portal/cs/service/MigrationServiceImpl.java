@@ -1,4 +1,4 @@
-package se.vgregion.portal.cs.migration.service;
+package se.vgregion.portal.cs.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,7 +15,8 @@ import java.util.Collection;
 import java.util.logging.Logger;
 
 /**
- * Service class for migrating cipher texts to new ciphers and new keys.
+ * Service class for migrating cipher texts to new ciphers and new keys. This implementation migrates between
+ * ECB and CTR block mode for AES enryption.
  *
  * @see se.vgregion.portal.cs.util.CryptoUtil
  * @see javax.crypto.Cipher
@@ -30,22 +31,13 @@ public class MigrationServiceImpl implements MigrationService {
 
     @Autowired
     private UserSiteCredentialRepository repository;
+
+    @Resource(name = "aesCtrCryptoUtil")
+    private AesCtrCryptoUtilImpl ctrCryptoUtil;
     @Resource(name = "cryptoUtil")
     private CryptoUtilImpl ecbCryptoUtil;
 
-    // AesCtrCryptoUtilImpl is not created by Spring context since two CryptoUtil's cause problems to the
-    // autowiring (which we don't want to change just because of this migration application)
-    private AesCtrCryptoUtilImpl ctrCryptoUtil;
-
-    private String newCvKeyPath = "newCv.key"; //default access for the tests
-
-    public void setCtrCryptoUtil(AesCtrCryptoUtilImpl ctrCryptoUtil) {
-        this.ctrCryptoUtil = ctrCryptoUtil;
-    }
-
-    public void setNewCvKeyPath(String newCvKeyPath) {
-        this.newCvKeyPath = newCvKeyPath;
-    }
+    private String newCvKeyPath = "newCv.key";
 
     /**
      * Migrate cipher texts from all {@link UserSiteCredential}s from ECB block mode to CTR block mode.
@@ -82,7 +74,7 @@ public class MigrationServiceImpl implements MigrationService {
                 merge(usc);
                 LOGGER.info("ECB encrypted: " + ecbEncrypt + " - saved.");
             } catch (GeneralSecurityException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e); //roll back
             }
         }
     }
@@ -99,7 +91,7 @@ public class MigrationServiceImpl implements MigrationService {
         AesCtrCryptoUtilImpl aesCtrCryptoUtilNew = new AesCtrCryptoUtilImpl(newKeyFile);
         Collection<UserSiteCredential> all = findAll();
         for (UserSiteCredential usc : all) {
-            String decrypt = null;
+            String decrypt;
             try {
                 decrypt = ctrCryptoUtil.decrypt(usc.getSitePassword());
                 String ctrEncrypt = aesCtrCryptoUtilNew.encrypt(decrypt);
@@ -107,7 +99,7 @@ public class MigrationServiceImpl implements MigrationService {
                 merge(usc);
                 LOGGER.info("New CTR encrypted: " + ctrEncrypt + " - saved.");
             } catch (GeneralSecurityException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e); //roll back
             }
         }
         return newKeyFile;
@@ -131,7 +123,7 @@ public class MigrationServiceImpl implements MigrationService {
                 merge(usc);
                 LOGGER.info("Old CTR encrypted: " + ctrEncrypt + " - saved.");
             } catch (GeneralSecurityException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e); //roll back
             }
         }
     }

@@ -1,6 +1,5 @@
 package se.vgregion.portal.cs.domain.persistence.jpa;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import se.vgregion.dao.domain.patterns.repository.db.jpa.DefaultJpaRepository;
@@ -8,6 +7,7 @@ import se.vgregion.portal.cs.domain.UserSiteCredential;
 import se.vgregion.portal.cs.domain.persistence.UserSiteCredentialRepository;
 import se.vgregion.portal.cs.util.CryptoUtil;
 
+import javax.annotation.Resource;
 import javax.persistence.Query;
 import java.security.GeneralSecurityException;
 import java.util.List;
@@ -21,11 +21,11 @@ import java.util.List;
 public class JpaUserSiteCredentialRepository extends DefaultJpaRepository<UserSiteCredential, Long> implements
         UserSiteCredentialRepository {
 
-    @Autowired
-    private CryptoUtil cryptoUtils;
+    @Resource(name = "cryptoUtil")
+    private CryptoUtil cryptoUtil;
 
-    public void setCryptoUtils(CryptoUtil cryptoUtils) {
-        this.cryptoUtils = cryptoUtils;
+    public void setCryptoUtil(CryptoUtil cryptoUtil) {
+        this.cryptoUtil = cryptoUtil;
     }
 
     /**
@@ -89,7 +89,7 @@ public class JpaUserSiteCredentialRepository extends DefaultJpaRepository<UserSi
     private void decryptSitePwd(UserSiteCredential creds) throws GeneralSecurityException {
         String encryptedPwd = creds.getSitePassword();
         String clearPwd = null;
-        clearPwd = cryptoUtils.decrypt(encryptedPwd);
+        clearPwd = cryptoUtil.decrypt(encryptedPwd);
         creds.setSitePassword(clearPwd);
         creds.setValid(true);
     }
@@ -97,7 +97,7 @@ public class JpaUserSiteCredentialRepository extends DefaultJpaRepository<UserSi
     private void encryptSitePwd(UserSiteCredential siteCredential) {
         try {
             String clearPwd = siteCredential.getSitePassword();
-            String encryptedPwd = cryptoUtils.encrypt(clearPwd);
+            String encryptedPwd = cryptoUtil.encrypt(clearPwd);
             siteCredential.setSitePassword(encryptedPwd);
         } catch (GeneralSecurityException e) {
             e.printStackTrace();

@@ -61,7 +61,7 @@
 
   <profiles>
     <profile>
-      <id>idea-build</id>
+      <id>ide-build</id>
       <!-- No resources management here. Choose this profile in order to not use the pure-maven-build profile. -->
     </profile>
     <profile>

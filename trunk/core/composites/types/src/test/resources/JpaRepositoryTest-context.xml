@@ -34,6 +34,6 @@
   <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
         p:location="classpath:test-datasource.properties"/>
 
-  <bean id="cryptUtils" class="se.vgregion.portal.cs.util.CryptoUtilMock" primary="true"/>
+  <bean id="cryptoUtil" class="se.vgregion.portal.cs.util.CryptoUtilMock" primary="true"/>
 
 </beans>

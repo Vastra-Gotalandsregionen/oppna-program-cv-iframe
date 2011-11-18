@@ -1,7 +1,6 @@
-package se.vgregion.portal.cs.migration.service;
+package se.vgregion.portal.cs.service;
 
 import se.vgregion.portal.cs.domain.UserSiteCredential;
-import se.vgregion.portal.cs.util.AesCtrCryptoUtilImpl;
 
 import java.io.File;
 import java.util.Collection;
@@ -63,10 +62,4 @@ public interface MigrationService {
      */
     String getKeyFilePath();
 
-    /**
-     * Setter for aesCtrCryptoUtil.
-     *
-     * @param aesCtrCryptoUtil aesCtrCryptoUtil
-     */
-    void setCtrCryptoUtil(AesCtrCryptoUtilImpl aesCtrCryptoUtil);
 }

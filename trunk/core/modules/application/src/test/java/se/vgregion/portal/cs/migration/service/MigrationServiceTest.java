@@ -3,15 +3,15 @@ package se.vgregion.portal.cs.migration.service;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import se.vgregion.portal.cs.domain.UserSiteCredential;
+import se.vgregion.portal.cs.service.MigrationService;
 import se.vgregion.portal.cs.util.AesCtrCryptoUtilImpl;
 import se.vgregion.portal.cs.util.CryptoUtilImpl;
 
+import javax.annotation.Resource;
 import java.io.File;
-import java.net.URL;
 import java.util.Collection;
 
 import static org.junit.Assert.assertEquals;
@@ -25,27 +25,19 @@ import static org.junit.Assert.assertTrue;
         "classpath:crypto-util-test.xml"})
 public class MigrationServiceTest extends AbstractTransactionalJUnit4SpringContextTests {
 
-    private String keyFilePath;
-
-    @Value("${keyFilePath}")
-    public void setKeyFilePath(String keyFilePath) {
-        this.keyFilePath = keyFilePath;
-    }
-
     @Autowired
     private MigrationService migrationService;
-    @Autowired
+
+    @Resource(name = "cryptoUtil")
     private CryptoUtilImpl ecbCryptoUtil;
+    @Resource(name = "aesCtrCryptoUtil")
     private AesCtrCryptoUtilImpl ctrCryptoUtil;
 
     private final String password = "v3ryS#Cret";
 
     @Before
     public void setUp() throws Exception {
-        URL resource = this.getClass().getClassLoader().getResource(keyFilePath);
-        ctrCryptoUtil = new AesCtrCryptoUtilImpl(new File(resource.getPath()));
 
-        migrationService.setCtrCryptoUtil(ctrCryptoUtil);
     }
 
     @Test
