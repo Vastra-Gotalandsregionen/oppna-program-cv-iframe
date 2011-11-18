@@ -28,4 +28,8 @@
     <property name="keyFile" value="classpath:${keyFilePath}" />
   </bean>
 
+    <bean name="aesCtrCryptoUtil"  class="se.vgregion.portal.cs.util.AesCtrCryptoUtilImpl">
+    <constructor-arg value="classpath:${keyFilePath}"/>
+  </bean>
+
 </beans>

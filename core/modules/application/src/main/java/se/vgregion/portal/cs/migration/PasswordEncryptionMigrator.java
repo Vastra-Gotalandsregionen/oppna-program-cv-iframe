@@ -2,8 +2,7 @@ package se.vgregion.portal.cs.migration;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import se.vgregion.portal.cs.migration.service.MigrationService;
-import se.vgregion.portal.cs.util.AesCtrCryptoUtilImpl;
+import se.vgregion.portal.cs.service.MigrationService;
 
 import java.io.File;
 import java.util.logging.Logger;
@@ -61,12 +60,6 @@ public class PasswordEncryptionMigrator {
                 "classpath:crypto-util.xml");
 
         MigrationService service = ctx.getBean(MigrationService.class);
-
-        String path = PasswordEncryptionMigrator.class.getClassLoader().getResource(service.getKeyFilePath())
-                .getPath();
-        AesCtrCryptoUtilImpl aesCtrCryptoUtil = new AesCtrCryptoUtilImpl(new File(path));
-
-        service.setCtrCryptoUtil(aesCtrCryptoUtil);
 
         PasswordEncryptionMigrator migrator = new PasswordEncryptionMigrator();
         migrator.setMigrationService(service);

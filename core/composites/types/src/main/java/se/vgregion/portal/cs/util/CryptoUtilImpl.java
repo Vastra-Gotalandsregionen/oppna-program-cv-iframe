@@ -44,6 +44,7 @@ import org.springframework.stereotype.Component;
  *
  * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
  */
+@Deprecated //ECB block mode is too weak
 @Component
 public class CryptoUtilImpl implements CryptoUtil {
 
