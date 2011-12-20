@@ -15,11 +15,11 @@ To activate the credential functionality in cs-iframe you hav to check "Authenti
 
 You have to configure the field-name for username and password. Cs-iframe provides the values for these fields as dynamic data provided for the user logged into the portal.
 
-For many services this information is not enough, the login form contains hidden field that are necessary to be able to login. This "extra" information can be provided as static key/value pairs as "Hidden values" 
+For many services this information is not enough, the login form contains hidden field that are necessary to be able to login. This "extra" information can be provided as static key/value pairs as "Hidden variables" 
 
  "key1=value1&key2=value2"
 
-Only static information can be provided.
+Only static information can be provided in the hidden variables field.
 
 == Variations ==
 
@@ -37,4 +37,18 @@ Cs-iframe allows for one GET-action to be performed before it tries to login. Us
 
 Some sites can make uses of the userId of the person logged into the portal. Checking this option will add this information to the iFrame src when calling the site.
 
+=== A site that breaks out from iFrames ===
+
+Sites can be written to not allow them to be displayed inside an IFrame. If the site is written in this way cs-iframe cannot be used.
+
+=== InternetExplorer (IE) and P3P ===
+
+Internet Explorer has a much more restrictive policy for showing content in IFrames. If the content is from a domains different than the one serving the iFrame, IE will forbid it.
+
+However, there is a way around this restriction. If the external site includes P3P-Headers the content will be allowed.
+
 = How it work =
+
+Cs-IFrame creates a virtual login form containing the information provided in the configuration. This form is loaded into the IFrame and then automatically submitted to the same adress as the site we want to integrate does. 
+
+The reply from the external site are then caught inside the portlet iFrame and since the action we just did was login, we are logged into the site and can continue to interact with is as a logged in user.
