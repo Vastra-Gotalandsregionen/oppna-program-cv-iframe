@@ -45,7 +45,7 @@ Sites can be written to not allow them to be displayed inside an IFrame. If the 
 
 Internet Explorer has a much more restrictive policy for showing content in IFrames. If the content is from a domains different than the one serving the iFrame, IE will forbid it.
 
-However, there is a way around this restriction. If the external site includes P3P-Headers the content will be allowed.
+However, there is a way around this restriction. If the external site includes P3P-Header the content will be allowed.
 
 = How it work =
 
