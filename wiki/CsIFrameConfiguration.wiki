@@ -7,13 +7,13 @@ It is necessary to put some work into understanding the site you want to integra
 
 = Configuration =
 
-First cs-iframe has to know where the target site is. The value provided to the "iFrame Source URL"-field is usually the link to where the login form post it's content.
+First CS-IFrame has to know where the target site is. The value provided to the "iFrame Source URL"-field is usually the link to where the login form post it's content.
 
 [http://oppna-program-cv-iframe.googlecode.com/svn/wiki/CS-configuration.png]
 
 To activate the credential functionality in cs-iframe you hav to check "Authenticate" and select a [CSAdmin SiteKey]. 
 
-You have to configure the field-name for username and password. Cs-iframe provides the values for these fields as dynamic data provided for the user logged into the portal.
+You have to configure the field-name for username and password. CS-IFrame provides the values for these fields as dynamic data provided for the user logged into the portal.
 
 For many services this information is not enough, the login form contains hidden field that are necessary to be able to login. This "extra" information can be provided as static key/value pairs as "Hidden variables" 
 
@@ -49,6 +49,8 @@ However, there is a way around this restriction. If the external site includes P
 
 = How it work =
 
-Cs-IFrame creates a virtual login form containing the information provided in the configuration. This form is loaded into the IFrame and then automatically submitted to the same adress as the site we want to integrate does. 
+Cs-IFrame creates a virtual login form containing the information provided in the configuration. This form is loaded into the IFrame^1^ and then automatically submitted to the same adress as the site we want to integrate does^2^. 
 
-The reply from the external site are then caught inside the portlet iFrame and since the action we just did was login, we are logged into the site and can continue to interact with is as a logged in user.
+[http://oppna-program-cv-iframe.googlecode.com/svn/wiki/CS-how_it_work.png]
+
+The reply from the external site are then caught inside the portlet iFrame^3^ and since the action we just did was login, we are logged into the site and can continue to interact with is as a logged in user^4^.
