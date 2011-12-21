@@ -3,11 +3,9 @@
 
 = Introduction =
 
-User credentials are stored for a "Site-key". The user can reach and update the save credential on the settings page of CS-IFrame. CS-Admin is collects all saved credentials in one view, this gives an overview and easy access to credential administration.
+User credentials are stored for a "Site-key". 
 
-The Site-key is a placeholder for which credential are used to authenticate the user on login for a particular site. 
-
-Different sites sometimes use the same authentication mechanism (a limited SSO domain). Then the site-key is reusable and and CS-IFrame allows the user to only supply the credential once, thus taking advantage of as much of the authentication infrastructure as possible.
+The user can reach and update the save credential on the settings page of CS-IFrame. CS-Admin is collects all saved credentials in one view, this gives an overview and easy access to credential administration.
 
 = Normal use =
 
