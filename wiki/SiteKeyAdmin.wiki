@@ -22,13 +22,26 @@ New Site-key's are created by clicking on the button under the list, every Site-
 
 When deleting a Site-key all user credentials associated with this key will be deleted. 
 
-_*- Be careful: Stored user credentials are valuable -*_. Every time the user has to enter his credentials without having initiated the change himself will erode the trust of the site. 
+_*- Be careful: Stored user credentials are valuable -*_. Every time the user has to reenter his credentials without having initiated the change himself, will erode the trust of the portal site. 
 
 It is often better to inactivate a Site-key first, and later when it is absolutely clear that the credentials never will be needed again, remove it.
 
 ==Edit view==
 
+[http://oppna-program-cv-iframe.googlecode.com/svn/wiki/CS-sitekey_edit.png]
 
+All values in the Site-key can be changed.
 
+However, be very careful when changing the key. It is used in the user credential tabel and big update will be run, and even if everything is done transactional, care is advised.
 
-A Site-key has to be activated to be selectable in an CS-IFrame. 
+When doing external integrations it is the key that are referenced, this is another reason to be very restrictive in changing the key.
+
+It is possible to use HTML in the description field, so it is possible to provide both images and links in the site description.
+
+One way to use the description field is to provide instructions and contact information of how to acquire access to the site. If the description is complicated and need a lot of instruction, provide a link to the instructions instead.
+
+A Site-key has to be activated to be selectable in the CS-IFrame configuration. 
+
+This is how it can look inside CS-IFrame configuration:
+
+[http://oppna-program-cv-iframe.googlecode.com/svn/wiki/CS-sitekey_dropdown.png]
