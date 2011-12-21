@@ -1,0 +1,15 @@
+#summary One-sentence summary of this page.
+
+= Introduction =
+
+The Site-key is a placeholder for which credential are used to authenticate the user on login for a particular site.
+
+Different sites sometimes use the same authentication mechanism (a limited SSO domain). Then the site-key is reusable and and CS-IFrame allows the user to only supply the credential once, thus taking advantage of as much of the authentication infrastructure as possible.
+
+
+= Details =
+
+Add your content here.  Format your content with:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
