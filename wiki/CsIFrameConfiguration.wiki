@@ -47,7 +47,7 @@ Internet Explorer has a much more restrictive policy for showing content in IFra
 
 However, there is a way around this restriction. If the external site includes P3P-Header the content will be allowed.
 
-= How it work =
+= How it works =
 
 Cs-IFrame creates a virtual login form containing the information provided in the configuration. This form is loaded into the IFrame^1^ and then automatically submitted to the same adress as the site we want to integrate does^2^. 
 
