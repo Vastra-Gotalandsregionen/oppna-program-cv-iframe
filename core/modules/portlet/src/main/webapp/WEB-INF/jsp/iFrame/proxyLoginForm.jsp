@@ -33,22 +33,37 @@
 
 <body onLoad="setTimeout('document.fm.submit()', 100);">
 
-<form action="${proxyFormAction}" method="${portletConfig.formMethod}" name="fm" id="fm">
-    <!--h1>Autologin</h1-->
+<c:choose>
+    <c:when test="${portletConfig.linkout}">
+        <form action="${proxyFormAction}"
+              method="${portletConfig.formMethod}"
+              target="${portletConfig.linkoutTarget}"
+              name="fm"
+              id="fm">
+            <input name="${portletConfig.siteUserNameField}" type="hidden" value="${siteCredential.siteUser}"/>
+            <input name="${portletConfig.sitePasswordField}" type="hidden" value="${siteCredential.sitePassword}"/>
 
-    <!--p>
-        Nyckel: ${siteCredential}<br/>
-    </p-->
+            <c:forEach var="entry" items="${portletConfig.hiddenVarialbleMap}">
+                <input name="${entry.key}" value="${entry.value}" type="hidden"/>
+            </c:forEach>
+        </form>
 
-    <input name="${portletConfig.siteUserNameField}" type="hidden" value="${siteCredential.siteUser}"/>
-    <input name="${portletConfig.sitePasswordField}" type="hidden" value="${siteCredential.sitePassword}"/>
+        <p>${siteKey.title} kommer att laddas i ett eget f&ouml;nster...</p>
+    </c:when>
+    <c:otherwise>
+        <form action="${proxyFormAction}"
+              method="${portletConfig.formMethod}"
+              name="fm"
+              id="fm">
+            <input name="${portletConfig.siteUserNameField}" type="hidden" value="${siteCredential.siteUser}"/>
+            <input name="${portletConfig.sitePasswordField}" type="hidden" value="${siteCredential.sitePassword}"/>
 
-    <c:forEach var="entry" items="${portletConfig.hiddenVarialbleMap}">
-        <input name="${entry.key}" value="${entry.value}" type="hidden"/>
-    </c:forEach>
-
-    <!--input type="submit" /-->
-</form>
+            <c:forEach var="entry" items="${portletConfig.hiddenVarialbleMap}">
+                <input name="${entry.key}" value="${entry.value}" type="hidden"/>
+            </c:forEach>
+        </form>
+    </c:otherwise>
+</c:choose>
 
 </body>
 

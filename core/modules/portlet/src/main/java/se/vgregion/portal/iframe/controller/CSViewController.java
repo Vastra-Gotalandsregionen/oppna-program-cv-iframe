@@ -63,16 +63,12 @@ public class CSViewController {
     private CredentialService credentialService;
 
     /**
-     * Main controllermethod. Handling of user-sitecredential availability and iFrame source linking
+     * Main controllermethod. Handling of user-sitecredential availability and iFrame source linking.
      * 
-     * @param prefs
-     *            - protlet preferences
-     * @param req
-     *            - request
-     * @param resp
-     *            - response
-     * @param model
-     *            - model
+     * @param prefs  - portlet preferences
+     * @param req - request
+     * @param resp - response
+     * @param model  - model
      * @return view
      */
     @RenderMapping
@@ -104,6 +100,7 @@ public class CSViewController {
         model.addAttribute("preIFrameSrc", preIFrameSrc);
         model.addAttribute("baseSrc", baseSrc);
         model.addAttribute("iFrameHeight", iFrameHeight);
+
         model.addAttribute("border", portletConfig.getHtmlAttribute("border", "0"));
         model.addAttribute("bordercolor", portletConfig.getHtmlAttribute("bordercolor", "#000000"));
         model.addAttribute("frameborder", portletConfig.getHtmlAttribute("frameborder", "0"));
@@ -113,6 +110,7 @@ public class CSViewController {
         model.addAttribute("scrolling", portletConfig.getHtmlAttribute("scrolling", "auto"));
         model.addAttribute("vspace", portletConfig.getHtmlAttribute("vspace", "0"));
         model.addAttribute("width", portletConfig.getHtmlAttribute("width", "100%"));
+
         String linkDisplay = portletConfig.isAuth() ? "display:block;" : "display:none;";
         model.addAttribute("link_display", linkDisplay);
         model.addAttribute("myPortletConfig", portletConfig);
@@ -123,13 +121,10 @@ public class CSViewController {
     /**
      * Credential view handleing.
      * 
-     * @param prefs
-     *            - portlet preferences
-     * @param req
-     *            - request
-     * @param model
-     *            - model
-     * @return view
+     * @param prefs - portlet preferences
+     * @param req - request
+     * @param model - model
+     * @return userCredentialForm
      */
     @RenderMapping(params = "action=changeVaultCredentials")
     public String changeVaultCredentials(PortletPreferences prefs, RenderRequest req, ModelMap model) {
@@ -151,25 +146,23 @@ public class CSViewController {
     /**
      * Prepare proxyLoginForm.jsp for form-based authentication.
      * 
-     * @param model
-     *            - model
-     * @param req
-     *            - request
-     * @param prefs
-     *            - portlet preferences
-     * @return view
+     * @param model - model
+     * @param req - request
+     * @param prefs - portlet preferences
+     * @return proxyLoginForm
      * @throws URISyntaxException
      */
     @ResourceMapping
     public String showProxyForm(PortletPreferences prefs, ResourceRequest req, ModelMap model)
             throws URISyntaxException {
-        PortletConfig portletConfig = se.vgregion.portal.iframe.model.PortletConfig.getInstance(prefs);
+        PortletConfig portletConfig = PortletConfig.getInstance(prefs);
         model.addAttribute("portletConfig", portletConfig);
         if (!portletConfig.isAuth() || !"form".equals(portletConfig.getAuthType())) {
             return "view";
         }
 
         SiteKey siteKey = credentialService.getSiteKey(portletConfig.getSiteKey());
+        model.addAttribute("siteKey", siteKey);
 
         UserSiteCredential siteCredential = new UserSiteCredential();
         credentialsAvailable(req, model, portletConfig, siteCredential, siteKey);
@@ -212,10 +205,8 @@ public class CSViewController {
     /**
      * Store User-SiteCredentials in the Credential-Vault. Action posted from userCredentailForm.jsp
      * 
-     * @param siteCredential
-     *            - credential
-     * @param req
-     *            - action request to handle cancel
+     * @param siteCredential - credential
+     * @param req - action request to handle cancel
      */
     @Transactional
     @ActionMapping
@@ -341,5 +332,4 @@ public class CSViewController {
         }
         return iFrameHeight;
     }
-
 }

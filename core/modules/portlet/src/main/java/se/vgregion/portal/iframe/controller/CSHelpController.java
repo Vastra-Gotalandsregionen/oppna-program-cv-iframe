@@ -35,7 +35,6 @@ import javax.portlet.PortletPreferences;
 
 /**
  * @author Anders Asplund
- * 
  */
 @Controller
 @RequestMapping("HELP")

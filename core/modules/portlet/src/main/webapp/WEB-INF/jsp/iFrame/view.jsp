@@ -38,6 +38,10 @@
 </portlet:renderURL>
 <portlet:renderURL portletMode="help" var="showHelp" secure="${myPortletConfig.sslUrlsOnly}"/>
 
+<c:if test="${myPortletConfig.linkoutRedirect}">
+    <meta http-equiv="refresh" content="5; url=${myPortletConfig.linkoutRedirectPage}">
+</c:if>
+
 <div class="vgr-portlet-controlls-container" style="${link_display}">
     <span class="vgr-portlet-controlls-left">
       <a title="Ändra inloggning" class="vgr-express-login" href="${changeCredentials}">Ändra inloggning</a>
