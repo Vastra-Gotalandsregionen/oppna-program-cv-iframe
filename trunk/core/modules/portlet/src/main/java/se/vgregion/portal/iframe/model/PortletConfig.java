@@ -32,8 +32,6 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
 /**
- * This action do that and that, if it has something special it is.
- * 
  * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
  */
 
@@ -49,8 +47,6 @@ public class PortletConfig implements Serializable {
     private String authType;
     private String formMethod;
     private String formAction;
-//    private boolean screenNameOnly;
-//    private boolean suggestScreenName = true;
     private boolean sslUrlsOnly;
     private String siteUserNameField;
     private String sitePasswordField;
@@ -59,6 +55,10 @@ public class PortletConfig implements Serializable {
     private String preIFrameAction;
     private String allowedBrowsersRegExp;
     private String allowedBrowsersViolationMessage;
+    private boolean linkout;
+    private String linkoutTarget;
+    private boolean linkoutRedirect;
+    private String linkoutRedirectPage;
 
     private Map<String, String> htmlAttributeMap = new HashMap<String, String>();
 
@@ -86,8 +86,6 @@ public class PortletConfig implements Serializable {
         portletConfig.setAuthType(prefs.getValue("auth-type", ""));
         portletConfig.setFormAction(prefs.getValue("form-action", ""));
         portletConfig.setFormMethod(prefs.getValue("form-method", ""));
-//        portletConfig.setScreenNameOnly(Boolean.valueOf(prefs.getValue("screenNameOnly", "false")));
-//        portletConfig.setSuggestScreenName(Boolean.valueOf(prefs.getValue("suggestScreenName", "true")));
         portletConfig.setSslUrlsOnly(Boolean.valueOf(prefs.getValue("sslUrlsOnly", "false")));
         portletConfig.setSiteUserNameField(prefs.getValue("user-name-field", ""));
         portletConfig.setSitePasswordField(prefs.getValue("password-field", ""));
@@ -96,6 +94,10 @@ public class PortletConfig implements Serializable {
         portletConfig.setHtmlAttributes(prefs.getValue("html-attributes", ""));
         portletConfig.setAllowedBrowsersRegExp(prefs.getValue("allowed-browsers-regExp", ""));
         portletConfig.setAllowedBrowsersViolationMessage(prefs.getValue("allowed-browsers-violation-message", ""));
+        portletConfig.setLinkout(Boolean.valueOf(prefs.getValue("linkout", "false")));
+        portletConfig.setLinkoutTarget(prefs.getValue("linkoutTarget", "_blank"));
+        portletConfig.setLinkoutRedirect(Boolean.valueOf(prefs.getValue("linkoutRedirect", "false")));
+        portletConfig.setLinkoutRedirectPage(prefs.getValue("linkoutRedirectPage", "../"));
         return portletConfig;
     }
 
@@ -117,8 +119,6 @@ public class PortletConfig implements Serializable {
             prefs.setValue("auth-type", getAuthType());
             prefs.setValue("form-action", getFormAction());
             prefs.setValue("form-method", getFormMethod());
-//            prefs.setValue("screenNameOnly", String.valueOf(isScreenNameOnly()));
-//            prefs.setValue("suggestScreenName", String.valueOf(isSuggestScreenName()));
             prefs.setValue("sslUrlsOnly", String.valueOf(isSslUrlsOnly()));
             prefs.setValue("user-name-field", getSiteUserNameField());
             prefs.setValue("password-field", getSitePasswordField());
@@ -127,6 +127,10 @@ public class PortletConfig implements Serializable {
             prefs.setValue("html-attributes", getHtmlAttributes());
             prefs.setValue("allowed-browsers-regExp", getAllowedBrowsersRegExp());
             prefs.setValue("allowed-browsers-violation-message", getAllowedBrowsersViolationMessage());
+            prefs.setValue("linkout", String.valueOf(isLinkout()));
+            prefs.setValue("linkoutTarget", getLinkoutTarget());
+            prefs.setValue("linkoutRedirect", String.valueOf(isLinkoutRedirect()));
+            prefs.setValue("linkoutRedirectPage", getLinkoutRedirectPage());
 
             prefs.store();
         } catch (ReadOnlyException e) {
@@ -219,22 +223,6 @@ public class PortletConfig implements Serializable {
         this.formMethod = formMethod;
     }
 
-//    public boolean isScreenNameOnly() {
-//        return screenNameOnly;
-//    }
-//
-//    public void setScreenNameOnly(boolean screenNameOnly) {
-//        this.screenNameOnly = screenNameOnly;
-//    }
-
-//    public boolean isSuggestScreenName() {
-//        return suggestScreenName;
-//    }
-//
-//    public void setSuggestScreenName(boolean suggestScreenName) {
-//        this.suggestScreenName = suggestScreenName;
-//    }
-
     public boolean isSslUrlsOnly() {
         return sslUrlsOnly;
     }
@@ -277,6 +265,54 @@ public class PortletConfig implements Serializable {
 
     public void setPreIFrameAction(String preIFrameAction) {
         this.preIFrameAction = preIFrameAction;
+    }
+
+    public void setAllowedBrowsersRegExp(String allowedBrowsersRegExp) {
+        this.allowedBrowsersRegExp = allowedBrowsersRegExp;
+    }
+
+    public String getAllowedBrowsersRegExp() {
+        return allowedBrowsersRegExp;
+    }
+
+    public void setAllowedBrowsersViolationMessage(String allowedBrowsersViolationMessage) {
+        this.allowedBrowsersViolationMessage = allowedBrowsersViolationMessage;
+    }
+
+    public String getAllowedBrowsersViolationMessage() {
+        return allowedBrowsersViolationMessage;
+    }
+
+    public boolean isLinkout() {
+        return linkout;
+    }
+
+    public void setLinkout(boolean linkout) {
+        this.linkout = linkout;
+    }
+
+    public String getLinkoutTarget() {
+        return linkoutTarget;
+    }
+
+    public void setLinkoutTarget(String linkoutTarget) {
+        this.linkoutTarget = linkoutTarget;
+    }
+
+    public boolean isLinkoutRedirect() {
+        return linkoutRedirect;
+    }
+
+    public void setLinkoutRedirect(boolean linkoutRedirect) {
+        this.linkoutRedirect = linkoutRedirect;
+    }
+
+    public String getLinkoutRedirectPage() {
+        return linkoutRedirectPage;
+    }
+
+    public void setLinkoutRedirectPage(String linkoutRedirectPage) {
+        this.linkoutRedirectPage = linkoutRedirectPage;
     }
 
     /**
@@ -328,25 +364,8 @@ public class PortletConfig implements Serializable {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).append("siteKey", siteKey)
                 .append("src", src).append("relative", relative).append("auth", auth).append("authType", authType)
                 .append("formAction", formAction).append("formMethod", formMethod)
-//                .append("screenNameOnly", screenNameOnly).append("suggestScreenName", suggestScreenName)
                 .append("sslUrlsOnly", sslUrlsOnly).append("siteUserNameField", siteUserNameField)
                 .append("sitePasswordField", sitePasswordField).append("hiddenVariables", hiddenVariables)
                 .append("preIFrameAction", preIFrameAction).append("htmlAttributes", htmlAttributes).toString();
-    }
-
-    public void setAllowedBrowsersRegExp(String allowedBrowsersRegExp) {
-        this.allowedBrowsersRegExp = allowedBrowsersRegExp;
-    }
-
-    public String getAllowedBrowsersRegExp() {
-        return allowedBrowsersRegExp;
-    }
-
-    public void setAllowedBrowsersViolationMessage(String allowedBrowsersViolationMessage) {
-        this.allowedBrowsersViolationMessage = allowedBrowsersViolationMessage;
-    }
-
-    public String getAllowedBrowsersViolationMessage() {
-        return allowedBrowsersViolationMessage;
     }
 }

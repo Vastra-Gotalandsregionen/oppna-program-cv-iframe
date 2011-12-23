@@ -55,10 +55,8 @@ public class CSEditController {
     /**
      * RenderMapping for edit page.
      * 
-     * @param model
-     *            - model
-     * @param prefs
-     *            - portletPreferences
+     * @param model - model
+     * @param prefs - portletPreferences
      * @return view
      */
     @RenderMapping
@@ -77,12 +75,9 @@ public class CSEditController {
     /**
      * Save an instance of {@link PortletPreferences}.
      *
-     * @param actionRequest
-     *            - action request
-     * @param prefs
-     *            - portlet preferences
-     * @param portletConfig
-     *            - request parameter
+     * @param actionRequest - action request
+     * @param prefs - portlet preferences
+     * @param portletConfig - request parameter
      */
     @ActionMapping
     public void savePreferences(ActionRequest actionRequest, PortletPreferences prefs,
