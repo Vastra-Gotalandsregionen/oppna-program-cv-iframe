@@ -40,6 +40,9 @@
 </style>
 
 <portlet:actionURL var="formAction" escapeXml="false" secure="${portletConfig.sslUrlsOnly}"/>
+<portlet:renderURL var="loginExtractor" secure="${portletConfig.sslUrlsOnly}">
+    <portlet:param name="action" value="loginExtractor"/>
+</portlet:renderURL>
 <c:set var="ns"><portlet:namespace/></c:set>
 
 <form:form method="post" action="${formAction}" commandName="portletConfig">
@@ -151,6 +154,12 @@
                     <td><form:input path="hiddenVariables" id="${ns}hiddenVariables" size="140"/></td>
                 </tr>
             </table>
+
+            <fieldset>
+                <legend>Extract Login parameters</legend>
+
+                <a href="${loginExtractor}">Login Extractor</a>
+            </fieldset>
         </fieldset>
 
         <fieldset>

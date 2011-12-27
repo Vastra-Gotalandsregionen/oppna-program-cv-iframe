@@ -56,5 +56,4 @@ public class SiteKeyHelper {
             return text;
         }
     }
-
 }
