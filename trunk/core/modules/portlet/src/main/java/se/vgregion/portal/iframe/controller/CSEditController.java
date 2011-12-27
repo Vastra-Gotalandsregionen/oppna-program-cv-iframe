@@ -22,23 +22,32 @@
  */
 package se.vgregion.portal.iframe.controller;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import se.vgregion.portal.admin.controller.SiteKeyHelper;
+import se.vgregion.portal.cs.domain.Form;
 import se.vgregion.portal.cs.domain.SiteKey;
 import se.vgregion.portal.cs.service.CredentialService;
+import se.vgregion.portal.cs.service.LoginformService;
 import se.vgregion.portal.iframe.model.PortletConfig;
 
+import javax.net.ssl.*;
 import javax.portlet.ActionRequest;
 import javax.portlet.PortletPreferences;
 import javax.portlet.ValidatorException;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
 /**
@@ -51,6 +60,9 @@ public class CSEditController {
 
     @Autowired
     private CredentialService credentialService;
+
+    @Autowired
+    private LoginformService loginformService;
 
     /**
      * RenderMapping for edit page.
@@ -70,6 +82,65 @@ public class CSEditController {
         model.addAttribute("siteKeys", siteKeys);
 
         return "edit";
+    }
+
+    @RenderMapping(params = "action=loginExtractor")
+    public String loginExtractor(PortletPreferences prefs, Model model) {
+        PortletConfig portletConfig = PortletConfig.getInstance(prefs);
+        String loginFormUrl = portletConfig.getSrc();
+        model.addAttribute("loginformUrl", loginFormUrl);
+
+        SSLSocketFactory oldSSslSocketFactory = null;
+        try {
+            oldSSslSocketFactory = trustAllSSLSocketFactory();
+
+            Document doc = Jsoup.parse(new URL(loginFormUrl), 3000);
+            model.addAttribute("loginformContent", doc.html());
+
+            List<Form> loginforms = loginformService.extract(doc);
+            model.addAttribute("loginforms", loginforms);
+        } catch (Exception e) {
+            model.addAttribute("loginformContent", "Failed to lookup page content");
+            model.addAttribute("error", e);
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } finally {
+            if (oldSSslSocketFactory != null)
+                resetSSLSocketFactory(oldSSslSocketFactory);
+        }
+
+        return "loginExtractor";
+    }
+
+    private SSLSocketFactory trustAllSSLSocketFactory() {
+        SSLSocketFactory oldSslSocketFactory = null;
+        // Create a trust manager that does not validate certificate chains
+        TrustManager[] trustAllCerts = new TrustManager[]{
+                new X509TrustManager() {
+                    public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                        return null;
+                    }
+                    public void checkClientTrusted(
+                            java.security.cert.X509Certificate[] certs, String authType) {
+                    }
+                    public void checkServerTrusted(
+                            java.security.cert.X509Certificate[] certs, String authType) {
+                    }
+                }
+        };
+
+        // Install the all-trusting trust manager
+        try {
+            SSLContext sc = SSLContext.getInstance("SSL");
+            sc.init(null, trustAllCerts, new java.security.SecureRandom());
+            oldSslSocketFactory = HttpsURLConnection.getDefaultSSLSocketFactory();
+            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+        } catch (Exception e) {
+        }
+        return oldSslSocketFactory;
+    }
+
+    private void resetSSLSocketFactory(SSLSocketFactory sslSocketFactory) {
+        HttpsURLConnection.setDefaultSSLSocketFactory(sslSocketFactory);
     }
 
     /**
