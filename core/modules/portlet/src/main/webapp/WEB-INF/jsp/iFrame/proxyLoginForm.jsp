@@ -48,7 +48,7 @@
             </c:forEach>
         </form>
 
-        <p>${siteKey.title} kommer att laddas i ett eget f&ouml;nster...</p>
+        <p>${siteKey.title} laddas i ett eget f&ouml;nster...</p>
     </c:when>
     <c:otherwise>
         <form action="${proxyFormAction}"
