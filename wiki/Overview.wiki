@@ -21,7 +21,13 @@ The credential page is the same page a user encounter the first time he tries to
 
 There is a title, a short description of the service - these messages are configured in [CsAdminConfig cs-admin] and finally username and password.
 
-The username and password will be stored in a secure way and used to automatically log in the user to the site. The username doesn't have to be same as the portal userId, it is the credentials for the external site and these credentials are handled by cs-admin for the portal user logged in. If the password are changed on the external site, the user has to manually change it inside cs-iframe. This is the biggest drawback when using cs-iframe, it can be very hard to make users understand that the new password has to be entered in two places.
+The username and password will be stored in a secure way and used to automatically log in the user to the site. 
+
+The username may not be same as the portal-uid, it is the credentials for the external site and these credentials keept by CS-Admin for the current portal user.
+
+As an extra security precaution it is possible to lock down access to use the portal-uid. This is possible to do for external sites use the same username as the portal-uid. Then the user only has to fill out password, the username cannot be changed. 
+
+If the password are changed on the external site, the user has to manually change it inside CS-iFrame. This is the biggest drawback when using CS-iFrame, it can be very hard to make users understand that the new password has to be entered in two places.
 
 However, the credential store can quite easily be integrated into the update-password scheme of the organization, removing the need for this manual synchronization step.
 
