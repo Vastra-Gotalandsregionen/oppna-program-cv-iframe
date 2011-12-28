@@ -158,7 +158,7 @@
             <fieldset>
                 <legend>Extract Login parameters</legend>
 
-                <a href="${loginExtractor}">Login Extractor</a>
+                <a href="${loginExtractor}"><input type="button" value="Login Extractor"/></a>
             </fieldset>
         </fieldset>
 

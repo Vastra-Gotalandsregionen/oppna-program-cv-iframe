@@ -36,18 +36,21 @@ import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import se.vgregion.portal.admin.controller.SiteKeyHelper;
 import se.vgregion.portal.cs.domain.Form;
+import se.vgregion.portal.cs.domain.FormField;
 import se.vgregion.portal.cs.domain.SiteKey;
 import se.vgregion.portal.cs.service.CredentialService;
 import se.vgregion.portal.cs.service.LoginformService;
+import se.vgregion.portal.iframe.model.LoginExtractor;
+import se.vgregion.portal.iframe.model.LoginField;
+import se.vgregion.portal.iframe.model.LoginForm;
 import se.vgregion.portal.iframe.model.PortletConfig;
 
 import javax.net.ssl.*;
 import javax.portlet.ActionRequest;
 import javax.portlet.PortletPreferences;
 import javax.portlet.ValidatorException;
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -66,7 +69,7 @@ public class CSEditController {
 
     /**
      * RenderMapping for edit page.
-     * 
+     *
      * @param model - model
      * @param prefs - portletPreferences
      * @return view
@@ -87,6 +90,8 @@ public class CSEditController {
     @RenderMapping(params = "action=loginExtractor")
     public String loginExtractor(PortletPreferences prefs, Model model) {
         PortletConfig portletConfig = PortletConfig.getInstance(prefs);
+        model.addAttribute("portletConfig", portletConfig);
+
         String loginFormUrl = portletConfig.getSrc();
         model.addAttribute("loginformUrl", loginFormUrl);
 
@@ -99,6 +104,9 @@ public class CSEditController {
 
             List<Form> loginforms = loginformService.extract(doc);
             model.addAttribute("loginforms", loginforms);
+
+            LoginExtractor loginExtractor = initLoginExtractor(loginforms);
+            model.addAttribute("loginExtractor", loginExtractor);
         } catch (Exception e) {
             model.addAttribute("loginformContent", "Failed to lookup page content");
             model.addAttribute("error", e);
@@ -111,6 +119,28 @@ public class CSEditController {
         return "loginExtractor";
     }
 
+    private LoginExtractor initLoginExtractor(List<Form> loginforms) {
+        LoginExtractor loginExtractor = new LoginExtractor();
+        List<LoginForm> loginFormList = new ArrayList<LoginForm>();
+        for (Form form : loginforms) {
+            LoginForm loginForm = new LoginForm();
+            loginForm.setMethod(form.getMethod());
+            loginForm.setAction(form.getAction());
+
+            List<LoginField> loginFieldList = new ArrayList<LoginField>();
+            for (FormField formField : form.getFormFields()) {
+                LoginField loginField = new LoginField();
+                loginField.setFieldName(formField.getName());
+                loginField.setFieldValue(formField.getValue());
+                loginFieldList.add(loginField);
+            }
+            loginForm.setLoginFields(loginFieldList);
+            loginFormList.add(loginForm);
+        }
+        loginExtractor.setLoginForms(loginFormList);
+        return loginExtractor;
+    }
+
     private SSLSocketFactory trustAllSSLSocketFactory() {
         SSLSocketFactory oldSslSocketFactory = null;
         // Create a trust manager that does not validate certificate chains
@@ -119,9 +149,11 @@ public class CSEditController {
                     public java.security.cert.X509Certificate[] getAcceptedIssuers() {
                         return null;
                     }
+
                     public void checkClientTrusted(
                             java.security.cert.X509Certificate[] certs, String authType) {
                     }
+
                     public void checkServerTrusted(
                             java.security.cert.X509Certificate[] certs, String authType) {
                     }
@@ -143,11 +175,49 @@ public class CSEditController {
         HttpsURLConnection.setDefaultSSLSocketFactory(sslSocketFactory);
     }
 
+    @ActionMapping("loginExtractorAction")
+    public void loginExtractorAction(ActionRequest request, @ModelAttribute LoginExtractor loginExtractor,
+            Model model,  PortletPreferences prefs) {
+        PortletConfig portletConfig = PortletConfig.getInstance(prefs);
+
+        try {
+            for (LoginForm loginForm : loginExtractor.getLoginForms()) {
+                if (!loginForm.isUse()) continue;
+
+                portletConfig.setFormMethod(loginForm.getMethod());
+                portletConfig.setFormAction(loginForm.getAction());
+
+                StringBuilder hidden = new StringBuilder("");
+                for (LoginField loginField : loginForm.getLoginFields()) {
+                    if (!loginField.isUse()) continue;
+
+                    if (loginField.isNameField()) {
+                        portletConfig.setSiteUserNameField(loginField.getFieldName());
+                    }
+                    if (loginField.isPasswordField()) {
+                        portletConfig.setSitePasswordField(loginField.getFieldName());
+                    }
+                    if (loginField.isExtraField()) {
+                        if (hidden.length() > 0) {
+                            hidden.append("&");
+                        }
+                        hidden.append(loginField.getFieldName()).append("=").append(loginField.getFieldValue());
+                    }
+                }
+                portletConfig.setHiddenVariables(hidden.toString());
+            }
+
+            portletConfig.store(prefs);
+        } catch (ValidatorException e) {
+            System.out.println("Error: "+e.getMessage());
+        }
+    }
+
     /**
      * Save an instance of {@link PortletPreferences}.
      *
      * @param actionRequest - action request
-     * @param prefs - portlet preferences
+     * @param prefs         - portlet preferences
      * @param portletConfig - request parameter
      */
     @ActionMapping
