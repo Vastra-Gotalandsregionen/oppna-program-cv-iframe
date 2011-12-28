@@ -11,7 +11,7 @@ First CS-IFrame has to know where the target site is. The value provided to the 
 
 [http://oppna-program-cv-iframe.googlecode.com/svn/wiki/CS-configuration.png]
 
-To activate the credential functionality in cs-iframe you hav to check "Authenticate" and select a [CSAdmin SiteKey]. 
+To activate the credential functionality in cs-iframe you have to check "Authenticate" and select a [CSAdmin SiteKey]. 
 
 You have to configure the field-name for username and password. CS-IFrame provides the values for these fields as dynamic data provided for the user logged into the portal.
 
