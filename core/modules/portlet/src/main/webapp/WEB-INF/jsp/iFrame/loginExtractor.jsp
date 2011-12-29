@@ -17,7 +17,7 @@
 
 <portlet:actionURL var="loginExtractorAction" name="loginExtractorAction"
                    portletMode="EDIT" secure="${portletConfig.sslUrlsOnly}"/>
-<portlet:actionURL var="abort" portletMode="EDIT" secure="${portletConfig.sslUrlsOnly}"/>
+<portlet:renderURL var="abort" portletMode="EDIT" secure="${portletConfig.sslUrlsOnly}"/>
 
 <form:form method="post" action="${loginExtractorAction}" commandName="loginExtractor">
     <fieldset>
