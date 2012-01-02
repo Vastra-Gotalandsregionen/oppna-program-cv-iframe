@@ -6,5 +6,5 @@
   * [CsAdmin]
     * [CsAdmin Overview]
     * [SiteKeyAdmin Site-key configuration]
-  * [PasswordMigration]
+  * [PasswordEncryptionMigrator]
   * [Installation]
