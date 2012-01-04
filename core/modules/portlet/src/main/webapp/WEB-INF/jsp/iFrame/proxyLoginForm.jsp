@@ -49,6 +49,13 @@
         </form>
 
         <p>${siteKey.title} laddas i ett eget f&ouml;nster...</p>
+        <c:if test="${postLoginLink}">
+            <ul>
+                <li>
+                    Direkt l&auml;nk: <a href="${postLogin}" target="${portletConfig.linkoutTarget}">${postLogin}</a>
+                </li>
+            </ul>
+        </c:if>
     </c:when>
     <c:otherwise>
         <form action="${proxyFormAction}"
