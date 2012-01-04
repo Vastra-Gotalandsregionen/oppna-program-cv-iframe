@@ -49,6 +49,9 @@
     <span class="vgr-portlet-controlls-right">
       <a class="vgr-portlet-help" href="${showHelp}" title="Hjälp">Hjälp</a>
     </span>
+    <span>
+        <a id="<portlet:namespace />postLogin"></a>
+    </span>
     <br/>
 </div>
 
@@ -98,11 +101,22 @@
 
                 // ====== Do the real login if a PreAction was configured ======
                 var iFrame = A.one('#<portlet:namespace />iframe');
-                A.later('500', iFrame, function() {
+                A.later('1500', iFrame, function() {
                     var iFrameSrc = '${iFrameSrc}';
-                    var preIFrameSrc = '${preIFrameSrc}';
-                    if (preIFrameSrc != iFrameSrc) {
-                        iFrame.setAttribute('src', iFrameSrc);
+                    var postLogin = '${postLogin}';
+                    var linkout = '${myPortletConfig.linkout}';
+                    if (linkout != 'true' && postLogin != 'null' && postLogin.length > 0) {
+                        iFrame.setAttribute('src', '${postLogin}');
+                    } else if (linkout == 'true' && postLogin != 'null' && postLogin.length > 0) {
+                        var link = A.one('#<portlet:namespace />postLogin');
+                        link.setAttribute('href', '${postLogin}');
+                        link.setAttribute('target', '${myPortletConfig.linkoutTarget}');
+                        link.simulate('click');
+                    } else {
+                        var preIFrameSrc = '${preIFrameSrc}';
+                        if (preIFrameSrc != iFrameSrc) {
+                            iFrame.setAttribute('src', iFrameSrc);
+                        }
                     }
                 });
                 // ======================

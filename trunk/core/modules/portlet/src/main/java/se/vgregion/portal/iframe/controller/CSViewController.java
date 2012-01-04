@@ -19,19 +19,10 @@
 
 package se.vgregion.portal.iframe.controller;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Enumeration;
-import java.util.Map;
-
-import javax.portlet.ActionRequest;
-import javax.portlet.PortletPreferences;
-import javax.portlet.PortletRequest;
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
-import javax.portlet.ResourceRequest;
-import javax.portlet.WindowState;
-
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.EncoderException;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.net.BCodec;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,38 +32,62 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 import org.springframework.web.portlet.util.PortletUtils;
-
 import se.vgregion.portal.cs.domain.SiteKey;
 import se.vgregion.portal.cs.domain.UserSiteCredential;
 import se.vgregion.portal.cs.service.CredentialService;
 import se.vgregion.portal.iframe.model.PortletConfig;
+
+import javax.portlet.*;
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Enumeration;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
  */
 @Controller
 @RequestMapping("VIEW")
+@SessionAttributes("postLogin")
 public class CSViewController {
     private Logger log = LoggerFactory.getLogger(CSViewController.class);
 
     @Autowired
     private CredentialService credentialService;
 
+    @ModelAttribute("postLogin")
+    public String initPostLogin() {
+        return "";
+    }
+
     /**
      * Main controllermethod. Handling of user-sitecredential availability and iFrame source linking.
-     * 
-     * @param prefs  - portlet preferences
-     * @param req - request
-     * @param resp - response
-     * @param model  - model
+     *
+     * @param prefs - portlet preferences
+     * @param req   - request
+     * @param resp  - response
+     * @param model - model
      * @return view
      */
     @RenderMapping
-    public String showView(PortletPreferences prefs, RenderRequest req, RenderResponse resp, ModelMap model) {
+    public String showView(PortletPreferences prefs, RenderRequest req, RenderResponse resp, ModelMap model,
+            @ModelAttribute("postLogin") String postLogin) {
+        String newPostLogin = req.getParameter("postLogin");
+        if (StringUtils.isNotBlank(newPostLogin)) {
+            try {
+                postLogin = new String(Base64.decodeBase64(newPostLogin));
+                model.addAttribute("postLogin", postLogin);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
         PortletConfig portletConfig = PortletConfig.getInstance(prefs);
         log.debug("Creds: {}", portletConfig);
 
@@ -92,6 +107,7 @@ public class CSViewController {
         } else {
             preIFrameSrc = iFrameSrc;
         }
+
         String baseSrc = getBaseSrc(iFrameSrc);
 
         String iFrameHeight = getIFrameHeight(req, portletConfig);
@@ -120,9 +136,9 @@ public class CSViewController {
 
     /**
      * Credential view handleing.
-     * 
+     *
      * @param prefs - portlet preferences
-     * @param req - request
+     * @param req   - request
      * @param model - model
      * @return userCredentialForm
      */
@@ -145,16 +161,17 @@ public class CSViewController {
 
     /**
      * Prepare proxyLoginForm.jsp for form-based authentication.
-     * 
+     *
      * @param model - model
-     * @param req - request
+     * @param req   - request
      * @param prefs - portlet preferences
      * @return proxyLoginForm
      * @throws URISyntaxException
      */
     @ResourceMapping
-    public String showProxyForm(PortletPreferences prefs, ResourceRequest req, ModelMap model)
-            throws URISyntaxException {
+    public String showProxyForm(PortletPreferences prefs, ResourceRequest req, ModelMap model,
+            @ModelAttribute("postLogin") String postLogin) {
+
         PortletConfig portletConfig = PortletConfig.getInstance(prefs);
         model.addAttribute("portletConfig", portletConfig);
         if (!portletConfig.isAuth() || !"form".equals(portletConfig.getAuthType())) {
@@ -167,19 +184,30 @@ public class CSViewController {
         UserSiteCredential siteCredential = new UserSiteCredential();
         credentialsAvailable(req, model, portletConfig, siteCredential, siteKey);
 
-        URI src = new URI(portletConfig.getSrc());
-
-        String proxyFormAction;
-        if (portletConfig.getFormAction() == null || portletConfig.getFormAction().length() < 1) {
-            proxyFormAction = src.toString();
-        } else {
-            proxyFormAction = src.resolve(portletConfig.getFormAction()).toString();
+        if (postLogin != null && postLogin.length() > 0) {
+            model.addAttribute("postLoginLink", true);
         }
 
-        model.addAttribute("proxyFormAction", proxyFormAction);
-        debug(req, proxyFormAction);
+        URI src = null;
+        try {
+            src = new URI(portletConfig.getSrc());
 
-        return "proxyLoginForm";
+            String proxyFormAction;
+            if (portletConfig.getFormAction() == null || portletConfig.getFormAction().length() < 1) {
+                proxyFormAction = src.toString();
+            } else {
+                proxyFormAction = src.resolve(portletConfig.getFormAction()).toString();
+            }
+
+            model.addAttribute("proxyFormAction", proxyFormAction);
+            debug(req, proxyFormAction);
+
+            return "proxyLoginForm";
+        } catch (URISyntaxException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+             return "help";
+        }
+
     }
 
     private void debug(ResourceRequest req, String proxyFormAction) {
@@ -204,9 +232,9 @@ public class CSViewController {
 
     /**
      * Store User-SiteCredentials in the Credential-Vault. Action posted from userCredentailForm.jsp
-     * 
+     *
      * @param siteCredential - credential
-     * @param req - action request to handle cancel
+     * @param req            - action request to handle cancel
      */
     @Transactional
     @ActionMapping
@@ -261,9 +289,9 @@ public class CSViewController {
 
         if (portletConfig.isUserLoggedIn()) {
             if (iFrameSrc.indexOf("?") == -1) {
-                iFrameSrc += "?userId="+lookupUid(req);
+                iFrameSrc += "?userId=" + lookupUid(req);
             } else {
-                iFrameSrc += "&userId="+lookupUid(req);
+                iFrameSrc += "&userId=" + lookupUid(req);
             }
         }
 

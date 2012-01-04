@@ -85,7 +85,7 @@ public class CSViewControllerTest extends BaseTestSetup {
         RenderResponse mockResp = new MockRenderResponse();
         ModelMap model = new ModelMap();
 
-        String response = controller.showView(prefs, mockReq, mockResp, model);
+        String response = controller.showView(prefs, mockReq, mockResp, model, null);
         assertEquals("userCredentialForm", response);
     }
 
@@ -99,7 +99,7 @@ public class CSViewControllerTest extends BaseTestSetup {
         RenderResponse mockResp = new MockRenderResponse();
         ModelMap model = new ModelMap();
 
-        String response = controller.showView(prefs, mockReq, mockResp, model);
+        String response = controller.showView(prefs, mockReq, mockResp, model, null);
         assertEquals("view", response);
 
         // Test model
@@ -131,7 +131,7 @@ public class CSViewControllerTest extends BaseTestSetup {
         RenderResponse mockResp = new MockRenderResponse();
         ModelMap model = new ModelMap();
 
-        String response = controller.showView(prefs, mockReq, mockResp, model);
+        String response = controller.showView(prefs, mockReq, mockResp, model, null);
         assertEquals("userCredentialForm", response);
     }
 
@@ -146,7 +146,7 @@ public class CSViewControllerTest extends BaseTestSetup {
         RenderResponse mockResp = new MockRenderResponse();
         ModelMap model = new ModelMap();
 
-        String response = controller.showView(prefs, mockReq, mockResp, model);
+        String response = controller.showView(prefs, mockReq, mockResp, model, null);
         assertEquals("userCredentialForm", response);
     }
 
@@ -164,7 +164,7 @@ public class CSViewControllerTest extends BaseTestSetup {
         RenderResponse mockResp = new MockRenderResponse();
         ModelMap model = new ModelMap();
 
-        String response = controller.showView(prefs, mockReq, mockResp, model);
+        String response = controller.showView(prefs, mockReq, mockResp, model, null);
         assertEquals("view", response);
 
         UserSiteCredential siteCredential = (UserSiteCredential) model.get("siteCredential");
@@ -206,7 +206,7 @@ public class CSViewControllerTest extends BaseTestSetup {
 
         ModelMap model = new ModelMap();
 
-        String response = controller.showView(prefs, req, resp, model);
+        String response = controller.showView(prefs, req, resp, model, null);
         assertEquals("view", response);
 
         UserSiteCredential siteCredential = (UserSiteCredential) model.get("siteCredential");
@@ -250,7 +250,7 @@ public class CSViewControllerTest extends BaseTestSetup {
 
         ModelMap model = new ModelMap();
 
-        String response = controller.showView(prefs, req, resp, model);
+        String response = controller.showView(prefs, req, resp, model, null);
         assertEquals("view", response);
 
         UserSiteCredential siteCredential = (UserSiteCredential) model.get("siteCredential");
@@ -296,12 +296,12 @@ public class CSViewControllerTest extends BaseTestSetup {
 
         // NORMAL
         mockReq.setWindowState(WindowState.NORMAL);
-        controller.showView(prefs, mockReq, mockResp, model);
+        controller.showView(prefs, mockReq, mockResp, model, null);
         assertEquals("300", model.get("iFrameHeight"));
 
         // MAXIMIZED
         mockReq.setWindowState(WindowState.MAXIMIZED);
-        controller.showView(prefs, mockReq, mockResp, model);
+        controller.showView(prefs, mockReq, mockResp, model, null);
         assertEquals("600", model.get("iFrameHeight"));
     }
 
@@ -447,7 +447,7 @@ public class CSViewControllerTest extends BaseTestSetup {
 
         ModelMap model = new ModelMap();
 
-        String result = controller.showProxyForm(prefs, req, model);
+        String result = controller.showProxyForm(prefs, req, model, null);
 
         assertEquals("proxyLoginForm", result);
 
@@ -479,7 +479,7 @@ public class CSViewControllerTest extends BaseTestSetup {
 
         ModelMap model = new ModelMap();
 
-        String result = controller.showProxyForm(prefs, req, model);
+        String result = controller.showProxyForm(prefs, req, model, null);
 
         assertEquals("proxyLoginForm", result);
 
@@ -505,7 +505,7 @@ public class CSViewControllerTest extends BaseTestSetup {
 
         ModelMap model = new ModelMap();
 
-        String result = controller.showProxyForm(prefs, req, model);
+        String result = controller.showProxyForm(prefs, req, model, null);
 
         assertEquals("view", result);
     }
@@ -521,7 +521,7 @@ public class CSViewControllerTest extends BaseTestSetup {
 
         ModelMap model = new ModelMap();
 
-        String result = controller.showProxyForm(prefs, req, model);
+        String result = controller.showProxyForm(prefs, req, model, null);
 
         assertEquals("view", result);
     }
@@ -538,7 +538,7 @@ public class CSViewControllerTest extends BaseTestSetup {
 
         ModelMap model = new ModelMap();
 
-        String result = controller.showProxyForm(prefs, req, model);
+        String result = controller.showProxyForm(prefs, req, model, null);
 
         assertEquals("view", result);
     }

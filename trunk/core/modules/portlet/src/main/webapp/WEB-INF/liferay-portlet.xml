@@ -26,10 +26,12 @@
 <liferay-portlet-app>
   <portlet>
     <portlet-name>cs-iframe</portlet-name>
-    <icon>/icon.png</icon>
+    <friendly-url-mapper-class>
+      com.liferay.portal.kernel.portlet.DefaultFriendlyURLMapper
+    </friendly-url-mapper-class>
+    <friendly-url-mapping>autologin</friendly-url-mapping>
+    <friendly-url-routes>csiframe-friendly-url-routes.xml</friendly-url-routes>
     <instanceable>true</instanceable>
-    <header-portlet-css>/css/test.css</header-portlet-css>
-    <footer-portlet-javascript>/js/test.js</footer-portlet-javascript>
   </portlet>
 
   <portlet>
