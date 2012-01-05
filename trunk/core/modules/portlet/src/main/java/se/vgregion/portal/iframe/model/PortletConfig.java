@@ -51,6 +51,8 @@ public class PortletConfig implements Serializable {
     private String siteUserNameField;
     private String sitePasswordField;
     private String hiddenVariables;
+    private String dynamicField;
+    private String dynamicFieldAction;
     private String htmlAttributes;
     private String preIFrameAction;
     private String allowedBrowsersRegExp;
@@ -89,6 +91,8 @@ public class PortletConfig implements Serializable {
         portletConfig.setSslUrlsOnly(Boolean.valueOf(prefs.getValue("sslUrlsOnly", "false")));
         portletConfig.setSiteUserNameField(prefs.getValue("user-name-field", ""));
         portletConfig.setSitePasswordField(prefs.getValue("password-field", ""));
+        portletConfig.setDynamicField(prefs.getValue("dynamic-field", ""));
+        portletConfig.setDynamicFieldAction(prefs.getValue("dynamic-field-action", ""));
         portletConfig.setHiddenVariables(prefs.getValue("hidden-variables", ""));
         portletConfig.setPreIFrameAction(prefs.getValue("pre-iframe-action", ""));
         portletConfig.setHtmlAttributes(prefs.getValue("html-attributes", ""));
@@ -122,6 +126,8 @@ public class PortletConfig implements Serializable {
             prefs.setValue("sslUrlsOnly", String.valueOf(isSslUrlsOnly()));
             prefs.setValue("user-name-field", getSiteUserNameField());
             prefs.setValue("password-field", getSitePasswordField());
+            prefs.setValue("dynamic-field", getDynamicField());
+            prefs.setValue("dynamic-field-action", getDynamicFieldAction());
             prefs.setValue("hidden-variables", getHiddenVariables());
             prefs.setValue("pre-iframe-action", getPreIFrameAction());
             prefs.setValue("html-attributes", getHtmlAttributes());
@@ -313,6 +319,22 @@ public class PortletConfig implements Serializable {
 
     public void setLinkoutRedirectPage(String linkoutRedirectPage) {
         this.linkoutRedirectPage = linkoutRedirectPage;
+    }
+
+    public String getDynamicField() {
+        return dynamicField;
+    }
+
+    public void setDynamicField(String dynamicField) {
+        this.dynamicField = dynamicField;
+    }
+
+    public String getDynamicFieldAction() {
+        return dynamicFieldAction;
+    }
+
+    public void setDynamicFieldAction(String dynamicFieldAction) {
+        this.dynamicFieldAction = dynamicFieldAction;
     }
 
     /**

@@ -12,6 +12,7 @@ public class LoginField implements Serializable {
     private boolean use;
     private boolean nameField;
     private boolean passwordField;
+    private boolean dynamicField;
     private boolean extraField;
     private String fieldName;
     private String fieldValue;
@@ -30,6 +31,14 @@ public class LoginField implements Serializable {
 
     public void setFieldValue(String fieldValue) {
         this.fieldValue = fieldValue;
+    }
+
+    public boolean isDynamicField() {
+        return dynamicField;
+    }
+
+    public void setDynamicField(boolean dynamicField) {
+        this.dynamicField = dynamicField;
     }
 
     public boolean isExtraField() {

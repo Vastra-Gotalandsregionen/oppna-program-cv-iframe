@@ -19,11 +19,9 @@
 
 package se.vgregion.portal.iframe.controller;
 
-import org.apache.commons.codec.DecoderException;
-import org.apache.commons.codec.EncoderException;
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.codec.net.BCodec;
 import org.apache.commons.lang.StringUtils;
+import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,9 +41,9 @@ import se.vgregion.portal.cs.service.CredentialService;
 import se.vgregion.portal.iframe.model.PortletConfig;
 
 import javax.portlet.*;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Enumeration;
 import java.util.Map;
 
@@ -79,6 +77,9 @@ public class CSViewController {
     public String showView(PortletPreferences prefs, RenderRequest req, RenderResponse resp, ModelMap model,
             @ModelAttribute("postLogin") String postLogin) {
         String newPostLogin = req.getParameter("postLogin");
+        while (StringUtils.isNotBlank(newPostLogin) && newPostLogin.endsWith("null")) {
+            newPostLogin = newPostLogin.substring(0, newPostLogin.length() - 4);
+        }
         if (StringUtils.isNotBlank(newPostLogin)) {
             try {
                 postLogin = new String(Base64.decodeBase64(newPostLogin));
@@ -178,14 +179,23 @@ public class CSViewController {
             return "view";
         }
 
+        // 1: Credentials
         SiteKey siteKey = credentialService.getSiteKey(portletConfig.getSiteKey());
         model.addAttribute("siteKey", siteKey);
 
         UserSiteCredential siteCredential = new UserSiteCredential();
         credentialsAvailable(req, model, portletConfig, siteCredential, siteKey);
 
+        // 2: postLogin
         if (postLogin != null && postLogin.length() > 0) {
             model.addAttribute("postLoginLink", true);
+        }
+
+        // 3: Dynamic Field
+        if (StringUtils.isNotBlank(portletConfig.getDynamicField())) {
+            model.addAttribute("hasDynamicField", true);
+            String dynamicValue = lookupDynamicValue(portletConfig);
+            model.addAttribute("dynamicValue", dynamicValue);
         }
 
         URI src = null;
@@ -208,6 +218,21 @@ public class CSViewController {
              return "help";
         }
 
+    }
+
+    private String lookupDynamicValue(PortletConfig portletConfig) {
+        try {
+            Document doc = new JSoupHelper().invoke(new URL(portletConfig.getDynamicFieldAction()), 1500);
+            String dynamicValue = doc.getElementsByTag("body").get(0).text().trim()
+                    .replaceAll("\n\r", "")
+                    .replaceAll("\r", "")
+                    .replaceAll("\n", "");
+            if (dynamicValue.contains("<>")) throw new Exception("Invalid value format ["+dynamicValue+"]");
+            return dynamicValue;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
     }
 
     private void debug(ResourceRequest req, String proxyFormAction) {
