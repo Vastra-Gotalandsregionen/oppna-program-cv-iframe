@@ -46,6 +46,9 @@
             <c:forEach var="entry" items="${portletConfig.hiddenVarialbleMap}">
                 <input name="${entry.key}" value="${entry.value}" type="hidden"/>
             </c:forEach>
+            <c:if test="${hasDynamicField}">
+                <input name="${portletConfig.dynamicField}" value="${dynamicValue}" type="hidden"/>
+            </c:if>
         </form>
 
         <p>${siteKey.title} laddas i ett eget f&ouml;nster...</p>
@@ -68,6 +71,9 @@
             <c:forEach var="entry" items="${portletConfig.hiddenVarialbleMap}">
                 <input name="${entry.key}" value="${entry.value}" type="hidden"/>
             </c:forEach>
+            <c:if test="${hasDynamicField}">
+                <input name="${portletConfig.dynamicField}" value="${dynamicValue}" type="hidden"/>
+            </c:if>
         </form>
     </c:otherwise>
 </c:choose>

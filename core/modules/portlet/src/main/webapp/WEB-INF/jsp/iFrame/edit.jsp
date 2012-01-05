@@ -71,8 +71,7 @@
             <tr id="${ns}siteKey">
                 <td><label for="${ns}siteKey">Site Key</label></td>
                 <td>
-                    <form:select path="siteKey"
-                                 id="${ns}siteKeys">
+                    <form:select path="siteKey" id="${ns}siteKeys">
                         <form:option value="">-- Ingen SiteKey --</form:option>
                         <c:forEach var="siteKey" items="${siteKeys}">
                             <form:option
@@ -148,6 +147,14 @@
                 <tr>
                     <td><label for="${ns}sitePasswordField">Password Field Name</label></td>
                     <td><form:input path="sitePasswordField" id="${ns}sitePasswordField" size="80"/></td>
+                </tr>
+                <tr>
+                    <td><label for="${ns}dynamicField">Dynamic Field Name</label></td>
+                    <td><form:input path="dynamicField" id="${ns}dynamicField" size="80"/></td>
+                </tr>
+                <tr>
+                    <td><label for="${ns}dynamicFieldAction">Dynamic Action</label></td>
+                    <td><form:input path="dynamicFieldAction" id="${ns}dynamicFieldAction" size="140"/></td>
                 </tr>
                 <tr>
                     <td><label for="${ns}hiddenVariables">Hidden Variables</label></td>

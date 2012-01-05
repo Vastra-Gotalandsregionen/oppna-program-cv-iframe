@@ -39,7 +39,7 @@
 <portlet:renderURL portletMode="help" var="showHelp" secure="${myPortletConfig.sslUrlsOnly}"/>
 
 <c:if test="${myPortletConfig.linkoutRedirect}">
-    <meta http-equiv="refresh" content="5; url=${myPortletConfig.linkoutRedirectPage}">
+    <meta http-equiv="refresh" content="7; url=${myPortletConfig.linkoutRedirectPage}">
 </c:if>
 
 <div class="vgr-portlet-controlls-container" style="${link_display}">
@@ -50,6 +50,9 @@
       <a class="vgr-portlet-help" href="${showHelp}" title="Hjälp">Hjälp</a>
     </span>
     <span>
+        <a id="<portlet:namespace />preLogin"></a>
+    </span>
+    <span>
         <a id="<portlet:namespace />postLogin"></a>
     </span>
     <br/>
@@ -58,8 +61,7 @@
 <div id="<portlet:namespace />iframeWrap">
     <c:choose>
         <c:when test="${(empty myPortletConfig.allowedBrowsersRegExp) or re:matches(myPortletConfig.allowedBrowsersRegExp, header['user-agent'])}">
-            <iframe src="${preIFrameSrc}"
-                    name="<portlet:namespace />iframe"
+            <iframe name="<portlet:namespace />iframe"
                     id="<portlet:namespace />iframe"
                     border="${bordercolor}"
                     frameborder="${frameborder}"
@@ -83,6 +85,26 @@
             'aui-base',
             'aui-loading-mask',
             function(A) {
+                var iFrame = A.one('#<portlet:namespace />iframe');
+
+                // ====== Check for pre-action otherwise load virtual login form ======
+                var iFrameSrc = '${iFrameSrc}';
+                var preIFrameSrc = '${preIFrameSrc}';
+                var linkout = '${myPortletConfig.linkout}';
+                if (preIFrameSrc == iFrameSrc) {
+                    iFrame.setAttribute('src', iFrameSrc);
+                } else {
+                    if (linkout == 'true') {
+                        var link = A.one('#<portlet:namespace />preLogin');
+                        link.setAttribute('href', preIFrameSrc);
+                        link.setAttribute('target', '${myPortletConfig.linkoutTarget}');
+                        link.simulate('click');
+                    } else {
+                        iFrame.setAttribute('src', preIFrameSrc);
+                    }
+                }
+                // ======================
+
                 // ====== LoadMask ======
                 var iFrameWrap = A.one('#<portlet:namespace />iframeWrap');
                 iFrameWrap.plug(A.LoadingMask, {
@@ -100,26 +122,34 @@
                 // ======================
 
                 // ====== Do the real login if a PreAction was configured ======
-                var iFrame = A.one('#<portlet:namespace />iframe');
-                A.later('1500', iFrame, function() {
+                A.later('500', iFrame, function() {
                     var iFrameSrc = '${iFrameSrc}';
+                    var preIFrameSrc = '${preIFrameSrc}';
+                    if (preIFrameSrc != iFrameSrc) {
+                        iFrame.setAttribute('src', iFrameSrc);
+                    }
+                });
+                // ======================
+
+                // ====== Do linkout after login if a postLogin was configured ======
+                var iFrame = A.one('#<portlet:namespace />iframe');
+                A.later('2000', iFrame, function() {
                     var postLogin = '${postLogin}';
                     var linkout = '${myPortletConfig.linkout}';
-                    if (linkout != 'true' && postLogin != 'null' && postLogin.length > 0) {
-                        iFrame.setAttribute('src', '${postLogin}');
-                    } else if (linkout == 'true' && postLogin != 'null' && postLogin.length > 0) {
-                        var link = A.one('#<portlet:namespace />postLogin');
-                        link.setAttribute('href', '${postLogin}');
-                        link.setAttribute('target', '${myPortletConfig.linkoutTarget}');
-                        link.simulate('click');
-                    } else {
-                        var preIFrameSrc = '${preIFrameSrc}';
-                        if (preIFrameSrc != iFrameSrc) {
-                            iFrame.setAttribute('src', iFrameSrc);
+                    if (postLogin != 'null' && postLogin.length > 0) {
+                        if (linkout == 'true') {
+                            var link = A.one('#<portlet:namespace />postLogin');
+                            link.setAttribute('href', '${postLogin}');
+                            link.setAttribute('target', '${myPortletConfig.linkoutTarget}');
+                            link.simulate('click');
+                        } else {
+                            iFrame.setAttribute('src', '${postLogin}');
                         }
                     }
                 });
                 // ======================
+
+
             }
     );
 

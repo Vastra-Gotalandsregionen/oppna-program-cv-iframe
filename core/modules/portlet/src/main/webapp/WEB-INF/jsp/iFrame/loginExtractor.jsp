@@ -63,6 +63,7 @@
                                     <th>Use</th>
                                     <th>Name</th>
                                     <th>Pass</th>
+                                    <th>Dyna</th>
                                     <th>Extra</th>
                                     <th>type</th>
                                     <th>id</th>
@@ -87,6 +88,10 @@
                                         <td align="center">
                                             <form:checkbox
                                                     path="loginForms[${formCnt.index}].loginFields[${fieldCnt.index}].passwordField"/>
+                                        </td>
+                                        <td align="center">
+                                            <form:checkbox
+                                                    path="loginForms[${formCnt.index}].loginFields[${fieldCnt.index}].dynamicField"/>
                                         </td>
                                         <td align="center">
                                             <form:checkbox

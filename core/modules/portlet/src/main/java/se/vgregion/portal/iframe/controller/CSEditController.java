@@ -95,11 +95,8 @@ public class CSEditController {
         String loginFormUrl = portletConfig.getSrc();
         model.addAttribute("loginformUrl", loginFormUrl);
 
-        SSLSocketFactory oldSSslSocketFactory = null;
         try {
-            oldSSslSocketFactory = trustAllSSLSocketFactory();
-
-            Document doc = Jsoup.parse(new URL(loginFormUrl), 3000);
+            Document doc = new JSoupHelper().invoke(new URL(loginFormUrl), 3000);
             model.addAttribute("loginformContent", doc.html());
 
             List<Form> loginforms = loginformService.extract(doc);
@@ -110,10 +107,7 @@ public class CSEditController {
         } catch (Exception e) {
             model.addAttribute("loginformContent", "Failed to lookup page content");
             model.addAttribute("error", e);
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        } finally {
-            if (oldSSslSocketFactory != null)
-                resetSSLSocketFactory(oldSSslSocketFactory);
+            e.printStackTrace();
         }
 
         return "loginExtractor";
@@ -141,40 +135,6 @@ public class CSEditController {
         return loginExtractor;
     }
 
-    private SSLSocketFactory trustAllSSLSocketFactory() {
-        SSLSocketFactory oldSslSocketFactory = null;
-        // Create a trust manager that does not validate certificate chains
-        TrustManager[] trustAllCerts = new TrustManager[]{
-                new X509TrustManager() {
-                    public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-                        return null;
-                    }
-
-                    public void checkClientTrusted(
-                            java.security.cert.X509Certificate[] certs, String authType) {
-                    }
-
-                    public void checkServerTrusted(
-                            java.security.cert.X509Certificate[] certs, String authType) {
-                    }
-                }
-        };
-
-        // Install the all-trusting trust manager
-        try {
-            SSLContext sc = SSLContext.getInstance("SSL");
-            sc.init(null, trustAllCerts, new java.security.SecureRandom());
-            oldSslSocketFactory = HttpsURLConnection.getDefaultSSLSocketFactory();
-            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-        } catch (Exception e) {
-        }
-        return oldSslSocketFactory;
-    }
-
-    private void resetSSLSocketFactory(SSLSocketFactory sslSocketFactory) {
-        HttpsURLConnection.setDefaultSSLSocketFactory(sslSocketFactory);
-    }
-
     @ActionMapping("loginExtractorAction")
     public void loginExtractorAction(ActionRequest request, @ModelAttribute LoginExtractor loginExtractor,
             Model model,  PortletPreferences prefs) {
@@ -196,6 +156,9 @@ public class CSEditController {
                     }
                     if (loginField.isPasswordField()) {
                         portletConfig.setSitePasswordField(loginField.getFieldName());
+                    }
+                    if (loginField.isDynamicField()) {
+                        portletConfig.setDynamicField(loginField.getFieldName());
                     }
                     if (loginField.isExtraField()) {
                         if (hidden.length() > 0) {
