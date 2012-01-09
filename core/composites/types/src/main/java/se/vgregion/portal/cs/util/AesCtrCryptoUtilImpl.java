@@ -77,25 +77,9 @@ public class AesCtrCryptoUtilImpl implements CryptoUtil {
     @Override
     public String encrypt(String value) throws GeneralSecurityException {
         if (!keyFile.exists()) {
-            KeyGenerator keyGen = KeyGenerator.getInstance(AES);
-            keyGen.init(KEY_SIZE);
-            SecretKey sk = keyGen.generateKey();
-            FileWriter fw = null;
-            try {
-                fw = new FileWriter(keyFile);
-                fw.write(byteArrayToHexString(sk.getEncoded()));
-                fw.flush();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    fw.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+            throw new IllegalStateException("The encryption file [" + keyFile.getAbsolutePath() + "] must exist.");
         }
-
+        
         SecretKeySpec sks = getSecretKeySpec();
 
         Cipher cipher = Cipher.getInstance(ALGORITHM);
@@ -173,7 +157,7 @@ public class AesCtrCryptoUtilImpl implements CryptoUtil {
         }
     }
 
-    private String byteArrayToHexString(byte[] b) {
+    private static String byteArrayToHexString(byte[] b) {
         StringBuffer sb = new StringBuffer(b.length * 2);
         final int ffHex = 0xff;
         final int n16 = 16;
@@ -187,7 +171,7 @@ public class AesCtrCryptoUtilImpl implements CryptoUtil {
         return sb.toString().toUpperCase(Locale.US);
     }
 
-    private byte[] hexStringToByteArray(String s) {
+    private static byte[] hexStringToByteArray(String s) {
         final int radix = 16;
         byte[] b = new byte[s.length() / 2];
         for (int i = 0; i < b.length; i++) {
@@ -197,17 +181,48 @@ public class AesCtrCryptoUtilImpl implements CryptoUtil {
         }
         return b;
     }
+    
+    public static void createKeyFile(File keyFile) {
+        FileWriter fw = null;
+        try {
+            KeyGenerator keyGen = KeyGenerator.getInstance(AES);
+            keyGen.init(KEY_SIZE);
+            SecretKey sk = keyGen.generateKey();
+            fw = null;
+            fw = new FileWriter(keyFile);
+            fw.write(byteArrayToHexString(sk.getEncoded()));
+            fw.flush();
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        } catch (NoSuchAlgorithmException e) {
+            throw new IllegalStateException(e);
+        } finally {
+            try {
+                if (fw != null) {
+                    fw.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     /**
      * Main method used for creating initial key file.
      *
      * @param args - not used
      */
-    public static void main(String[] args) {
-        final String keyFile = "./howto.key";
+    public static void main(String[] args) throws NoSuchAlgorithmException {
+        final String keyFileName = "./howto.key";
         final String pwdFile = "./howto.properties";
 
-        AesCtrCryptoUtilImpl cryptoUtils = new AesCtrCryptoUtilImpl(new File(keyFile));
+        File keyFile = new File(keyFileName);
+
+        if (!keyFile.exists()) {
+            createKeyFile(keyFile);
+        }
+        
+        AesCtrCryptoUtilImpl cryptoUtils = new AesCtrCryptoUtilImpl(keyFile);
 
         String clearPwd = "0123456789abcdef0123456789abcdef";
 
