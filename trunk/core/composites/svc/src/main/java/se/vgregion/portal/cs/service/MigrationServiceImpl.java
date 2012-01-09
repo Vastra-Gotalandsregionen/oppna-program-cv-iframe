@@ -26,9 +26,6 @@ public class MigrationServiceImpl implements MigrationService {
 
     private static final Logger LOGGER = Logger.getLogger(MigrationServiceImpl.class.getName());
 
-    @Value("${keyFilePath}")
-    private String keyFilePath;
-
     @Autowired
     private UserSiteCredentialRepository repository;
 
@@ -145,10 +142,6 @@ public class MigrationServiceImpl implements MigrationService {
      */
     public Collection<UserSiteCredential> findAll() {
         return repository.findAll();
-    }
-
-    public String getKeyFilePath() {
-        return keyFilePath;
     }
 
 }

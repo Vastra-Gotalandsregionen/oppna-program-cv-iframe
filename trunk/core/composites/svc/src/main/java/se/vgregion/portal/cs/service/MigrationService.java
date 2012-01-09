@@ -55,11 +55,4 @@ public interface MigrationService {
      */
     Collection<UserSiteCredential> findAll();
 
-    /**
-     * Getter for keyFilePath.
-     *
-     * @return keyFilePath
-     */
-    String getKeyFilePath();
-
 }
