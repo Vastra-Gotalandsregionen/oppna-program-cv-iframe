@@ -85,6 +85,11 @@ public class MigrationServiceImpl implements MigrationService {
     @Transactional
     public File migrateAndUpdateKey() {
         File newKeyFile = new File(newCvKeyPath);
+
+        if (!newKeyFile.exists()) {
+            ctrCryptoUtil.createKeyFile(newKeyFile);
+        }
+        
         AesCtrCryptoUtilImpl aesCtrCryptoUtilNew = new AesCtrCryptoUtilImpl(newKeyFile);
         Collection<UserSiteCredential> all = findAll();
         for (UserSiteCredential usc : all) {
