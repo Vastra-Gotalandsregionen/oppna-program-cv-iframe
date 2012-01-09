@@ -10,7 +10,7 @@
   <context:component-scan base-package="se.vgregion.portal.cs.domain"/>
 
   <bean id="cryptoUtil" name="cryptoUtil" class="se.vgregion.portal.cs.util.AesCtrCryptoUtilImpl">
-    <constructor-arg value="classpath:security/cv.key"/>
+    <constructor-arg value="${user.home}/.cs/cv.key"/>
   </bean>
 
 </beans>
