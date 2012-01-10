@@ -7,7 +7,7 @@ In a portal the user expects a "single sign on" experience. This is often not ea
 
 cs-iframe is an efficient way to reuse existing investment without having to do a lot of rework and still let the users have an "SSO" experience of the portal site. 
 
-= Normal use =
+= Normal use (iFrame) =
 
 In normal use CS-iFrame keeps itself invisible pretty much, leaving the space to the content inside the iFrame.
 
