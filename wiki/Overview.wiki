@@ -1,29 +1,31 @@
-#summary CsIFrame
+#summary CS-iFrame
 #sidebar TableOfContents
 
 = Introduction =
 
-In a portal the user expects a "single sign on" experience. This is often not easily accomplished without doing extensive changes to existing services. CsIFrame take an easier route, it makes it easy for a user to save the login credentials once. The credentials are then stored in a secure way and are reused to automatically log into the site on subsequent visits.
+In a portal the user expects a "single sign on" experience. This is often not easily accomplished without doing extensive changes to existing services. CS-iFrame take an easier route, it makes it easy for users to store the login credentials. The credentials are then saved in a secure way and are then reused to automatically log into the site on subsequent visits.
 
 cs-iframe is an efficient way to reuse existing investment without having to do a lot of rework and still let the users have an "SSO" experience of the portal site. 
 
 = Normal use =
 
-In normal use CsIFrame keeps itself invisible pretty much, leaving the space to the content inside the iFrame.
+In normal use CS-iFrame keeps itself invisible pretty much, leaving the space to the content inside the iFrame.
 
 [http://oppna-program-cv-iframe.googlecode.com/svn/wiki/CS-controls.png]
 
+When user credentials are stored for a site, CS-iFrame will automatically use these to log in. On first accessing CS-iFrame, before credentials has been provided, the user will be directed to the credentials page. 
+
 There are two links in the top left corner, one to give access to the credentials for the site, and one to a help page.
 
-The credential page is the same page a user encounter the first time he tries to access the site. No credentials are stored and without them it isn't possible to login.
+The credential page is the same page a user encounter the first time he tries to access the site. If the stored credentials are wrong it isn't possible to login though CS-iFrame will try and fail and the site will probably redirect to it's own login page, login information provided on this page will not be captured and cannot be used by CS-iFrame.
 
 [http://oppna-program-cv-iframe.googlecode.com/svn/wiki/CS-change-login.png]
 
-There is a title, a short description of the service - these messages are configured in [CsAdminConfig cs-admin] and finally username and password.
+There is a title, a short description of the service - these messages are configured in [CsAdminConfig CS-Admin] and finally username and password.
 
 The username and password will be stored in a secure way and used to automatically log in the user to the site. 
 
-The username may not be same as the portal-uid, it is the credentials for the external site and these credentials keept by CS-Admin for the current portal user.
+The username may not be same as the portal-uid, it is the credentials for the external site and these credentials are keept by CS-Admin for the current portal user.
 
 As an extra security precaution it is possible to lock down access to use the portal-uid. This is possible to do for external sites use the same username as the portal-uid. Then the user only has to fill out password, the username cannot be changed. 
 
