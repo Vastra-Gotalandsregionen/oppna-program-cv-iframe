@@ -41,7 +41,14 @@
               name="fm"
               id="fm">
             <input name="${portletConfig.siteUserNameField}" type="hidden" value="${siteCredential.siteUser}"/>
-            <input name="${portletConfig.sitePasswordField}" type="hidden" value="${siteCredential.sitePassword}"/>
+            <c:choose>
+                <c:when test="${portletConfig.rdEncode}">
+                    <input name="${portletConfig.sitePasswordField}" type="hidden" value="${rdPass}"/>
+                </c:when>
+                <c:otherwise>
+                    <input name="${portletConfig.sitePasswordField}" type="hidden" value="${siteCredential.sitePassword}"/>
+                </c:otherwise>
+            </c:choose>
 
             <c:forEach var="entry" items="${portletConfig.hiddenVarialbleMap}">
                 <input name="${entry.key}" value="${entry.value}" type="hidden"/>
@@ -66,7 +73,14 @@
               name="fm"
               id="fm">
             <input name="${portletConfig.siteUserNameField}" type="hidden" value="${siteCredential.siteUser}"/>
-            <input name="${portletConfig.sitePasswordField}" type="hidden" value="${siteCredential.sitePassword}"/>
+            <c:choose>
+                <c:when test="${portletConfig.rdEncode}">
+                    <input name="${portletConfig.sitePasswordField}" type="hidden" value="${rdPass}"/>
+                </c:when>
+                <c:otherwise>
+                    <input name="${portletConfig.sitePasswordField}" type="hidden" value="${siteCredential.sitePassword}"/>
+                </c:otherwise>
+            </c:choose>
 
             <c:forEach var="entry" items="${portletConfig.hiddenVarialbleMap}">
                 <input name="${entry.key}" value="${entry.value}" type="hidden"/>
