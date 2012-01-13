@@ -146,7 +146,10 @@
                 </tr>
                 <tr>
                     <td><label for="${ns}sitePasswordField">Password Field Name</label></td>
-                    <td><form:input path="sitePasswordField" id="${ns}sitePasswordField" size="80"/></td>
+                    <td>
+                        <form:input path="sitePasswordField" id="${ns}sitePasswordField" size="80"/>
+                        <form:checkbox path="rdEncode" id="${ns}rdEncode"/> RD-encode
+                    </td>
                 </tr>
                 <tr>
                     <td><label for="${ns}dynamicField">Dynamic Field Name</label></td>

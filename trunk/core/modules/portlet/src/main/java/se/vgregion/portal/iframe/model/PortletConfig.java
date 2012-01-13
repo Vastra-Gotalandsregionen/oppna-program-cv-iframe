@@ -19,17 +19,16 @@
 
 package se.vgregion.portal.iframe.model;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 
 import javax.portlet.PortletPreferences;
 import javax.portlet.ReadOnlyException;
 import javax.portlet.ValidatorException;
-
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
@@ -50,6 +49,7 @@ public class PortletConfig implements Serializable {
     private boolean sslUrlsOnly;
     private String siteUserNameField;
     private String sitePasswordField;
+    private boolean rdEncode;
     private String hiddenVariables;
     private String dynamicField;
     private String dynamicFieldAction;
@@ -91,6 +91,7 @@ public class PortletConfig implements Serializable {
         portletConfig.setSslUrlsOnly(Boolean.valueOf(prefs.getValue("sslUrlsOnly", "false")));
         portletConfig.setSiteUserNameField(prefs.getValue("user-name-field", ""));
         portletConfig.setSitePasswordField(prefs.getValue("password-field", ""));
+        portletConfig.setRdEncode(Boolean.valueOf(prefs.getValue("rd-encode", "false")));
         portletConfig.setDynamicField(prefs.getValue("dynamic-field", ""));
         portletConfig.setDynamicFieldAction(prefs.getValue("dynamic-field-action", ""));
         portletConfig.setHiddenVariables(prefs.getValue("hidden-variables", ""));
@@ -126,6 +127,7 @@ public class PortletConfig implements Serializable {
             prefs.setValue("sslUrlsOnly", String.valueOf(isSslUrlsOnly()));
             prefs.setValue("user-name-field", getSiteUserNameField());
             prefs.setValue("password-field", getSitePasswordField());
+            prefs.setValue("rd-encode", String.valueOf(isRdEncode()));
             prefs.setValue("dynamic-field", getDynamicField());
             prefs.setValue("dynamic-field-action", getDynamicFieldAction());
             prefs.setValue("hidden-variables", getHiddenVariables());
@@ -251,6 +253,14 @@ public class PortletConfig implements Serializable {
 
     public void setSitePasswordField(String sitePasswordField) {
         this.sitePasswordField = sitePasswordField;
+    }
+
+    public boolean isRdEncode() {
+        return rdEncode;
+    }
+
+    public void setRdEncode(boolean rdEncode) {
+        this.rdEncode = rdEncode;
     }
 
     public String getHiddenVariables() {

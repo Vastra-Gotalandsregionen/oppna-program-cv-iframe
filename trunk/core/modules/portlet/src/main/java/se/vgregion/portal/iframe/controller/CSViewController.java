@@ -22,6 +22,7 @@ package se.vgregion.portal.iframe.controller;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,13 @@ import se.vgregion.portal.cs.domain.UserSiteCredential;
 import se.vgregion.portal.cs.service.CredentialService;
 import se.vgregion.portal.iframe.model.PortletConfig;
 
-import javax.portlet.*;
+import javax.portlet.ActionRequest;
+import javax.portlet.PortletPreferences;
+import javax.portlet.PortletRequest;
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
+import javax.portlet.ResourceRequest;
+import javax.portlet.WindowState;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -198,6 +205,11 @@ public class CSViewController {
             model.addAttribute("dynamicValue", dynamicValue);
         }
 
+        // 4: RD encode
+        if (portletConfig.isRdEncode()) {
+            model.addAttribute("rdPass", encodeRaindancePassword(lookupUid(req), portletConfig));
+        }
+
         URI src = null;
         try {
             src = new URI(portletConfig.getSrc());
@@ -223,7 +235,7 @@ public class CSViewController {
     private String lookupDynamicValue(PortletConfig portletConfig) {
         try {
             Document doc = new JSoupHelper().invoke(new URL(portletConfig.getDynamicFieldAction()), 1500);
-            String dynamicValue = doc.getElementsByTag("body").get(0).text().trim()
+            String dynamicValue = doc.select("body").get(0).text().trim()
                     .replaceAll("\n\r", "")
                     .replaceAll("\r", "")
                     .replaceAll("\n", "");
@@ -233,6 +245,44 @@ public class CSViewController {
             e.printStackTrace();
             return "";
         }
+    }
+    
+    private String encodeRaindancePassword(String uid, PortletConfig portletConfig) {
+        try {
+            Document doc = new JSoupHelper().invoke(new URL(portletConfig.getSrc()), 1500);
+
+            Element dynamicValue = doc.getElementById("loginForm:_idJsp10");
+            String onClick = dynamicValue.attr("onclick");
+            String sessionKey = onClick.split("'")[3];
+            UserSiteCredential siteCredential = credentialService.getUserSiteCredential(uid,
+                    portletConfig.getSiteKey());
+
+            return encodeRaindance(siteCredential.getSitePassword(), sessionKey);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    private String encodeRaindance(String sitePassword, String sessionKey) {
+        String tot = (sitePassword.length() > 9) ? ""+sitePassword.length() : "0" + sitePassword.length();
+        String workStr = sessionKey.substring(0, 5) + tot + sitePassword + sessionKey.substring(5);
+        
+        StringBuilder sb = new StringBuilder();
+        for (int i=0; i<workStr.length(); i++) {
+            int tmp = workStr.charAt(i);
+            if (tmp % 2 > 0) {
+                tmp = (tmp * 3) + 42;
+            } else {
+                tmp = (tmp * 2) + 20;
+            }
+            
+            String pre = (tmp < 10) ? "00" : (tmp < 100) ? "0" : "";
+            
+            sb.append(pre).append(tmp);
+        }
+        
+        return sb.toString();
     }
 
     private void debug(ResourceRequest req, String proxyFormAction) {
