@@ -120,6 +120,9 @@ public class CSEditController {
             LoginForm loginForm = new LoginForm();
             loginForm.setMethod(form.getMethod());
             loginForm.setAction(form.getAction());
+            if (loginforms.size() == 1) {
+                loginForm.setUse(true);
+            }
 
             List<LoginField> loginFieldList = new ArrayList<LoginField>();
             for (FormField formField : form.getFormFields()) {
