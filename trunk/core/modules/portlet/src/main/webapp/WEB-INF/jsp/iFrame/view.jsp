@@ -92,7 +92,14 @@
                 var preIFrameSrc = '${preIFrameSrc}';
                 var linkout = '${myPortletConfig.linkout}';
                 if (preIFrameSrc == iFrameSrc) {
-                    iFrame.setAttribute('src', iFrameSrc);
+                    if (linkout == 'true') {
+                        var link = A.one('#<portlet:namespace />preLogin');
+                        link.setAttribute('href', iFrameSrc);
+                        link.setAttribute('target', '${myPortletConfig.linkoutTarget}');
+                        link.simulate('click');
+                    } else {
+                        iFrame.setAttribute('src', iFrameSrc);
+                    }
                 } else {
                     if (linkout == 'true') {
                         var link = A.one('#<portlet:namespace />preLogin');

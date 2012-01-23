@@ -83,6 +83,7 @@ public class CSViewController {
     @RenderMapping
     public String showView(PortletPreferences prefs, RenderRequest req, RenderResponse resp, ModelMap model,
             @ModelAttribute("postLogin") String postLogin) {
+        // Resolve postLogin from friendly-url
         String newPostLogin = req.getParameter("postLogin");
         while (StringUtils.isNotBlank(newPostLogin) && newPostLogin.endsWith("null")) {
             newPostLogin = newPostLogin.substring(0, newPostLogin.length() - 4);
@@ -95,7 +96,9 @@ public class CSViewController {
                 e.printStackTrace();
             }
         }
+        // ------------------------------------
 
+        // Site Credentials
         PortletConfig portletConfig = PortletConfig.getInstance(prefs);
         log.debug("Creds: {}", portletConfig);
 
@@ -107,7 +110,9 @@ public class CSViewController {
             model.addAttribute("portletConfig", portletConfig);
             return "userCredentialForm";
         }
+        // ------------------------------------
 
+        // PreLogin action, iFrame url (url to virtual form, or an basic auth url to site)
         String iFrameSrc = prepareView(resp, req, portletConfig, siteCredential);
         String preIFrameSrc;
         if (StringUtils.isNotBlank(portletConfig.getPreIFrameAction())) {
@@ -118,11 +123,14 @@ public class CSViewController {
 
         String baseSrc = getBaseSrc(iFrameSrc);
 
-        String iFrameHeight = getIFrameHeight(req, portletConfig);
 
         model.addAttribute("iFrameSrc", iFrameSrc);
         model.addAttribute("preIFrameSrc", preIFrameSrc);
         model.addAttribute("baseSrc", baseSrc);
+        // ------------------------------------
+
+        // iFrame display configuration
+        String iFrameHeight = getIFrameHeight(req, portletConfig);
         model.addAttribute("iFrameHeight", iFrameHeight);
 
         model.addAttribute("border", portletConfig.getHtmlAttribute("border", "0"));
@@ -138,6 +146,7 @@ public class CSViewController {
         String linkDisplay = portletConfig.isAuth() ? "display:block;" : "display:none;";
         model.addAttribute("link_display", linkDisplay);
         model.addAttribute("myPortletConfig", portletConfig);
+        // ------------------------------------
 
         return "view";
     }
@@ -345,13 +354,16 @@ public class CSViewController {
 
         if (portletConfig.isAuth()) {
             if (portletConfig.getAuthType().equals("basic")) {
-                // goto src with basic authentication
-                int pos = src.indexOf("://");
+                String[] splitUrl = src.split("://");
+                if (splitUrl.length != 2) {
+                    src = ""; // Cannot be processed
+                } else {
+                    String protocol = splitUrl[0];
+                    String url = splitUrl[1];
 
-                String protocol = src.substring(0, pos + 3);
-                String url = src.substring(pos + 3, src.length());
-
-                src = protocol + siteCredential.getSiteUser() + ":" + siteCredential.getSitePassword() + "@" + url;
+                    src = String.format("%s://%s:%s@%s", protocol, siteCredential.getSiteUser(),
+                            siteCredential.getSitePassword(), url);
+                }
             } else {
                 // goto proxy for form login
                 src = resp.createResourceURL().toString();
