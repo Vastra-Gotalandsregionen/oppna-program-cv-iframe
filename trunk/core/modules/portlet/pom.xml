@@ -17,15 +17,6 @@
 
   <build>
     <finalName>cs-iframe-portlet</finalName>
-    <plugins>
-      <plugin>
-        <!-- Configure eclipse plug-in to generate a context root that does not have the version number on it -->
-        <artifactId>maven-eclipse-plugin</artifactId>
-        <configuration>
-          <wtpContextName>${project.artifactId}</wtpContextName>
-        </configuration>
-      </plugin>
-    </plugins>
   </build>
 
   <dependencies>
@@ -82,11 +73,20 @@
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
+      <artifactId>spring-aop</artifactId>
+      <version>${spring.fw.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
       <artifactId>spring-aspects</artifactId>
     </dependency>
     <dependency>
       <groupId>org.aspectj</groupId>
       <artifactId>aspectjweaver</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>cglib</groupId>
+      <artifactId>cglib-nodep</artifactId>
     </dependency>
     <dependency>
       <groupId>commons-codec</groupId>
@@ -133,13 +133,13 @@
     <dependency>
       <groupId>com.liferay.portal</groupId>
       <artifactId>portal-service</artifactId>
-      <version>6.0.6</version>
+      <version>6.0.11</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>se.vgregion.commons-util</groupId>
       <artifactId>commons-util-core-bc-composite-security</artifactId>
-      <version>3.10</version>
+      <version>3.11</version>
     </dependency>
 
     <!-- Test -->

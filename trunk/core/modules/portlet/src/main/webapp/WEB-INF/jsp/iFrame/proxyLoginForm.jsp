@@ -31,32 +31,39 @@
     <meta content="0" http-equiv="Expires"/>
 </head>
 
-<body onLoad="setTimeout('document.fm.submit()', 100);">
+<body onload="autoOpen();">
 
 <c:choose>
     <c:when test="${portletConfig.linkout}">
-        <form action="${proxyFormAction}"
-              method="${portletConfig.formMethod}"
-              target="${portletConfig.linkoutTarget}"
-              name="fm"
-              id="fm">
-            <input name="${portletConfig.siteUserNameField}" type="hidden" value="${siteCredential.siteUser}"/>
-            <c:choose>
-                <c:when test="${portletConfig.rdEncode}">
-                    <input name="${portletConfig.sitePasswordField}" type="hidden" value="${rdPass}"/>
-                </c:when>
-                <c:otherwise>
-                    <input name="${portletConfig.sitePasswordField}" type="hidden" value="${siteCredential.sitePassword}"/>
-                </c:otherwise>
-            </c:choose>
+        <c:choose>
+            <c:when test="${portletConfig.authType == 'form'}">
+                <form action="${proxyAction}"
+                      method="${portletConfig.formMethod}"
+                      target="${portletConfig.linkoutTarget}"
+                      name="<portlet:namespace />proxy_login"
+                      id="<portlet:namespace />proxy_login">
+                    <input name="${portletConfig.siteUserNameField}" type="hidden" value="${siteCredential.siteUser}"/>
+                    <c:choose>
+                        <c:when test="${portletConfig.rdEncode}">
+                            <input name="${portletConfig.sitePasswordField}" type="hidden" value="${rdPass}"/>
+                        </c:when>
+                        <c:otherwise>
+                            <input name="${portletConfig.sitePasswordField}" type="hidden" value="${siteCredential.sitePassword}"/>
+                        </c:otherwise>
+                    </c:choose>
 
-            <c:forEach var="entry" items="${portletConfig.hiddenVarialbleMap}">
-                <input name="${entry.key}" value="${entry.value}" type="hidden"/>
-            </c:forEach>
-            <c:if test="${hasDynamicField}">
-                <input name="${portletConfig.dynamicField}" value="${dynamicValue}" type="hidden"/>
-            </c:if>
-        </form>
+                    <c:forEach var="entry" items="${portletConfig.hiddenVarialbleMap}">
+                        <input name="${entry.key}" value="${entry.value}" type="hidden"/>
+                    </c:forEach>
+                    <c:if test="${hasDynamicField}">
+                        <input name="${portletConfig.dynamicField}" value="${dynamicValue}" type="hidden"/>
+                    </c:if>
+                </form>
+            </c:when>
+            <c:otherwise>
+                <a id="<portlet:namespace />proxy_login" name="<portlet:namespace />proxy_login" href="${proxyAction}" target="${portletConfig.linkoutTarget}"></a>
+            </c:otherwise>
+        </c:choose>
 
         <p>${siteKey.title} laddas i ett eget f&ouml;nster...</p>
         <c:if test="${postLoginLink}">
@@ -68,30 +75,73 @@
         </c:if>
     </c:when>
     <c:otherwise>
-        <form action="${proxyFormAction}"
-              method="${portletConfig.formMethod}"
-              name="fm"
-              id="fm">
-            <input name="${portletConfig.siteUserNameField}" type="hidden" value="${siteCredential.siteUser}"/>
-            <c:choose>
-                <c:when test="${portletConfig.rdEncode}">
-                    <input name="${portletConfig.sitePasswordField}" type="hidden" value="${rdPass}"/>
-                </c:when>
-                <c:otherwise>
-                    <input name="${portletConfig.sitePasswordField}" type="hidden" value="${siteCredential.sitePassword}"/>
-                </c:otherwise>
-            </c:choose>
+        <c:choose>
+            <c:when test="${portletConfig.authType == 'form'}">
+                <form action="${proxyAction}"
+                      method="${portletConfig.formMethod}"
+                      name="<portlet:namespace />proxy_login"
+                      id="<portlet:namespace />proxy_login">
+                    <input name="${portletConfig.siteUserNameField}" type="hidden" value="${siteCredential.siteUser}"/>
+                    <c:choose>
+                        <c:when test="${portletConfig.rdEncode}">
+                            <input name="${portletConfig.sitePasswordField}" type="hidden" value="${rdPass}"/>
+                        </c:when>
+                        <c:otherwise>
+                            <input name="${portletConfig.sitePasswordField}" type="hidden" value="${siteCredential.sitePassword}"/>
+                        </c:otherwise>
+                    </c:choose>
 
-            <c:forEach var="entry" items="${portletConfig.hiddenVarialbleMap}">
-                <input name="${entry.key}" value="${entry.value}" type="hidden"/>
-            </c:forEach>
-            <c:if test="${hasDynamicField}">
-                <input name="${portletConfig.dynamicField}" value="${dynamicValue}" type="hidden"/>
-            </c:if>
-        </form>
+                    <c:forEach var="entry" items="${portletConfig.hiddenVarialbleMap}">
+                        <input name="${entry.key}" value="${entry.value}" type="hidden"/>
+                    </c:forEach>
+                    <c:if test="${hasDynamicField}">
+                        <input name="${portletConfig.dynamicField}" value="${dynamicValue}" type="hidden"/>
+                    </c:if>
+                </form>
+            </c:when>
+            <c:otherwise>
+                <a id="<portlet:namespace />proxy_login" name="<portlet:namespace />proxy_login" href="${proxyAction}"></a>
+            </c:otherwise>
+        </c:choose>
     </c:otherwise>
 </c:choose>
 
 </body>
 
+<script type="text/javascript">
+    function autoOpen() {
+        var loginProxy = document.getElementById('<portlet:namespace />proxy_login');
+
+        if ("form" == "${portletConfig.authType}") {
+            setTimeout(loginProxy.submit(), 100);
+        } else {
+            setTimeout(clickIfPossible(loginProxy), 100);
+        }
+    }
+
+    function clickIfPossible(link) {
+        var allowDefaultAction = true;
+        alert('apa');
+        alert(link);
+        if (link.click) {
+            link.click();
+            return;
+        } else if (document.createEvent) {
+            var e = document.createEvent('MouseEvents');
+            e.initEvent(
+                    'click'     // event type
+                    ,true      // can bubble?
+                    ,true      // cancelable?
+            );
+            allowDefaultAction = link.dispatchEvent(e);
+        }
+
+        if (allowDefaultAction) {
+            var f = document.createElement('form');
+            f.action = link.href;
+            document.body.appendChild(f);
+            f.submit();
+        }
+    }
+</script>
 </html>

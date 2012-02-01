@@ -26,14 +26,6 @@
   <listener>
     <listener-class>com.liferay.portal.kernel.servlet.PortletContextListener</listener-class>
   </listener>
-  <listener>
-    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-  </listener>
-
-  <context-param>
-    <param-name>contextConfigLocation</param-name>
-    <param-value>classpath*:/applicationContext.xml</param-value>
-  </context-param>
 
   <servlet>
     <servlet-name>view</servlet-name>
@@ -73,4 +65,10 @@
     <url-pattern>/csadmin/*</url-pattern>
   </servlet-mapping>
 
+  <jsp-config>
+    <taglib>
+      <taglib-uri>http://java.sun.com/portlet_2_0</taglib-uri>
+      <taglib-location>/WEB-INF/tld/liferay-portlet.tld</taglib-location>
+    </taglib>
+  </jsp-config>
 </web-app>
