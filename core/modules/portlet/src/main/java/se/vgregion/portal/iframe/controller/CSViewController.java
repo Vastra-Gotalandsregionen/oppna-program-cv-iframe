@@ -83,6 +83,20 @@ public class CSViewController {
     @RenderMapping
     public String showView(PortletPreferences prefs, RenderRequest req, RenderResponse resp, ModelMap model,
             @ModelAttribute("postLogin") String postLogin) {
+        PortletConfig portletConfig = PortletConfig.getInstance(prefs);
+        log.debug("Creds: {}", portletConfig);
+
+        // Site Credentials
+        SiteKey siteKey = credentialService.getSiteKey(portletConfig.getSiteKey());
+        model.addAttribute("siteKey", siteKey);
+
+        UserSiteCredential siteCredential = new UserSiteCredential();
+        if (siteKey != null && !credentialsAvailable(req, model, portletConfig, siteCredential, siteKey)) {
+            model.addAttribute("portletConfig", portletConfig);
+            return "userCredentialForm";
+        }
+        // ------------------------------------
+
         // Resolve postLogin from friendly-url
         String newPostLogin = req.getParameter("postLogin");
         while (StringUtils.isNotBlank(newPostLogin) && newPostLogin.endsWith("null")) {
@@ -91,24 +105,13 @@ public class CSViewController {
         if (StringUtils.isNotBlank(newPostLogin)) {
             try {
                 postLogin = new String(Base64.decodeBase64(newPostLogin));
+                if ("basic".equals(portletConfig.getAuthType())) {
+                    postLogin = prepareBasicAuthAction(siteCredential, postLogin);
+                }
                 model.addAttribute("postLogin", postLogin);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
-        // ------------------------------------
-
-        // Site Credentials
-        PortletConfig portletConfig = PortletConfig.getInstance(prefs);
-        log.debug("Creds: {}", portletConfig);
-
-        SiteKey siteKey = credentialService.getSiteKey(portletConfig.getSiteKey());
-        model.addAttribute("siteKey", siteKey);
-
-        UserSiteCredential siteCredential = new UserSiteCredential();
-        if (siteKey != null && !credentialsAvailable(req, model, portletConfig, siteCredential, siteKey)) {
-            model.addAttribute("portletConfig", portletConfig);
-            return "userCredentialForm";
         }
         // ------------------------------------
 
@@ -191,7 +194,7 @@ public class CSViewController {
 
         PortletConfig portletConfig = PortletConfig.getInstance(prefs);
         model.addAttribute("portletConfig", portletConfig);
-        if (!portletConfig.isAuth() || !"form".equals(portletConfig.getAuthType())) {
+        if (!portletConfig.isAuth()) {
             return "view";
         }
 
@@ -223,15 +226,19 @@ public class CSViewController {
         try {
             src = new URI(portletConfig.getSrc());
 
-            String proxyFormAction;
+            String proxyAction;
             if (portletConfig.getFormAction() == null || portletConfig.getFormAction().length() < 1) {
-                proxyFormAction = src.toString();
+                proxyAction = src.toString();
             } else {
-                proxyFormAction = src.resolve(portletConfig.getFormAction()).toString();
+                proxyAction = src.resolve(portletConfig.getFormAction()).toString();
             }
 
-            model.addAttribute("proxyFormAction", proxyFormAction);
-            debug(req, proxyFormAction);
+            if ("basic".equals(portletConfig.getAuthType())) {
+                proxyAction = prepareBasicAuthAction(siteCredential, proxyAction);
+            }
+
+            model.addAttribute("proxyAction", proxyAction);
+            debug(req, proxyAction);
 
             return "proxyLoginForm";
         } catch (URISyntaxException e) {
@@ -239,6 +246,20 @@ public class CSViewController {
              return "help";
         }
 
+    }
+
+    private String prepareBasicAuthAction(UserSiteCredential siteCredential, String action) {
+        String[] splitUrl = action.split("://");
+        if (splitUrl.length != 2) {
+            return action; // Cannot be processed
+        } else {
+            String protocol = splitUrl[0];
+            String url = splitUrl[1];
+
+            action = String.format("%s://%s:%s@%s", protocol, siteCredential.getSiteUser(),
+                    siteCredential.getSitePassword(), url);
+        }
+        return action;
     }
 
     private String lookupDynamicValue(PortletConfig portletConfig) {
@@ -353,21 +374,21 @@ public class CSViewController {
         String src = portletConfig.getSrc();
 
         if (portletConfig.isAuth()) {
-            if (portletConfig.getAuthType().equals("basic")) {
-                String[] splitUrl = src.split("://");
-                if (splitUrl.length != 2) {
-                    src = ""; // Cannot be processed
-                } else {
-                    String protocol = splitUrl[0];
-                    String url = splitUrl[1];
-
-                    src = String.format("%s://%s:%s@%s", protocol, siteCredential.getSiteUser(),
-                            siteCredential.getSitePassword(), url);
-                }
-            } else {
+//            if (portletConfig.getAuthType().equals("basic")) {
+//                String[] splitUrl = src.split("://");
+//                if (splitUrl.length != 2) {
+//                    src = ""; // Cannot be processed
+//                } else {
+//                    String protocol = splitUrl[0];
+//                    String url = splitUrl[1];
+//
+//                    src = String.format("%s://%s:%s@%s", protocol, siteCredential.getSiteUser(),
+//                            siteCredential.getSitePassword(), url);
+//                }
+//            } else {
                 // goto proxy for form login
                 src = resp.createResourceURL().toString();
-            }
+//            }
         }
 
         if (src.length() > 0) {

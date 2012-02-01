@@ -50,10 +50,10 @@
       <a class="vgr-portlet-help" href="${showHelp}" title="Hjälp">Hjälp</a>
     </span>
     <span>
-        <a id="<portlet:namespace />preLogin"></a>
+        <a id="<portlet:namespace />preLogin" href="" target=""></a>
     </span>
     <span>
-        <a id="<portlet:namespace />postLogin"></a>
+        <a id="<portlet:namespace />postLogin" href=""></a>
     </span>
     <br/>
 </div>
@@ -91,24 +91,18 @@
                 var iFrameSrc = '${iFrameSrc}';
                 var preIFrameSrc = '${preIFrameSrc}';
                 var linkout = '${myPortletConfig.linkout}';
-                if (preIFrameSrc == iFrameSrc) {
+                if (preIFrameSrc != iFrameSrc) {
                     if (linkout == 'true') {
-                        var link = A.one('#<portlet:namespace />preLogin');
-                        link.setAttribute('href', iFrameSrc);
-                        link.setAttribute('target', '${myPortletConfig.linkoutTarget}');
-                        link.simulate('click');
-                    } else {
-                        iFrame.setAttribute('src', iFrameSrc);
-                    }
-                } else {
-                    if (linkout == 'true') {
-                        var link = A.one('#<portlet:namespace />preLogin');
+                        var linkId = '<portlet:namespace />preLogin';
+                        var link = A.one('#'+linkId);
                         link.setAttribute('href', preIFrameSrc);
                         link.setAttribute('target', '${myPortletConfig.linkoutTarget}');
-                        link.simulate('click');
+                        actuateLink(linkId, link);
                     } else {
                         iFrame.setAttribute('src', preIFrameSrc);
                     }
+                } else {
+                    iFrame.setAttribute('src', iFrameSrc);
                 }
                 // ======================
 
@@ -141,21 +135,33 @@
                 // ====== Do linkout after login if a postLogin was configured ======
                 var iFrame = A.one('#<portlet:namespace />iframe');
                 A.later('2000', iFrame, function() {
-                    var postLogin = '${postLogin}';
-                    var linkout = '${myPortletConfig.linkout}';
-                    if (postLogin != 'null' && postLogin.length > 0) {
-                        if (linkout == 'true') {
-                            var link = A.one('#<portlet:namespace />postLogin');
-                            link.setAttribute('href', '${postLogin}');
-                            link.setAttribute('target', '${myPortletConfig.linkoutTarget}');
-                            link.simulate('click');
-                        } else {
-                            iFrame.setAttribute('src', '${postLogin}');
+                    if ('${myPortletConfig.authType}' == 'form') {
+                        var postLogin = '${postLogin}';
+                        var linkout = '${myPortletConfig.linkout}';
+                        if (postLogin != 'null' && postLogin.length > 0) {
+                            if (linkout == 'true') {
+                                var linkId = '<portlet:namespace />postLogin';
+                                var link = A.one('#'+linkId);
+                                link.setAttribute('href', '${postLogin}');
+                                link.setAttribute('target', '${myPortletConfig.linkoutTarget}');
+                                actuateLink(linkId, link);
+                            } else {
+                                iFrame.setAttribute('src', '${postLogin}');
+                            }
                         }
                     }
                 });
                 // ======================
 
+                function actuateLink(linkId, auiLink) {
+                    var link = document.getElementById(linkId);
+                    if (link.click) {
+                        link.click();
+                        return;
+                    } else {
+                        auiLink.simulate('click');
+                    }
+                }
 
             }
     );
