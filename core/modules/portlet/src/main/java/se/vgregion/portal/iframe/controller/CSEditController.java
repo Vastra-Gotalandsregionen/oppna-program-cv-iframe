@@ -151,6 +151,7 @@ public class CSEditController {
                 portletConfig.setFormAction(loginForm.getAction());
 
                 StringBuilder hidden = new StringBuilder("");
+                StringBuilder dynamicFields = new StringBuilder();
                 for (LoginField loginField : loginForm.getLoginFields()) {
                     if (!loginField.isUse()) continue;
 
@@ -161,7 +162,10 @@ public class CSEditController {
                         portletConfig.setSitePasswordField(loginField.getFieldName());
                     }
                     if (loginField.isDynamicField()) {
-                        portletConfig.setDynamicField(loginField.getFieldName());
+                        if (dynamicFields.length() > 0) {
+                            dynamicFields.append(", ");
+                        }
+                        dynamicFields.append(loginField.getFieldName());
                     }
                     if (loginField.isExtraField()) {
                         if (hidden.length() > 0) {
@@ -170,6 +174,7 @@ public class CSEditController {
                         hidden.append(loginField.getFieldName()).append("=").append(loginField.getFieldValue());
                     }
                 }
+                portletConfig.setDynamicField(dynamicFields.toString());
                 portletConfig.setHiddenVariables(hidden.toString());
             }
 

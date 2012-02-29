@@ -51,7 +51,9 @@ import javax.portlet.WindowState;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Collections;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -61,7 +63,7 @@ import java.util.Map;
 @RequestMapping("VIEW")
 @SessionAttributes("postLogin")
 public class CSViewController {
-    private Logger log = LoggerFactory.getLogger(CSViewController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CSViewController.class);
 
     @Autowired
     private CredentialService credentialService;
@@ -82,9 +84,9 @@ public class CSViewController {
      */
     @RenderMapping
     public String showView(PortletPreferences prefs, RenderRequest req, RenderResponse resp, ModelMap model,
-            @ModelAttribute("postLogin") String postLogin) {
+                           @ModelAttribute("postLogin") String postLogin) {
         PortletConfig portletConfig = PortletConfig.getInstance(prefs);
-        log.debug("Creds: {}", portletConfig);
+        LOGGER.debug("Creds: {}", portletConfig);
 
         // Site Credentials
         SiteKey siteKey = credentialService.getSiteKey(portletConfig.getSiteKey());
@@ -190,7 +192,7 @@ public class CSViewController {
      */
     @ResourceMapping
     public String showProxyForm(PortletPreferences prefs, ResourceRequest req, ModelMap model,
-            @ModelAttribute("postLogin") String postLogin) {
+                                @ModelAttribute("postLogin") String postLogin) {
 
         PortletConfig portletConfig = PortletConfig.getInstance(prefs);
         model.addAttribute("portletConfig", portletConfig);
@@ -213,8 +215,8 @@ public class CSViewController {
         // 3: Dynamic Field
         if (StringUtils.isNotBlank(portletConfig.getDynamicField())) {
             model.addAttribute("hasDynamicField", true);
-            String dynamicValue = lookupDynamicValue(portletConfig);
-            model.addAttribute("dynamicValue", dynamicValue);
+            Map<String, String> dynamicFieldValues = lookupDynamicValue(portletConfig);
+            model.addAttribute("dynamicFieldValues", dynamicFieldValues);
         }
 
         // 4: RD encode
@@ -243,7 +245,7 @@ public class CSViewController {
             return "proxyLoginForm";
         } catch (URISyntaxException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-             return "help";
+            return "help";
         }
 
     }
@@ -262,21 +264,32 @@ public class CSViewController {
         return action;
     }
 
-    private String lookupDynamicValue(PortletConfig portletConfig) {
+    private Map<String, String> lookupDynamicValue(PortletConfig portletConfig) {
+        Map<String, String> dynamicFieldValueMap = new HashMap<String, String>();
         try {
-            Document doc = new JSoupHelper().invoke(new URL(portletConfig.getDynamicFieldAction()), 1500);
-            String dynamicValue = doc.select("body").get(0).text().trim()
-                    .replaceAll("\n\r", "")
-                    .replaceAll("\r", "")
-                    .replaceAll("\n", "");
-            if (dynamicValue.contains("<>")) throw new Exception("Invalid value format ["+dynamicValue+"]");
-            return dynamicValue;
+            String dynamicFieldString = portletConfig.getDynamicField();
+            String[] dynamicFields = dynamicFieldString.replace(" ", "").split(",");
+            String dynamicValue;
+            for (String dynamicField : dynamicFields) {
+
+                Document doc = new JSoupHelper().invoke(new URL(portletConfig.getDynamicFieldAction()), 1500);
+                dynamicValue = doc.select("body").get(0).getElementsByAttributeValue("name", dynamicField).get(0)
+                        .attr("value")
+                        .replaceAll("\n\r", "")
+                        .replaceAll("\r", "")
+                        .replaceAll("\n", "");                
+                if (dynamicValue.contains("<>")) {
+                    throw new Exception("Invalid value format [" + dynamicValue + "]");
+                }
+                dynamicFieldValueMap.put(dynamicField, dynamicValue);
+            }
+            return dynamicFieldValueMap;
         } catch (Exception e) {
-            e.printStackTrace();
-            return "";
+            LOGGER.error(e.getMessage(), e);
+            return Collections.emptyMap();
         }
     }
-    
+
     private String encodeRaindancePassword(String uid, PortletConfig portletConfig) {
         try {
             Document doc = new JSoupHelper().invoke(new URL(portletConfig.getSrc()), 1500);
@@ -295,42 +308,42 @@ public class CSViewController {
     }
 
     private String encodeRaindance(String sitePassword, String sessionKey) {
-        String tot = (sitePassword.length() > 9) ? ""+sitePassword.length() : "0" + sitePassword.length();
+        String tot = (sitePassword.length() > 9) ? "" + sitePassword.length() : "0" + sitePassword.length();
         String workStr = sessionKey.substring(0, 5) + tot + sitePassword + sessionKey.substring(5);
-        
+
         StringBuilder sb = new StringBuilder();
-        for (int i=0; i<workStr.length(); i++) {
+        for (int i = 0; i < workStr.length(); i++) {
             int tmp = workStr.charAt(i);
             if (tmp % 2 > 0) {
                 tmp = (tmp * 3) + 42;
             } else {
                 tmp = (tmp * 2) + 20;
             }
-            
+
             String pre = (tmp < 10) ? "00" : (tmp < 100) ? "0" : "";
-            
+
             sb.append(pre).append(tmp);
         }
-        
+
         return sb.toString();
     }
 
     private void debug(ResourceRequest req, String proxyFormAction) {
-        if (log.isDebugEnabled()) {
-            log.debug("ProxyFormAction: {}", proxyFormAction);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("ProxyFormAction: {}", proxyFormAction);
 
-            log.debug("Request attributes");
+            LOGGER.debug("Request attributes");
             Enumeration attrs = req.getAttributeNames();
             while (attrs.hasMoreElements()) {
                 String attr = attrs.nextElement().toString();
-                log.debug("Request attribute: {} : {}", attr, req.getAttribute(attr));
+                LOGGER.debug("Request attribute: {} : {}", attr, req.getAttribute(attr));
             }
 
-            log.debug("Request parameters");
+            LOGGER.debug("Request parameters");
             Enumeration params = req.getParameterNames();
             while (params.hasMoreElements()) {
                 String param = params.nextElement().toString();
-                log.debug("Request parameters: {} : {}", param, req.getParameterValues(param));
+                LOGGER.debug("Request parameters: {} : {}", param, req.getParameterValues(param));
             }
         }
     }
@@ -344,7 +357,7 @@ public class CSViewController {
     @Transactional
     @ActionMapping
     public void storeUserCredential(@ModelAttribute("siteCredential") UserSiteCredential siteCredential,
-            ActionRequest req) {
+                                    ActionRequest req) {
 
         if (StringUtils.isBlank(siteCredential.getUid())) {
             throw new RuntimeException("ERROR: Unknown user. Cannot store credential.");
@@ -386,8 +399,8 @@ public class CSViewController {
 //                            siteCredential.getSitePassword(), url);
 //                }
 //            } else {
-                // goto proxy for form login
-                src = resp.createResourceURL().toString();
+            // goto proxy for form login
+            src = resp.createResourceURL().toString();
 //            }
         }
 
@@ -411,7 +424,7 @@ public class CSViewController {
     }
 
     private boolean credentialsAvailable(PortletRequest req, ModelMap model, PortletConfig portletConfig,
-            UserSiteCredential returnSiteCredential, SiteKey siteKey) {
+                                         UserSiteCredential returnSiteCredential, SiteKey siteKey) {
         boolean userSiteCredentialExist = true;
         if (portletConfig.isAuth()) {
             String uid = lookupUid(req);
