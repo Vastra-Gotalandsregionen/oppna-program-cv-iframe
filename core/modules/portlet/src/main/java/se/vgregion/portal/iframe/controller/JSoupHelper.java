@@ -7,20 +7,29 @@ import javax.net.ssl.*;
 import java.net.URL;
 
 /**
- * Created by IntelliJ IDEA.
- * Created: 2012-01-05 13:59
+ * Helper class for JSoup.
  *
  * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
  */
 public class JSoupHelper {
+
+    /**
+     * Invokes the given url and returns the response as a {@link Document}.
+     * @param target the target url
+     * @param timeout timeout in millis
+     * @return the response as a {@link Document}
+     * @throws Exception Exception
+     */
     public Document invoke(URL target, long timeout) throws Exception {
         SSLSocketFactory oldSSslSocketFactory = null;
         try {
             oldSSslSocketFactory = trustAllSSLSocketFactory();
-            return Jsoup.parse(target, 3000);
+            final int timeoutMillis = 3000;
+            return Jsoup.parse(target, timeoutMillis);
         } finally {
-            if (oldSSslSocketFactory != null)
+            if (oldSSslSocketFactory != null) {
                 resetSSLSocketFactory(oldSSslSocketFactory);
+            }
         }
     }
 
@@ -50,6 +59,7 @@ public class JSoupHelper {
             oldSslSocketFactory = HttpsURLConnection.getDefaultSSLSocketFactory();
             HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
         } catch (Exception e) {
+            throw new RuntimeException(e); // Will probably not happen
         }
         return oldSslSocketFactory;
     }

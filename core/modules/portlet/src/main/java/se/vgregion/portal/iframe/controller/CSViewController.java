@@ -57,6 +57,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Controller class for main view.
+ *
  * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
  */
 @Controller
@@ -68,6 +70,11 @@ public class CSViewController {
     @Autowired
     private CredentialService credentialService;
 
+    /**
+     * Method called by Spring to initiate the postLogin session attribute.
+     *
+     * @return an empty String
+     */
     @ModelAttribute("postLogin")
     public String initPostLogin() {
         return "";
@@ -76,10 +83,11 @@ public class CSViewController {
     /**
      * Main controllermethod. Handling of user-sitecredential availability and iFrame source linking.
      *
-     * @param prefs - portlet preferences
-     * @param req   - request
-     * @param resp  - response
-     * @param model - model
+     * @param prefs     portlet preferences
+     * @param req       request
+     * @param resp      response
+     * @param model     model
+     * @param postLogin postLogin
      * @return view
      */
     @RenderMapping
@@ -102,7 +110,8 @@ public class CSViewController {
         // Resolve postLogin from friendly-url
         String newPostLogin = req.getParameter("postLogin");
         while (StringUtils.isNotBlank(newPostLogin) && newPostLogin.endsWith("null")) {
-            newPostLogin = newPostLogin.substring(0, newPostLogin.length() - 4);
+            final int i = 4;
+            newPostLogin = newPostLogin.substring(0, newPostLogin.length() - i);
         }
         if (StringUtils.isNotBlank(newPostLogin)) {
             try {
@@ -184,9 +193,10 @@ public class CSViewController {
     /**
      * Prepare proxyLoginForm.jsp for form-based authentication.
      *
-     * @param model - model
-     * @param req   - request
-     * @param prefs - portlet preferences
+     * @param model model
+     * @param req   request
+     * @param prefs portlet preferences
+     * @param postLogin postLogin url
      * @return proxyLoginForm
      * @throws URISyntaxException
      */
@@ -272,12 +282,13 @@ public class CSViewController {
             String dynamicValue;
             for (String dynamicField : dynamicFields) {
 
-                Document doc = new JSoupHelper().invoke(new URL(portletConfig.getDynamicFieldAction()), 1500);
+                final int timeout = 5000;
+                Document doc = new JSoupHelper().invoke(new URL(portletConfig.getDynamicFieldAction()), timeout);
                 dynamicValue = doc.select("body").get(0).getElementsByAttributeValue("name", dynamicField).get(0)
                         .attr("value")
                         .replaceAll("\n\r", "")
                         .replaceAll("\r", "")
-                        .replaceAll("\n", "");                
+                        .replaceAll("\n", "");
                 if (dynamicValue.contains("<>")) {
                     throw new Exception("Invalid value format [" + dynamicValue + "]");
                 }
@@ -292,11 +303,13 @@ public class CSViewController {
 
     private String encodeRaindancePassword(String uid, PortletConfig portletConfig) {
         try {
-            Document doc = new JSoupHelper().invoke(new URL(portletConfig.getSrc()), 1500);
+            final int timeout = 5000;
+            Document doc = new JSoupHelper().invoke(new URL(portletConfig.getSrc()), timeout);
 
             Element dynamicValue = doc.getElementById("loginForm:_idJsp10");
             String onClick = dynamicValue.attr("onclick");
-            String sessionKey = onClick.split("'")[3];
+            final int i = 3;
+            String sessionKey = onClick.split("'")[i];
             UserSiteCredential siteCredential = credentialService.getUserSiteCredential(uid,
                     portletConfig.getSiteKey());
 
@@ -308,19 +321,26 @@ public class CSViewController {
     }
 
     private String encodeRaindance(String sitePassword, String sessionKey) {
-        String tot = (sitePassword.length() > 9) ? "" + sitePassword.length() : "0" + sitePassword.length();
-        String workStr = sessionKey.substring(0, 5) + tot + sitePassword + sessionKey.substring(5);
+        final int nine = 9;
+        String tot = (sitePassword.length() > nine) ? "" + sitePassword.length() : "0" + sitePassword.length();
+        final int five = 5;
+        String workStr = sessionKey.substring(0, five) + tot + sitePassword + sessionKey.substring(five);
 
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < workStr.length(); i++) {
             int tmp = workStr.charAt(i);
             if (tmp % 2 > 0) {
-                tmp = (tmp * 3) + 42;
+                final int three = 3;
+                final int fortyTwo = 42;
+                tmp = (tmp * three) + fortyTwo;
             } else {
-                tmp = (tmp * 2) + 20;
+                final int twenty = 20;
+                tmp = (tmp * 2) + twenty;
             }
 
-            String pre = (tmp < 10) ? "00" : (tmp < 100) ? "0" : "";
+            final int ten = 10;
+            final int hundred = 100;
+            String pre = (tmp < ten) ? "00" : (tmp < hundred) ? "0" : "";
 
             sb.append(pre).append(tmp);
         }
@@ -381,7 +401,8 @@ public class CSViewController {
         }
     }
 
-    private String prepareView(RenderResponse resp, RenderRequest req, PortletConfig portletConfig, UserSiteCredential siteCredential) {
+    private String prepareView(RenderResponse resp, RenderRequest req, PortletConfig portletConfig,
+                               UserSiteCredential siteCredential) {
         String iFrameSrc = getDefaultTarget();
 
         String src = portletConfig.getSrc();
@@ -464,9 +485,11 @@ public class CSViewController {
 
     private String getBaseSrc(String iFrameSrc) {
         String baseSrc = iFrameSrc;
-        int lastSlashPos = iFrameSrc.substring(7).lastIndexOf("/");
+        final int seven = 7;
+        int lastSlashPos = iFrameSrc.substring(seven).lastIndexOf("/");
         if (lastSlashPos != -1) {
-            baseSrc = iFrameSrc.substring(0, lastSlashPos + 8);
+            final int eight = 8;
+            baseSrc = iFrameSrc.substring(0, lastSlashPos + eight);
         }
         return baseSrc;
     }

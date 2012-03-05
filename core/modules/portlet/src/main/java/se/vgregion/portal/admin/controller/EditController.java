@@ -17,6 +17,8 @@ import se.vgregion.portal.cs.service.CredentialService;
 import java.util.*;
 
 /**
+ * Controller class for the edit view.
+ *
  * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
  */
 @Controller
@@ -27,16 +29,30 @@ public class EditController {
     @Autowired
     private CredentialService credentialService;
 
+    /**
+     * Shows the edit view.
+     *
+     * @param model Model
+     * @return a view
+     */
     @RenderMapping
     public String showEdit(Model model) {
+        final int maxLen = 45;
         List<SiteKey> siteKeys = new SiteKeyHelper(credentialService.getAllSiteKeys()).
-                orderBySiteKey().descriptionElipsis(45).get();
+                orderBySiteKey().descriptionElipsis(maxLen).get();
 
         model.addAttribute("siteKeys", siteKeys);
 
         return "edit";
     }
 
+    /**
+     * Shows the edit site key view.
+     *
+     * @param siteKeyId siteKeyId
+     * @param model model
+     * @return the view name
+     */
     @RenderMapping(params = "action=editSiteKey")
     public String editSiteKey(@RequestParam(required = false, value = "siteKeyId") Long siteKeyId, Model model) {
         SiteKey currentSiteKey = null;
@@ -51,6 +67,13 @@ public class EditController {
         return "editSiteKey";
     }
 
+    /**
+     * Action mapping which saves the site key.
+     *
+     * @param siteKey the site key
+     * @param result BindingResult
+     * @param model Model
+     */
     @ActionMapping("saveSiteKey")
     public void saveSiteKey(@ModelAttribute("currentSiteKey") SiteKey siteKey,
             BindingResult result, Model model) {
@@ -66,6 +89,12 @@ public class EditController {
         }
     }
 
+    /**
+     * Action mapping which deletes a site key.
+     *
+     * @param siteKeyId the site key
+     * @param model Model
+     */
     @ActionMapping("deleteSiteKey")
     public void deleteSiteKey(@RequestParam("siteKeyId") Long siteKeyId, Model model) {
         SiteKey siteKey = null;
