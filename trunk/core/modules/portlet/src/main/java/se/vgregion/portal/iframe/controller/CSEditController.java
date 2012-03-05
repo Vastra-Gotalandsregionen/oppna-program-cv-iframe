@@ -22,7 +22,6 @@
  */
 package se.vgregion.portal.iframe.controller;
 
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,7 +44,6 @@ import se.vgregion.portal.iframe.model.LoginField;
 import se.vgregion.portal.iframe.model.LoginForm;
 import se.vgregion.portal.iframe.model.PortletConfig;
 
-import javax.net.ssl.*;
 import javax.portlet.ActionRequest;
 import javax.portlet.PortletPreferences;
 import javax.portlet.ValidatorException;
@@ -87,6 +85,13 @@ public class CSEditController {
         return "edit";
     }
 
+    /**
+     * RenderMapping for edit page. The method extracts input elements from a given URL.
+     *
+     * @param prefs PortletPreferences
+     * @param model Model
+     * @return view
+     */
     @RenderMapping(params = "action=loginExtractor")
     public String loginExtractor(PortletPreferences prefs, Model model) {
         PortletConfig portletConfig = PortletConfig.getInstance(prefs);
@@ -96,7 +101,8 @@ public class CSEditController {
         model.addAttribute("loginformUrl", loginFormUrl);
 
         try {
-            Document doc = new JSoupHelper().invoke(new URL(loginFormUrl), 3000);
+            final int timeout = 5000;
+            Document doc = new JSoupHelper().invoke(new URL(loginFormUrl), timeout);
             model.addAttribute("loginformContent", doc.html());
 
             List<Form> loginforms = loginformService.extract(doc);
@@ -138,14 +144,24 @@ public class CSEditController {
         return loginExtractor;
     }
 
+    /**
+     * Action mapping for the edit page. The method saves the input to the portlet preferences.
+     *
+     * @param request ActionRequest
+     * @param loginExtractor LoginExtractor
+     * @param model Model
+     * @param prefs PortletPreferences
+     */
     @ActionMapping("loginExtractorAction")
     public void loginExtractorAction(ActionRequest request, @ModelAttribute LoginExtractor loginExtractor,
-            Model model,  PortletPreferences prefs) {
+            Model model, PortletPreferences prefs) {
         PortletConfig portletConfig = PortletConfig.getInstance(prefs);
 
         try {
             for (LoginForm loginForm : loginExtractor.getLoginForms()) {
-                if (!loginForm.isUse()) continue;
+                if (!loginForm.isUse()) {
+                    continue;
+                }
 
                 portletConfig.setFormMethod(loginForm.getMethod());
                 portletConfig.setFormAction(loginForm.getAction());
@@ -153,7 +169,9 @@ public class CSEditController {
                 StringBuilder hidden = new StringBuilder("");
                 StringBuilder dynamicFields = new StringBuilder();
                 for (LoginField loginField : loginForm.getLoginFields()) {
-                    if (!loginField.isUse()) continue;
+                    if (!loginField.isUse()) {
+                        continue;
+                    }
 
                     if (loginField.isNameField()) {
                         portletConfig.setSiteUserNameField(loginField.getFieldName());
@@ -180,7 +198,7 @@ public class CSEditController {
 
             portletConfig.store(prefs);
         } catch (ValidatorException e) {
-            System.out.println("Error: "+e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
     }
 

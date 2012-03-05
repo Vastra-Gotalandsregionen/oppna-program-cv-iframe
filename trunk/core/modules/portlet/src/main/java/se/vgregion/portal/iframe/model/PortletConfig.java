@@ -31,9 +31,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Model object for {@link PortletPreferences} which also contains a few CRUD-like methods.
+ *
  * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
  */
-
 public class PortletConfig implements Serializable {
     private static final long serialVersionUID = 526915899524612688L;
 

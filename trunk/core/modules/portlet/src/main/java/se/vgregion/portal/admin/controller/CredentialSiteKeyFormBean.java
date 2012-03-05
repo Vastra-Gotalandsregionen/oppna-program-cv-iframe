@@ -19,9 +19,18 @@ public class CredentialSiteKeyFormBean implements Serializable {
 
     private SiteKey siteKey;
 
+    /**
+     * Constructor.
+     */
     public CredentialSiteKeyFormBean() {
     }
 
+    /**
+     * Constructor.
+     *
+     * @param credential UserSiteCredential
+     * @param siteKey SiteKey
+     */
     public CredentialSiteKeyFormBean(UserSiteCredential credential, SiteKey siteKey) {
         this.credential = credential;
         this.siteKey = siteKey;
@@ -45,13 +54,21 @@ public class CredentialSiteKeyFormBean implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         CredentialSiteKeyFormBean that = (CredentialSiteKeyFormBean) o;
 
-        if (credential != null ? !credential.equals(that.credential) : that.credential != null) return false;
-        if (siteKey != null ? !siteKey.equals(that.siteKey) : that.siteKey != null) return false;
+        if (credential != null ? !credential.equals(that.credential) : that.credential != null) {
+            return false;
+        }
+        if (siteKey != null ? !siteKey.equals(that.siteKey) : that.siteKey != null) {
+            return false;
+        }
 
         return true;
     }
@@ -59,7 +76,8 @@ public class CredentialSiteKeyFormBean implements Serializable {
     @Override
     public int hashCode() {
         int result = credential != null ? credential.hashCode() : 0;
-        result = 31 * result + (siteKey != null ? siteKey.hashCode() : 0);
+        final int prime = 31;
+        result = prime * result + (siteKey != null ? siteKey.hashCode() : 0);
         return result;
     }
 }

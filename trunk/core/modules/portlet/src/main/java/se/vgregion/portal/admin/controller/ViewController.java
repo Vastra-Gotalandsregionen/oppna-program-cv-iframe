@@ -27,6 +27,8 @@ import static javax.portlet.PortletRequest.P3PUserInfos.USER_LOGIN_ID;
 import static javax.portlet.PortletRequest.USER_INFO;
 
 /**
+ * Controller class for the admin view.
+ *
  * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
  */
 @Controller
@@ -37,6 +39,13 @@ public class ViewController {
     @Autowired
     private CredentialService credentialService;
 
+    /**
+     * Shows the main view populated by {@link UserSiteCredential}s.
+     *
+     * @param req RenderRequest
+     * @param model Model
+     * @return the view
+     */
     @RenderMapping
     public String showView(RenderRequest req, Model model) {
         String uid = lookupUid(req);
@@ -48,6 +57,12 @@ public class ViewController {
         return "view";
     }
 
+    /**
+     * Updates the given {@link UserSiteCredential} in the underlying storage.
+     *
+     * @param userCredential UserSiteCredential
+     * @param model Model
+     */
     @ActionMapping("updateCredential")
     public void updateCredential(@ModelAttribute UserSiteCredential userCredential, Model model) {
         try {
@@ -59,10 +74,19 @@ public class ViewController {
         }
     }
 
+    /**
+     * Doesn't do anything.
+     */
     @ActionMapping("refreshCredential")
     public void refreshCredential() {
     }
 
+    /**
+     * Deletes a {@link UserSiteCredential} with a given id.
+     *
+     * @param userCredentialId the id
+     * @param model Model
+     */
     @ActionMapping("removeCredential")
     public void deleteCredentials(@RequestParam("userCredentialId") Long userCredentialId, Model model) {
         UserSiteCredential siteCredential = null;
@@ -73,10 +97,11 @@ public class ViewController {
 
             model.addAttribute("removeAction", siteCredential.getSiteKey());
         } catch (Exception ex) {
-            if (siteCredential != null)
+            if (siteCredential != null) {
                 model.addAttribute("removeActionFailed", siteCredential.getSiteKey());
-            else
+            } else {
                 model.addAttribute("removeActionFailed", true);
+            }
         }
     }
 

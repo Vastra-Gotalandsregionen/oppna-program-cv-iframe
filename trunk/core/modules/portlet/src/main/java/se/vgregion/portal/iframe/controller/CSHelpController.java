@@ -34,6 +34,8 @@ import se.vgregion.portal.iframe.model.PortletConfig;
 import javax.portlet.PortletPreferences;
 
 /**
+ * Class for the request mappings for the help page.
+ *
  * @author Anders Asplund
  */
 @Controller
@@ -43,6 +45,13 @@ public class CSHelpController {
     @Autowired
     private CredentialService credentialService;
 
+    /**
+     * Show the help page.
+     *
+     * @param model Model
+     * @param prefs PortletPreferences
+     * @return help view
+     */
     @RenderMapping
     public String showHelp(Model model, PortletPreferences prefs) {
         PortletConfig portletConfig = se.vgregion.portal.iframe.model.PortletConfig.getInstance(prefs);
