@@ -96,7 +96,7 @@ public class ViewController {
             credentialService.removeUserSiteCredential(userCredentialId);
 
             model.addAttribute("removeAction", siteCredential.getSiteKey());
-        } catch (Exception ex) {
+        } catch (RuntimeException ex) {
             if (siteCredential != null) {
                 model.addAttribute("removeActionFailed", siteCredential.getSiteKey());
             } else {
