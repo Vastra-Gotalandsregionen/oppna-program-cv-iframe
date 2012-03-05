@@ -84,7 +84,7 @@ public class EditController {
             credentialService.save(siteKey);
 
             model.addAttribute("saveAction", siteKey.getSiteKey());
-        } catch (Exception ex) {
+        } catch (RuntimeException ex) {
             model.addAttribute("saveActionFailed", siteKey.getSiteKey());
         }
     }
@@ -104,7 +104,7 @@ public class EditController {
             credentialService.removeSiteKey(siteKeyId);
 
             model.addAttribute("removeAction", siteKey.getSiteKey());
-        } catch (Exception ex) {
+        } catch (RuntimeException ex) {
             if (siteKey != null) {
                 model.addAttribute("removeActionFailed", siteKey.getSiteKey());
             } else {

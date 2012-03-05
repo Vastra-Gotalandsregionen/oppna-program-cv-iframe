@@ -9,6 +9,8 @@ import java.io.Serializable;
  * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
  */
 public class LoginField implements Serializable {
+    private static final long serialVersionUID = -8278668379674747318L;
+
     private boolean use;
     private boolean nameField;
     private boolean passwordField;

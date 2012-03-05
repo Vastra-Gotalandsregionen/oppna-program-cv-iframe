@@ -1,6 +1,5 @@
 package se.vgregion.portal.iframe.model;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -9,7 +8,8 @@ import java.util.List;
  *
  * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
  */
-public class LoginExtractor implements Serializable {
+public class LoginExtractor {
+
     private List<LoginForm> loginForms;
 
     public List<LoginForm> getLoginForms() {
