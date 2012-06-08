@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>se.vgregion.cs-iframe</groupId>
+    <artifactId>cs-iframe-core</artifactId>
+    <version>2.5</version>
+    <relativePath>../../pom.xml</relativePath>
+  </parent>
+
+  <artifactId>cs-iframe-core-module-application</artifactId>
+  <packaging>jar</packaging>
+  <name>${project.artifactId}</name>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifest>
+              <mainClass>se.vgregion.portal.cs.migration.PasswordEncryptionMigrator</mainClass>
+              <classpathPrefix>lib/</classpathPrefix>
+              <addClasspath>true</addClasspath>
+            </manifest>
+            <manifestEntries>
+              <Class-Path>.</Class-Path>
+            </manifestEntries>
+          </archive>
+        </configuration>
+        <executions>
+          <execution>
+            <id>add-manifest</id>
+            <phase>package</phase>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/lib</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+    <profile>
+      <id>ide-build</id>
+      <!-- No resources management here. Choose this profile in order to not use the pure-maven-build profile. -->
+    </profile>
+    <profile>
+      <id>pure-maven-build</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <build>
+        <resources>
+          <resource>
+            <directory>src/main/resources</directory>
+            <includes>
+              <include>*</include>
+            </includes>
+          </resource>
+          <resource>
+            <directory>src/main/resources/security</directory>
+            <excludes>
+              <!-- This exclusion is made since this file cannot be inside the jar archive. That breaks the Spring configuration 
+                because it must be possible to make a file system path to this file. It should instead be put in a folder named security 
+                in the same folder as the jar file. -->
+              <exclude>
+                *
+              </exclude>
+            </excludes>
+          </resource>
+        </resources>
+      </build>
+    </profile>
+  </profiles>
+
+  <dependencies>
+  
+    <dependency>
+      <groupId>se.vgregion.commons-util</groupId>
+      <artifactId>commons-util-core-bc-composite-security</artifactId>
+      <version>3.11</version>
+    </dependency>
+    <dependency>
+      <groupId>postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>8.4-702.jdbc4</version>
+    </dependency>
+
+    <dependency>
+      <groupId>hsqldb</groupId>
+      <artifactId>hsqldb</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+</project>
