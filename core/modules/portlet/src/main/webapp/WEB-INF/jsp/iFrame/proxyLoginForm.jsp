@@ -55,9 +55,9 @@
                     <c:forEach var="entry" items="${portletConfig.hiddenVarialbleMap}">
                         <input name="${entry.key}" value="${entry.value}" type="hidden"/>
                     </c:forEach>
-                    <c:if test="${hasDynamicField}">
-                        <input name="${portletConfig.dynamicField}" value="${dynamicValue}" type="hidden"/>
-                    </c:if>
+                    <c:forEach var="entry" items="${dynamicFieldValues}">
+                        <input name="${entry.key}" value="${entry.value}" type="hidden"/>
+                    </c:forEach>
                 </form>
             </c:when>
             <c:otherwise>

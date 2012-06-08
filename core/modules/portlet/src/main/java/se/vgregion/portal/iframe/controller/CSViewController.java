@@ -224,7 +224,6 @@ public class CSViewController {
 
         // 3: Dynamic Field
         if (StringUtils.isNotBlank(portletConfig.getDynamicField())) {
-            model.addAttribute("hasDynamicField", true);
             Map<String, String> dynamicFieldValues = lookupDynamicValue(portletConfig);
             model.addAttribute("dynamicFieldValues", dynamicFieldValues);
         }
@@ -306,7 +305,7 @@ public class CSViewController {
             final int timeout = 5000;
             Document doc = new JSoupHelper().invoke(new URL(portletConfig.getSrc()), timeout);
 
-            Element dynamicValue = doc.getElementById("loginForm:_idJsp10");
+            Element dynamicValue = doc.getElementById("loginForm:j_idt22");
             String onClick = dynamicValue.attr("onclick");
             final int i = 3;
             String sessionKey = onClick.split("'")[i];
