@@ -36,6 +36,8 @@ import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 import org.springframework.web.portlet.util.PortletUtils;
+import se.vgregion.ldapservice.LdapService;
+import se.vgregion.ldapservice.LdapUser;
 import se.vgregion.portal.cs.domain.SiteKey;
 import se.vgregion.portal.cs.domain.UserSiteCredential;
 import se.vgregion.portal.cs.service.CredentialService;
@@ -64,11 +66,16 @@ import java.util.Map;
 @Controller
 @RequestMapping("VIEW")
 @SessionAttributes("postLogin")
+@SuppressWarnings("unchecked")
 public class CSViewController {
     private static final Logger LOGGER = LoggerFactory.getLogger(CSViewController.class);
+    private static final String INOTES_REDIRECT_TO_URL = "/mail/%s.nsf/iNotes/Mail/?OpenDocument&ui=dwa_ulite"; // To be used with String.format()
 
     @Autowired
     private CredentialService credentialService;
+
+    @Autowired //todo make a caching (and async?) service layer in between
+    private LdapService ldapService;
 
     /**
      * Method called by Spring to initiate the postLogin session attribute.
@@ -229,13 +236,26 @@ public class CSViewController {
         }
 
         // 4: RD encode
+        String userId = lookupUid(req);
         if (portletConfig.isRdEncode()) {
-            model.addAttribute("rdPass", encodeRaindancePassword(lookupUid(req), portletConfig));
+            model.addAttribute("rdPass", encodeRaindancePassword(userId, portletConfig));
+        }
+
+        if (portletConfig.isInotes()) {
+            // Then we place a dynamic url (including the userId) in the hiddenVariablesMap.
+            Map<String, String> hiddenVariablesMap = new HashMap<String, String>();
+            hiddenVariablesMap.put("RedirectTo", String.format(INOTES_REDIRECT_TO_URL,
+                    credentialService.getUserSiteCredential(userId, portletConfig.getSiteKey()).getSiteUser()));
+            model.addAttribute("hiddenVariablesMap", hiddenVariablesMap);
+        } else {
+            model.addAttribute("hiddenVariablesMap", portletConfig.getHiddenVariablesMap());
         }
 
         URI src = null;
         try {
-            src = new URI(portletConfig.getSrc());
+            String srcUrl = portletConfig.getSrc();
+            srcUrl = replacePlaceholders(userId, srcUrl);
+            src = new URI(srcUrl);
 
             String proxyAction;
             if (portletConfig.getFormAction() == null || portletConfig.getFormAction().length() < 1) {
@@ -257,6 +277,24 @@ public class CSViewController {
             return "help";
         }
 
+    }
+
+    String replacePlaceholders(String userId, String proxyAction) {
+        if (proxyAction.contains("{ldap.mailserver.cn}")) {
+            LdapUser ldapUserByUid = ldapService.getLdapUserByUid(userId);
+            String mailServer = ldapUserByUid.getAttributeValue("mailServer");
+            if (mailServer != null) {
+                String mailHost = getCnValue(mailServer);
+                proxyAction = proxyAction.replace("{ldap.mailserver.cn}", mailHost);
+            }
+        }
+        return proxyAction;
+    }
+
+    String getCnValue(String mailServer) {
+        int index = mailServer.indexOf("CN=");
+        int commaPosition = mailServer.indexOf(",", index);
+        return mailServer.substring(index + "CN=".length(), commaPosition > 0 ? commaPosition : mailServer.length());
     }
 
     private String prepareBasicAuthAction(UserSiteCredential siteCredential, String action) {

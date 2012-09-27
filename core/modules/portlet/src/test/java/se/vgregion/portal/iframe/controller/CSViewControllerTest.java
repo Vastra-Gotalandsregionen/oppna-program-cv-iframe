@@ -19,11 +19,6 @@
 
 package se.vgregion.portal.iframe.controller;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
-
 import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,6 +37,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.mockito.Matchers;
+import org.mockito.Mockito;
 import org.springframework.mock.web.portlet.MockActionRequest;
 import org.springframework.mock.web.portlet.MockPortletPreferences;
 import org.springframework.mock.web.portlet.MockRenderRequest;
@@ -51,9 +48,13 @@ import org.springframework.mock.web.portlet.MockResourceURL;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.ui.ModelMap;
 
+import se.vgregion.ldapservice.LdapService;
+import se.vgregion.ldapservice.LdapUser;
 import se.vgregion.portal.cs.domain.UserSiteCredential;
 import se.vgregion.portal.iframe.BaseTestSetup;
 import se.vgregion.portal.iframe.model.PortletConfig;
+
+import static org.junit.Assert.*;
 
 /**
  * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
@@ -571,6 +572,36 @@ public class CSViewControllerTest extends BaseTestSetup {
         controller.storeUserCredential(userSiteCredential, request);
 
         assertEquals(0, storeService.getStoreCalled());
+    }
+
+    @Test
+    public void testGetCnValue() {
+        // Test that we get right value independently of where the CN string is located (possibly the CN string will
+        // always be first but we could just as well make the method robust in this matter)
+        String cnValue = controller.getCnValue("CN=liv,OU=epost,O=vgregion");
+        assertEquals("liv", cnValue);
+
+        cnValue = controller.getCnValue("OU=epost,CN=liv,O=vgregion");
+        assertEquals("liv", cnValue);
+
+        cnValue = controller.getCnValue("OU=epost,O=vgregion,CN=liv");
+        assertEquals("liv", cnValue);
+    }
+
+    @Test
+    public void testReplacePlaceholders() {
+
+        // Given
+        LdapService ldapService = Mockito.mock(LdapService.class);
+        LdapUser ldapUser = Mockito.mock(LdapUser.class);
+        Mockito.when(ldapUser.getAttributeValue("mailServer")).thenReturn("CN=liv,OU=epost,O=vgregion");
+        Mockito.when(ldapService.getLdapUserByUid(Matchers.eq("aUserId"))).thenReturn(ldapUser);
+        ReflectionTestUtils.setField(controller, "ldapService", ldapService);
+
+        // When
+        String result = controller.replacePlaceholders("aUserId", "http://{ldap.mailserver.cn}.vgregion.se");
+
+        assertEquals("http://liv.vgregion.se", result);
     }
 
     class TestStubMockRenderResponse extends MockRenderResponse {

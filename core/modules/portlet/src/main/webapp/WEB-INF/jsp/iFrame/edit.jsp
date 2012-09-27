@@ -51,7 +51,7 @@
         <table class="lfr-table">
             <tr>
                 <td><label for="${ns}src">Source URL</label></td>
-                <td><form:input path="src" id="${ns}src" size="80"/></td>
+                <td><form:input path="src" id="${ns}src" size="80"/>Möjliga platshållare: {ldap.mailserver.cn}</td>
             </tr>
             <tr id="${ns}addUserLoggedIn">
                 <td><label for="${ns}userLoggedIn">Add user logged in</label></td>
@@ -161,7 +161,10 @@
                 </tr>
                 <tr>
                     <td><label for="${ns}hiddenVariables">Hidden Variables</label></td>
-                    <td><form:input path="hiddenVariables" id="${ns}hiddenVariables" size="140"/></td>
+                    <td>
+                        <form:input path="hiddenVariables" id="${ns}hiddenVariables" size="140"/>
+                        <form:checkbox path="inotes" id="${ns}isInotes"/> Är iNotes-inloggning (då inaktiveras och ersätts detta fält)
+                    </td>
                 </tr>
             </table>
 
@@ -223,3 +226,16 @@
 
     <input type="submit" value="Save"/>
 </form:form>
+
+<script type="text/javascript">
+    AUI().ready('aui-base', function (A) {
+        A.one('#${ns}isInotes').on('click', function (e) {
+            var hiddenVariablesInput = A.one('#${ns}hiddenVariables');
+            if (hiddenVariablesInput.get('disabled')) {
+                hiddenVariablesInput.set('disabled', false);
+            } else {
+                hiddenVariablesInput.set('disabled', true);
+            }
+        });
+    });
+</script>

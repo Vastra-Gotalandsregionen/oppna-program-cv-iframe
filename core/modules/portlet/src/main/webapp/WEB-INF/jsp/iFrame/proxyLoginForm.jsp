@@ -52,7 +52,7 @@
                         </c:otherwise>
                     </c:choose>
 
-                    <c:forEach var="entry" items="${portletConfig.hiddenVarialbleMap}">
+                    <c:forEach var="entry" items="${hiddenVariablesMap}">
                         <input name="${entry.key}" value="${entry.value}" type="hidden"/>
                     </c:forEach>
                     <c:forEach var="entry" items="${dynamicFieldValues}">
@@ -91,7 +91,7 @@
                         </c:otherwise>
                     </c:choose>
 
-                    <c:forEach var="entry" items="${portletConfig.hiddenVarialbleMap}">
+                    <c:forEach var="entry" items="${hiddenVariablesMap}">
                         <input name="${entry.key}" value="${entry.value}" type="hidden"/>
                     </c:forEach>
                     <c:forEach var="entry" items="${dynamicFieldValues}">

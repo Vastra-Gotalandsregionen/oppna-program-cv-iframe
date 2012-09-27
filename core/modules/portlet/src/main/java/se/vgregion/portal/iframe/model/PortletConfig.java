@@ -62,6 +62,7 @@ public class PortletConfig implements Serializable {
     private String linkoutTarget;
     private boolean linkoutRedirect;
     private String linkoutRedirectPage;
+    private boolean inotes;
 
     private Map<String, String> htmlAttributeMap = new HashMap<String, String>();
 
@@ -73,7 +74,7 @@ public class PortletConfig implements Serializable {
 
     /**
      * Factory for creating portlet configuration.
-     * 
+     *
      * @param prefs
      *            - PortletPreferences to synch with
      * @return configuration parameters
@@ -104,12 +105,13 @@ public class PortletConfig implements Serializable {
         portletConfig.setLinkoutTarget(prefs.getValue("linkoutTarget", "_blank"));
         portletConfig.setLinkoutRedirect(Boolean.valueOf(prefs.getValue("linkoutRedirect", "false")));
         portletConfig.setLinkoutRedirectPage(prefs.getValue("linkoutRedirectPage", "../"));
+        portletConfig.setInotes(Boolean.valueOf(prefs.getValue("inotes", "false")));
         return portletConfig;
     }
 
     /**
      * Store configuration in PortlerPreferences.
-     * 
+     *
      * @param prefs
      *            - PortlerPreferences
      * @throws ValidatorException
@@ -140,6 +142,7 @@ public class PortletConfig implements Serializable {
             prefs.setValue("linkoutTarget", getLinkoutTarget());
             prefs.setValue("linkoutRedirect", String.valueOf(isLinkoutRedirect()));
             prefs.setValue("linkoutRedirectPage", getLinkoutRedirectPage());
+            prefs.setValue("inotes", String.valueOf(isInotes()));
 
             prefs.store();
         } catch (ReadOnlyException e) {
@@ -151,7 +154,7 @@ public class PortletConfig implements Serializable {
 
     /**
      * Convienience method to access html-attribute.
-     * 
+     *
      * @param attribute
      *            - attribute name
      * @param defaultValue
@@ -348,12 +351,20 @@ public class PortletConfig implements Serializable {
         this.dynamicFieldAction = dynamicFieldAction;
     }
 
+    public boolean isInotes() {
+        return inotes;
+    }
+
+    public void setInotes(boolean inotes) {
+        this.inotes = inotes;
+    }
+
     /**
      * Convinience method for access of hidden attribures.
-     * 
+     *
      * @return Map<String, String> - name/value pair
      */
-    public Map<String, String> getHiddenVarialbleMap() {
+    public Map<String, String> getHiddenVariablesMap() {
         Map<String, String> staticHiddenMap = new HashMap<String, String>();
 
         String[] variables = hiddenVariables.split("&");
@@ -371,7 +382,7 @@ public class PortletConfig implements Serializable {
 
     /**
      * Set html attributes.
-     * 
+     *
      * @param htmlAttributes
      *            - new line ('\n') separated list of html attributes
      */
