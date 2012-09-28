@@ -71,7 +71,7 @@ public class CSViewControllerTest extends BaseTestSetup {
         RenderResponse mockResp = new MockRenderResponse();
         ModelMap model = new ModelMap();
 
-        String response = controller.showView(prefs, mockReq, mockResp, model, null);
+        String response = controller.showView(prefs, mockReq, mockResp, model);
         assertEquals("userCredentialForm", response);
     }
 
@@ -85,7 +85,7 @@ public class CSViewControllerTest extends BaseTestSetup {
         RenderResponse mockResp = new MockRenderResponse();
         ModelMap model = new ModelMap();
 
-        String response = controller.showView(prefs, mockReq, mockResp, model, null);
+        String response = controller.showView(prefs, mockReq, mockResp, model);
         assertEquals("view", response);
 
         // Test model
@@ -117,7 +117,7 @@ public class CSViewControllerTest extends BaseTestSetup {
         RenderResponse mockResp = new MockRenderResponse();
         ModelMap model = new ModelMap();
 
-        String response = controller.showView(prefs, mockReq, mockResp, model, null);
+        String response = controller.showView(prefs, mockReq, mockResp, model);
         assertEquals("userCredentialForm", response);
     }
 
@@ -132,7 +132,7 @@ public class CSViewControllerTest extends BaseTestSetup {
         RenderResponse mockResp = new MockRenderResponse();
         ModelMap model = new ModelMap();
 
-        String response = controller.showView(prefs, mockReq, mockResp, model, null);
+        String response = controller.showView(prefs, mockReq, mockResp, model);
         assertEquals("userCredentialForm", response);
     }
 
@@ -152,7 +152,7 @@ public class CSViewControllerTest extends BaseTestSetup {
 
         ModelMap model = new ModelMap();
 
-        String response = controller.showView(prefs, req, resp, model, null);
+        String response = controller.showView(prefs, req, resp, model);
         assertEquals("view", response);
 
         UserSiteCredential siteCredential = (UserSiteCredential) model.get("siteCredential");
@@ -196,7 +196,7 @@ public class CSViewControllerTest extends BaseTestSetup {
 
         ModelMap model = new ModelMap();
 
-        String response = controller.showView(prefs, req, resp, model, null);
+        String response = controller.showView(prefs, req, resp, model);
         assertEquals("view", response);
 
         UserSiteCredential siteCredential = (UserSiteCredential) model.get("siteCredential");
@@ -242,12 +242,12 @@ public class CSViewControllerTest extends BaseTestSetup {
 
         // NORMAL
         mockReq.setWindowState(WindowState.NORMAL);
-        controller.showView(prefs, mockReq, mockResp, model, null);
+        controller.showView(prefs, mockReq, mockResp, model);
         assertEquals("300", model.get("iFrameHeight"));
 
         // MAXIMIZED
         mockReq.setWindowState(WindowState.MAXIMIZED);
-        controller.showView(prefs, mockReq, mockResp, model, null);
+        controller.showView(prefs, mockReq, mockResp, model);
         assertEquals("600", model.get("iFrameHeight"));
     }
 

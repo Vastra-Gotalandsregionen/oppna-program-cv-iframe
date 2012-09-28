@@ -18,24 +18,40 @@ import java.util.Properties;
 import java.util.concurrent.*;
 
 /**
+ * This implementation wraps an {@link LdapService} and makes the calls asynchronously, thus fetches the result lazily.
+ * The returned object is a wrapper implementation which uses concurrency to enable lazy loading.
+ *
  * @author Patrik Bergström
+ * @see LdapService
  */
 @Service
+@SuppressWarnings("unchecked")
 public class AsyncCachingLdapServiceWrapper implements LdapService {
 
     private static final CacheManager SINGLE_CACHE_MANAGER = CacheManager.create();
 
     private Ehcache cache;
     private LdapService ldapService;
-    private ExecutorService executor = Executors.newFixedThreadPool(10);
+    private static final int N_THREADS = 10;
+    private ExecutorService executor = Executors.newFixedThreadPool(N_THREADS);
 
+    /**
+     * Constructor.
+     *
+     * @param ldapService ldapService
+     */
     public AsyncCachingLdapServiceWrapper(LdapService ldapService) {
-        long timeoutInMillis = 48 * 60 * 60 * 1000; // 48 hours
+        final int hours = 48;
+        final int minutes = 60;
+        final int seconds = 60;
+        final int millis = 1000;
+        long timeoutInMillis = hours * minutes * seconds * millis; // 48 hours
         // The timeout arguments mean that it's only the time from creation that matters; the idle time can
         // never be longer than the time since creation.
         String name = this.getClass() + "Cache_" + timeoutInMillis;
         if (!SINGLE_CACHE_MANAGER.cacheExists(name)) {
-            this.cache = new Cache(name, 500, false, false, timeoutInMillis, timeoutInMillis);
+            final int maxElementsInMemory = 500;
+            this.cache = new Cache(name, maxElementsInMemory, false, false, timeoutInMillis, timeoutInMillis);
             SINGLE_CACHE_MANAGER.addCache(cache);
         } else {
             this.cache = SINGLE_CACHE_MANAGER.getCache(name);
@@ -44,12 +60,19 @@ public class AsyncCachingLdapServiceWrapper implements LdapService {
         this.ldapService = ldapService;
     }
 
+    /**
+     * Constructor.
+     *
+     * @param ldapService       ldapService
+     * @param timeToLiveSeconds the time the cached elements should live (from creation)
+     */
     public AsyncCachingLdapServiceWrapper(LdapService ldapService, long timeToLiveSeconds) {
         // The timeout arguments mean that it's only the time from creation that matters; the idle time can
         // never be longer than the time since creation.
         String name = this.getClass() + "Cache_" + timeToLiveSeconds;
         if (!SINGLE_CACHE_MANAGER.cacheExists(name)) {
-            cache = new Cache(name, 500, false, false, timeToLiveSeconds, timeToLiveSeconds);
+            final int maxElementsInMemory = 500;
+            cache = new Cache(name, maxElementsInMemory, false, false, timeToLiveSeconds, timeToLiveSeconds);
             SINGLE_CACHE_MANAGER.addCache(cache);
         } else {
             this.cache = SINGLE_CACHE_MANAGER.getCache(name);
@@ -128,9 +151,15 @@ public class AsyncCachingLdapServiceWrapper implements LdapService {
 
     public static class AsyncLdapUserWrapper implements LdapUser, Serializable {
         private static final Logger LOGGER = LoggerFactory.getLogger(AsyncLdapUserWrapper.class);
+        private static final long serialVersionUID = -1123850060733039675L;
 
         private Future<LdapUser> futureLdapUser;
 
+        /**
+         * Constructor.
+         *
+         * @param futureLdapUser futureLdapUser
+         */
         public AsyncLdapUserWrapper(Future<LdapUser> futureLdapUser) {
             this.futureLdapUser = futureLdapUser;
         }

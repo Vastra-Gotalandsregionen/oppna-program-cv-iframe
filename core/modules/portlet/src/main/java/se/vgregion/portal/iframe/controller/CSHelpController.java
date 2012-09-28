@@ -18,7 +18,7 @@
  */
 
 /**
- * 
+ *
  */
 package se.vgregion.portal.iframe.controller;
 
@@ -42,8 +42,17 @@ import javax.portlet.PortletPreferences;
 @RequestMapping("HELP")
 public class CSHelpController {
 
-    @Autowired
     private CredentialService credentialService;
+
+    /**
+     * Constructor.
+     *
+     * @param credentialService credentialService
+     */
+    @Autowired
+    public CSHelpController(CredentialService credentialService) {
+        this.credentialService = credentialService;
+    }
 
     /**
      * Show the help page.
