@@ -36,11 +36,11 @@ import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 import org.springframework.web.portlet.util.PortletUtils;
-import se.vgregion.ldapservice.LdapService;
 import se.vgregion.ldapservice.LdapUser;
 import se.vgregion.portal.cs.domain.SiteKey;
 import se.vgregion.portal.cs.domain.UserSiteCredential;
 import se.vgregion.portal.cs.service.CredentialService;
+import se.vgregion.portal.csiframe.svc.AsyncCachingLdapServiceWrapper;
 import se.vgregion.portal.iframe.model.PortletConfig;
 
 import javax.portlet.ActionRequest;
@@ -74,8 +74,8 @@ public class CSViewController {
     @Autowired
     private CredentialService credentialService;
 
-    @Autowired //todo make a caching (and async?) service layer in between
-    private LdapService ldapService;
+    @Autowired
+    private AsyncCachingLdapServiceWrapper ldapService;
 
     /**
      * Method called by Spring to initiate the postLogin session attribute.
@@ -217,6 +217,15 @@ public class CSViewController {
             return "view";
         }
 
+        String userId = lookupUid(req);
+
+        if (portletConfig.isInotes()) {
+            // We happen to know that we are going to need to make a call to get the user's mail server from ldap later
+            // in this method or rather in a method called by this method. We also know that the LdapService is an
+            // AsyncCachingLdapServiceWrapper. Making a call now will speed up the experience for the user.
+            ldapService.getLdapUserByUid(userId);
+        }
+
         // 1: Credentials
         SiteKey siteKey = credentialService.getSiteKey(portletConfig.getSiteKey());
         model.addAttribute("siteKey", siteKey);
@@ -236,7 +245,6 @@ public class CSViewController {
         }
 
         // 4: RD encode
-        String userId = lookupUid(req);
         if (portletConfig.isRdEncode()) {
             model.addAttribute("rdPass", encodeRaindancePassword(userId, portletConfig));
         }
