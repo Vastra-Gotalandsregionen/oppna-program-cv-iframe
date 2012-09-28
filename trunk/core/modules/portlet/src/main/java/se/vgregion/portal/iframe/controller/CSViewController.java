@@ -69,7 +69,8 @@ import java.util.Map;
 @SuppressWarnings("unchecked")
 public class CSViewController {
     private static final Logger LOGGER = LoggerFactory.getLogger(CSViewController.class);
-    private static final String INOTES_REDIRECT_TO_URL = "/mail/%s.nsf/iNotes/Mail/?OpenDocument&ui=dwa_ulite"; // To be used with String.format()
+    // To be used with String.format()
+    private static final String INOTES_REDIRECT_TO_URL = "/mail/%s.nsf/iNotes/Mail/?OpenDocument&ui=dwa_ulite";
 
     @Autowired
     private CredentialService credentialService;
@@ -94,12 +95,10 @@ public class CSViewController {
      * @param req       request
      * @param resp      response
      * @param model     model
-     * @param postLogin postLogin
      * @return view
      */
     @RenderMapping
-    public String showView(PortletPreferences prefs, RenderRequest req, RenderResponse resp, ModelMap model,
-                           @ModelAttribute("postLogin") String postLogin) {
+    public String showView(PortletPreferences prefs, RenderRequest req, RenderResponse resp, ModelMap model) {
         PortletConfig portletConfig = PortletConfig.getInstance(prefs);
         LOGGER.debug("Creds: {}", portletConfig);
 
@@ -122,7 +121,7 @@ public class CSViewController {
         }
         if (StringUtils.isNotBlank(newPostLogin)) {
             try {
-                postLogin = new String(Base64.decodeBase64(newPostLogin));
+                String postLogin = new String(Base64.decodeBase64(newPostLogin));
                 if ("basic".equals(portletConfig.getAuthType())) {
                     postLogin = prepareBasicAuthAction(siteCredential, postLogin);
                 }
