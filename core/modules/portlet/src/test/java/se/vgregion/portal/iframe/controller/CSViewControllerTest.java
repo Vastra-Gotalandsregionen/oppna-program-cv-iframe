@@ -19,40 +19,25 @@
 
 package se.vgregion.portal.iframe.controller;
 
-import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.portlet.PortletMode;
-import javax.portlet.PortletPreferences;
-import javax.portlet.PortletRequest;
-import javax.portlet.ReadOnlyException;
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
-import javax.portlet.ResourceRequest;
-import javax.portlet.ResourceURL;
-import javax.portlet.WindowState;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
-import org.springframework.mock.web.portlet.MockActionRequest;
-import org.springframework.mock.web.portlet.MockPortletPreferences;
-import org.springframework.mock.web.portlet.MockRenderRequest;
-import org.springframework.mock.web.portlet.MockRenderResponse;
-import org.springframework.mock.web.portlet.MockResourceRequest;
-import org.springframework.mock.web.portlet.MockResourceURL;
+import org.springframework.mock.web.portlet.*;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.ui.ModelMap;
-
-import se.vgregion.ldapservice.LdapService;
 import se.vgregion.ldapservice.LdapUser;
 import se.vgregion.portal.cs.domain.UserSiteCredential;
+import se.vgregion.portal.csiframe.svc.AsyncCachingLdapServiceWrapper;
 import se.vgregion.portal.iframe.BaseTestSetup;
 import se.vgregion.portal.iframe.model.PortletConfig;
+
+import javax.portlet.*;
+import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -592,7 +577,7 @@ public class CSViewControllerTest extends BaseTestSetup {
     public void testReplacePlaceholders() {
 
         // Given
-        LdapService ldapService = Mockito.mock(LdapService.class);
+        AsyncCachingLdapServiceWrapper ldapService = Mockito.mock(AsyncCachingLdapServiceWrapper.class);
         LdapUser ldapUser = Mockito.mock(LdapUser.class);
         Mockito.when(ldapUser.getAttributeValue("mailServer")).thenReturn("CN=liv,OU=epost,O=vgregion");
         Mockito.when(ldapService.getLdapUserByUid(Matchers.eq("aUserId"))).thenReturn(ldapUser);
