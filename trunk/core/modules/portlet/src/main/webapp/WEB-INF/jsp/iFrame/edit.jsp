@@ -163,7 +163,7 @@
                     <td><label for="${ns}hiddenVariables">Hidden Variables</label></td>
                     <td>
                         <form:input path="hiddenVariables" id="${ns}hiddenVariables" size="140"/>
-                        <form:checkbox path="inotes" id="${ns}isInotes"/> Är iNotes-inloggning (då inaktiveras och ersätts detta fält)
+                        <form:checkbox path="inotesUltralight" id="${ns}isInotesUltralight"/> iNotes ultralight-inloggning (då inaktiveras och ersätts detta fält)
                     </td>
                 </tr>
             </table>
@@ -229,7 +229,7 @@
 
 <script type="text/javascript">
     AUI().ready('aui-base', function (A) {
-        A.one('#${ns}isInotes').on('click', function (e) {
+        A.one('#${ns}isInotesUltralight').on('click', function (e) {
             var hiddenVariablesInput = A.one('#${ns}hiddenVariables');
             if (hiddenVariablesInput.get('disabled')) {
                 hiddenVariablesInput.set('disabled', false);

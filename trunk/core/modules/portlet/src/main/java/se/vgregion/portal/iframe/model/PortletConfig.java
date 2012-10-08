@@ -62,7 +62,7 @@ public class PortletConfig implements Serializable {
     private String linkoutTarget;
     private boolean linkoutRedirect;
     private String linkoutRedirectPage;
-    private boolean inotes;
+    private boolean inotesUltralight;
 
     private Map<String, String> htmlAttributeMap = new HashMap<String, String>();
 
@@ -105,7 +105,7 @@ public class PortletConfig implements Serializable {
         portletConfig.setLinkoutTarget(prefs.getValue("linkoutTarget", "_blank"));
         portletConfig.setLinkoutRedirect(Boolean.valueOf(prefs.getValue("linkoutRedirect", "false")));
         portletConfig.setLinkoutRedirectPage(prefs.getValue("linkoutRedirectPage", "../"));
-        portletConfig.setInotes(Boolean.valueOf(prefs.getValue("inotes", "false")));
+        portletConfig.setInotesUltralight(Boolean.valueOf(prefs.getValue("inotesUltralight", "false")));
         return portletConfig;
     }
 
@@ -142,7 +142,7 @@ public class PortletConfig implements Serializable {
             prefs.setValue("linkoutTarget", getLinkoutTarget());
             prefs.setValue("linkoutRedirect", String.valueOf(isLinkoutRedirect()));
             prefs.setValue("linkoutRedirectPage", getLinkoutRedirectPage());
-            prefs.setValue("inotes", String.valueOf(isInotes()));
+            prefs.setValue("inotesUltralight", String.valueOf(isInotesUltralight()));
 
             prefs.store();
         } catch (ReadOnlyException e) {
@@ -351,12 +351,12 @@ public class PortletConfig implements Serializable {
         this.dynamicFieldAction = dynamicFieldAction;
     }
 
-    public boolean isInotes() {
-        return inotes;
+    public boolean isInotesUltralight() {
+        return inotesUltralight;
     }
 
-    public void setInotes(boolean inotes) {
-        this.inotes = inotes;
+    public void setInotesUltralight(boolean inotesUltralight) {
+        this.inotesUltralight = inotesUltralight;
     }
 
     /**

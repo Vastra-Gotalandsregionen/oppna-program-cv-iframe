@@ -106,22 +106,6 @@
                 }
                 // ======================
 
-                // ====== LoadMask ======
-                var iFrameWrap = A.one('#<portlet:namespace />iframeWrap');
-                iFrameWrap.plug(A.LoadingMask, {
-                    background: '#555',
-                    strings: { loading: 'Laddar extern källa…' }
-                });
-
-                // Show loading mask
-                iFrameWrap.loadingmask.show();
-
-                // Hide loading mask after 2 seconds
-                A.later('1500', iFrameWrap, function() {
-                    iFrameWrap.loadingmask.hide();
-                });
-                // ======================
-
                 // ====== Do the real login if a PreAction was configured ======
                 A.later('500', iFrame, function() {
                     var iFrameSrc = '${iFrameSrc}';
