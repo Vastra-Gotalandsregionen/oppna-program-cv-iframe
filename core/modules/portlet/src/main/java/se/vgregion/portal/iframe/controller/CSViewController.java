@@ -70,7 +70,7 @@ import java.util.Map;
 public class CSViewController {
     private static final Logger LOGGER = LoggerFactory.getLogger(CSViewController.class);
     // To be used with String.format()
-    private static final String INOTES_REDIRECT_TO_URL = "/mail/%s.nsf/iNotes/Mail/?OpenDocument&ui=dwa_ulite";
+    private static final String INOTES_ULTRALIGHT_REDIRECT_TO_URL = "/mail/%s.nsf/iNotes/Mail/?OpenDocument&ui=dwa_ulite";
 
     @Autowired
     private CredentialService credentialService;
@@ -218,7 +218,7 @@ public class CSViewController {
 
         String userId = lookupUid(req);
 
-        if (portletConfig.isInotes()) {
+        if (portletConfig.isInotesUltralight()) {
             // We happen to know that we are going to need to make a call to get the user's mail server from ldap later
             // in this method or rather in a method called by this method. We also know that the LdapService is an
             // AsyncCachingLdapServiceWrapper. Making a call now will speed up the experience for the user.
@@ -248,10 +248,10 @@ public class CSViewController {
             model.addAttribute("rdPass", encodeRaindancePassword(userId, portletConfig));
         }
 
-        if (portletConfig.isInotes()) {
+        if (portletConfig.isInotesUltralight()) {
             // Then we place a dynamic url (including the userId) in the hiddenVariablesMap.
             Map<String, String> hiddenVariablesMap = new HashMap<String, String>();
-            hiddenVariablesMap.put("RedirectTo", String.format(INOTES_REDIRECT_TO_URL,
+            hiddenVariablesMap.put("RedirectTo", String.format(INOTES_ULTRALIGHT_REDIRECT_TO_URL,
                     credentialService.getUserSiteCredential(userId, portletConfig.getSiteKey()).getSiteUser()));
             model.addAttribute("hiddenVariablesMap", hiddenVariablesMap);
         } else {
