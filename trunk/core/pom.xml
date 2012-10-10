@@ -11,13 +11,13 @@ Generation time : 2009-10-28 12:45:52 CET
   <parent>
     <groupId>se.vgregion.cs-iframe</groupId>
     <artifactId>cs-iframe-system</artifactId>
-    <version>2.6-SNAPSHOT</version>
+    <version>2.6</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
   <groupId>se.vgregion.cs-iframe</groupId>
   <artifactId>cs-iframe-core</artifactId>
   <packaging>pom</packaging>
-  <version>2.6-SNAPSHOT</version>
+  <version>2.6</version>
   <name>${project.artifactId}</name>
 
   <modules>
