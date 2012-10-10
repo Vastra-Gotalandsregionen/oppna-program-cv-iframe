@@ -70,7 +70,8 @@ import java.util.Map;
 public class CSViewController {
     private static final Logger LOGGER = LoggerFactory.getLogger(CSViewController.class);
     // To be used with String.format()
-    private static final String INOTES_ULTRALIGHT_REDIRECT_TO_URL = "/mail/%s.nsf/iNotes/Mail/?OpenDocument&ui=dwa_ulite";
+    private static final String INOTES_ULTRALIGHT_REDIRECT_TO_URL = "/mail/%s.nsf/iNotes/Mail/?OpenDocument&ui="
+            + "dwa_ulite";
 
     @Autowired
     private CredentialService credentialService;
