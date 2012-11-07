@@ -19,27 +19,46 @@
 
 package se.vgregion.portal.iframe.controller;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
+
+import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.portlet.PortletMode;
+import javax.portlet.PortletPreferences;
+import javax.portlet.PortletRequest;
+import javax.portlet.ReadOnlyException;
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
+import javax.portlet.ResourceRequest;
+import javax.portlet.ResourceURL;
+import javax.portlet.WindowState;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
-import org.springframework.mock.web.portlet.*;
+import org.springframework.mock.web.portlet.MockActionRequest;
+import org.springframework.mock.web.portlet.MockPortletPreferences;
+import org.springframework.mock.web.portlet.MockRenderRequest;
+import org.springframework.mock.web.portlet.MockRenderResponse;
+import org.springframework.mock.web.portlet.MockResourceRequest;
+import org.springframework.mock.web.portlet.MockResourceURL;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.ui.ModelMap;
+
 import se.vgregion.ldapservice.LdapUser;
 import se.vgregion.portal.cs.domain.UserSiteCredential;
 import se.vgregion.portal.csiframe.svc.AsyncCachingLdapServiceWrapper;
+import se.vgregion.portal.csiframe.svc.MailInfService;
 import se.vgregion.portal.iframe.BaseTestSetup;
 import se.vgregion.portal.iframe.model.PortletConfig;
-
-import javax.portlet.*;
-import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.junit.Assert.*;
 
 /**
  * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
@@ -47,11 +66,12 @@ import static org.junit.Assert.*;
 public class CSViewControllerTest extends BaseTestSetup {
 
     CSViewController controller;
-    MockCredentialService storeService;
+    se.vgregion.portal.iframe.controller.MockCredentialService storeService;
 
     @Before
     public void setUp() {
         controller = new CSViewController();
+
         storeService = new MockCredentialService();
         // Sets the private field userSiteCredentialService to our mock version.
 
@@ -560,21 +580,9 @@ public class CSViewControllerTest extends BaseTestSetup {
     }
 
     @Test
-    public void testGetCnValue() {
-        // Test that we get right value independently of where the CN string is located (possibly the CN string will
-        // always be first but we could just as well make the method robust in this matter)
-        String cnValue = controller.getCnValue("CN=liv,OU=epost,O=vgregion");
-        assertEquals("liv", cnValue);
-
-        cnValue = controller.getCnValue("OU=epost,CN=liv,O=vgregion");
-        assertEquals("liv", cnValue);
-
-        cnValue = controller.getCnValue("OU=epost,O=vgregion,CN=liv");
-        assertEquals("liv", cnValue);
-    }
-
-    @Test
-    public void testReplacePlaceholders() {
+    public void testReplacePlaceholders() throws Exception {
+        String url = "http://localhost:8081/msrv?";
+        controller.setFindMailServerNameServiceUrl(url);
 
         // Given
         AsyncCachingLdapServiceWrapper ldapService = Mockito.mock(AsyncCachingLdapServiceWrapper.class);
@@ -582,6 +590,10 @@ public class CSViewControllerTest extends BaseTestSetup {
         Mockito.when(ldapUser.getAttributeValue("mailServer")).thenReturn("CN=liv,OU=epost,O=vgregion");
         Mockito.when(ldapService.getLdapUserByUid(Matchers.eq("aUserId"))).thenReturn(ldapUser);
         ReflectionTestUtils.setField(controller, "ldapService", ldapService);
+
+        MailInfService mailInfService = Mockito.mock(MailInfService.class);
+        Mockito.when(mailInfService.findServerName("aUserId")).thenReturn("liv");
+        ReflectionTestUtils.setField(controller, "mailInfService", mailInfService);
 
         // When
         String result = controller.replacePlaceholders("aUserId", "http://{ldap.mailserver.cn}.vgregion.se");
