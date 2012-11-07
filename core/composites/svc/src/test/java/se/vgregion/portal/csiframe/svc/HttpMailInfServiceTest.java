@@ -17,13 +17,15 @@ import org.mortbay.jetty.webapp.WebAppContext;
 
 public class HttpMailInfServiceTest {
 
+    static int port = 8282;
+
     @BeforeClass
     public static void initMockServerNameService() throws Exception {
         initMockServerNameService(true);
     }
 
     public static void initMockServerNameService(boolean stopAtShutdown) throws Exception {
-        Server server = new Server(8282);
+        Server server = new Server(port);
         server.setStopAtShutdown(stopAtShutdown);
 
         WebAppContext wac = new WebAppContext();
@@ -37,7 +39,7 @@ public class HttpMailInfServiceTest {
 
     @Test
     public void testFindServerName() {
-        String serviceUrl = "http://localhost:8081/msrv?";
+        String serviceUrl = "http://localhost:" + port + "/msrv?";
         HttpMailInfService controller = new HttpMailInfService();
         controller.setServiceUrl(serviceUrl);
         String result = controller.findServerName("aUserId");
