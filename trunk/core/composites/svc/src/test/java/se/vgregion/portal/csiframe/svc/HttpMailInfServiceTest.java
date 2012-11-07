@@ -23,7 +23,7 @@ public class HttpMailInfServiceTest {
     }
 
     public static void initMockServerNameService(boolean stopAtShutdown) throws Exception {
-        Server server = new Server(8081);
+        Server server = new Server(8282);
         server.setStopAtShutdown(stopAtShutdown);
 
         WebAppContext wac = new WebAppContext();
