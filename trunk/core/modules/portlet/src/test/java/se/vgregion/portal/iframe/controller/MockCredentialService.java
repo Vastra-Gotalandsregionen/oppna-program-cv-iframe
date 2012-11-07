@@ -1,10 +1,10 @@
 package se.vgregion.portal.iframe.controller;
 
+import java.util.List;
+
 import se.vgregion.portal.cs.domain.SiteKey;
 import se.vgregion.portal.cs.domain.UserSiteCredential;
 import se.vgregion.portal.cs.service.CredentialService;
-
-import java.util.List;
 
 class MockCredentialService implements CredentialService {
     private int storeCalled = 0;
@@ -28,22 +28,22 @@ class MockCredentialService implements CredentialService {
 
     @Override
     public UserSiteCredential getUserSiteCredential(Long siteCredentialId) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return null; // To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
     public List<UserSiteCredential> getAllSiteCredentials(String uid) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return null; // To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
     public List<SiteKey> getAllSiteKeys() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return null; // To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
     public SiteKey getSiteKey(Long siteKeyId) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return null; // To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
@@ -61,17 +61,17 @@ class MockCredentialService implements CredentialService {
 
     @Override
     public void save(SiteKey siteKey) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        // To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
     public void removeUserSiteCredential(Long siteCredentialId) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        // To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
     public void removeSiteKey(Long siteKeyId) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        // To change body of implemented methods use File | Settings | File Templates.
     }
 
 }

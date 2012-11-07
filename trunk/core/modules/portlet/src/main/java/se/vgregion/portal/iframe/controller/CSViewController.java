@@ -19,6 +19,22 @@
 
 package se.vgregion.portal.iframe.controller;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.portlet.ActionRequest;
+import javax.portlet.PortletPreferences;
+import javax.portlet.PortletRequest;
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
+import javax.portlet.ResourceRequest;
+import javax.portlet.WindowState;
+
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
 import org.jsoup.nodes.Document;
@@ -36,31 +52,17 @@ import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 import org.springframework.web.portlet.util.PortletUtils;
-import se.vgregion.ldapservice.LdapUser;
+
 import se.vgregion.portal.cs.domain.SiteKey;
 import se.vgregion.portal.cs.domain.UserSiteCredential;
 import se.vgregion.portal.cs.service.CredentialService;
 import se.vgregion.portal.csiframe.svc.AsyncCachingLdapServiceWrapper;
+import se.vgregion.portal.csiframe.svc.MailInfService;
 import se.vgregion.portal.iframe.model.PortletConfig;
-
-import javax.portlet.ActionRequest;
-import javax.portlet.PortletPreferences;
-import javax.portlet.PortletRequest;
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
-import javax.portlet.ResourceRequest;
-import javax.portlet.WindowState;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Controller class for main view.
- *
+ * 
  * @author <a href="mailto:david.rosell@redpill-linpro.com">David Rosell</a>
  */
 @Controller
@@ -79,9 +81,14 @@ public class CSViewController {
     @Autowired
     private AsyncCachingLdapServiceWrapper ldapService;
 
+    @Autowired
+    private MailInfService mailInfService;
+
+    private String findMailServerNameServiceUrl = "http://aida.vgregion.se/activate.nsf/msrv?openagent&";
+
     /**
      * Method called by Spring to initiate the postLogin session attribute.
-     *
+     * 
      * @return an empty String
      */
     @ModelAttribute("postLogin")
@@ -91,11 +98,15 @@ public class CSViewController {
 
     /**
      * Main controllermethod. Handling of user-sitecredential availability and iFrame source linking.
-     *
-     * @param prefs     portlet preferences
-     * @param req       request
-     * @param resp      response
-     * @param model     model
+     * 
+     * @param prefs
+     *            portlet preferences
+     * @param req
+     *            request
+     * @param resp
+     *            response
+     * @param model
+     *            model
      * @return view
      */
     @RenderMapping
@@ -144,7 +155,6 @@ public class CSViewController {
 
         String baseSrc = getBaseSrc(iFrameSrc);
 
-
         model.addAttribute("iFrameSrc", iFrameSrc);
         model.addAttribute("preIFrameSrc", preIFrameSrc);
         model.addAttribute("baseSrc", baseSrc);
@@ -174,10 +184,13 @@ public class CSViewController {
 
     /**
      * Credential view handleing.
-     *
-     * @param prefs - portlet preferences
-     * @param req   - request
-     * @param model - model
+     * 
+     * @param prefs
+     *            - portlet preferences
+     * @param req
+     *            - request
+     * @param model
+     *            - model
      * @return userCredentialForm
      */
     @RenderMapping(params = "action=changeVaultCredentials")
@@ -199,17 +212,21 @@ public class CSViewController {
 
     /**
      * Prepare proxyLoginForm.jsp for form-based authentication.
-     *
-     * @param model model
-     * @param req   request
-     * @param prefs portlet preferences
-     * @param postLogin postLogin url
+     * 
+     * @param model
+     *            model
+     * @param req
+     *            request
+     * @param prefs
+     *            portlet preferences
+     * @param postLogin
+     *            postLogin url
      * @return proxyLoginForm
      * @throws URISyntaxException
      */
     @ResourceMapping
     public String showProxyForm(PortletPreferences prefs, ResourceRequest req, ModelMap model,
-                                @ModelAttribute("postLogin") String postLogin) {
+            @ModelAttribute("postLogin") String postLogin) {
 
         PortletConfig portletConfig = PortletConfig.getInstance(prefs);
         model.addAttribute("portletConfig", portletConfig);
@@ -220,7 +237,8 @@ public class CSViewController {
         String userId = lookupUid(req);
 
         if (portletConfig.isInotesUltralight()) {
-            // We happen to know that we are going to need to make a call to get the user's mail server from ldap later
+            // We happen to know that we are going to need to make a call to get the user's mail server from ldap
+            // later
             // in this method or rather in a method called by this method. We also know that the LdapService is an
             // AsyncCachingLdapServiceWrapper. Making a call now will speed up the experience for the user.
             ldapService.getLdapUserByUid(userId);
@@ -281,28 +299,30 @@ public class CSViewController {
 
             return "proxyLoginForm";
         } catch (URISyntaxException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace(); // To change body of catch statement use File | Settings | File Templates.
             return "help";
         }
 
     }
 
-    String replacePlaceholders(String userId, String proxyAction) {
-        if (proxyAction.contains("{ldap.mailserver.cn}")) {
-            LdapUser ldapUserByUid = ldapService.getLdapUserByUid(userId);
-            String mailServer = ldapUserByUid.getAttributeValue("mailServer");
-            if (mailServer != null) {
-                String mailHost = getCnValue(mailServer);
-                proxyAction = proxyAction.replace("{ldap.mailserver.cn}", mailHost);
-            }
-        }
-        return proxyAction;
+    /**
+     * There are several mail servers that the user might be registred on. This method finds the symbolic name of
+     * the server.
+     * 
+     * @param userId
+     *            vgrid id that is used as id to lookup what mail server the user have.
+     * @return name of the server.
+     */
+    String fetchMailServerName(String userId) {
+        return mailInfService.findServerName(userId);
     }
 
-    String getCnValue(String mailServer) {
-        int index = mailServer.indexOf("CN=");
-        int commaPosition = mailServer.indexOf(",", index);
-        return mailServer.substring(index + "CN=".length(), commaPosition > 0 ? commaPosition : mailServer.length());
+    String replacePlaceholders(String userId, String proxyAction) {
+        if (proxyAction.contains("{ldap.mailserver.cn}")) {
+            String mailHost = fetchMailServerName(userId);
+            proxyAction = proxyAction.replace("{ldap.mailserver.cn}", mailHost);
+        }
+        return proxyAction;
     }
 
     private String prepareBasicAuthAction(UserSiteCredential siteCredential, String action) {
@@ -330,10 +350,7 @@ public class CSViewController {
                 final int timeout = 5000;
                 Document doc = new JSoupHelper().invoke(new URL(portletConfig.getDynamicFieldAction()), timeout);
                 dynamicValue = doc.select("body").get(0).getElementsByAttributeValue("name", dynamicField).get(0)
-                        .attr("value")
-                        .replaceAll("\n\r", "")
-                        .replaceAll("\r", "")
-                        .replaceAll("\n", "");
+                        .attr("value").replaceAll("\n\r", "").replaceAll("\r", "").replaceAll("\n", "");
                 if (dynamicValue.contains("<>")) {
                     throw new Exception("Invalid value format [" + dynamicValue + "]");
                 }
@@ -415,14 +432,16 @@ public class CSViewController {
 
     /**
      * Store User-SiteCredentials in the Credential-Vault. Action posted from userCredentailForm.jsp
-     *
-     * @param siteCredential - credential
-     * @param req            - action request to handle cancel
+     * 
+     * @param siteCredential
+     *            - credential
+     * @param req
+     *            - action request to handle cancel
      */
     @Transactional
     @ActionMapping
     public void storeUserCredential(@ModelAttribute("siteCredential") UserSiteCredential siteCredential,
-                                    ActionRequest req) {
+            ActionRequest req) {
 
         if (StringUtils.isBlank(siteCredential.getUid())) {
             throw new RuntimeException("ERROR: Unknown user. Cannot store credential.");
@@ -432,8 +451,8 @@ public class CSViewController {
             throw new RuntimeException("CONFIGURATION ERROR: No site-key given. Cannot store user credential.");
         }
         if (!PortletUtils.hasSubmitParameter(req, "_cancel")) {
-            UserSiteCredential entToStore = credentialService.getUserSiteCredential(
-                    siteCredential.getUid(), siteCredential.getSiteKey());
+            UserSiteCredential entToStore = credentialService.getUserSiteCredential(siteCredential.getUid(),
+                    siteCredential.getSiteKey());
             if (entToStore == null || entToStore.getId() == null) {
                 entToStore = siteCredential;
             } else {
@@ -447,27 +466,27 @@ public class CSViewController {
     }
 
     private String prepareView(RenderResponse resp, RenderRequest req, PortletConfig portletConfig,
-                               UserSiteCredential siteCredential) {
+            UserSiteCredential siteCredential) {
         String iFrameSrc = getDefaultTarget();
 
         String src = portletConfig.getSrc();
 
         if (portletConfig.isAuth()) {
-//            if (portletConfig.getAuthType().equals("basic")) {
-//                String[] splitUrl = src.split("://");
-//                if (splitUrl.length != 2) {
-//                    src = ""; // Cannot be processed
-//                } else {
-//                    String protocol = splitUrl[0];
-//                    String url = splitUrl[1];
-//
-//                    src = String.format("%s://%s:%s@%s", protocol, siteCredential.getSiteUser(),
-//                            siteCredential.getSitePassword(), url);
-//                }
-//            } else {
+            // if (portletConfig.getAuthType().equals("basic")) {
+            // String[] splitUrl = src.split("://");
+            // if (splitUrl.length != 2) {
+            // src = ""; // Cannot be processed
+            // } else {
+            // String protocol = splitUrl[0];
+            // String url = splitUrl[1];
+            //
+            // src = String.format("%s://%s:%s@%s", protocol, siteCredential.getSiteUser(),
+            // siteCredential.getSitePassword(), url);
+            // }
+            // } else {
             // goto proxy for form login
             src = resp.createResourceURL().toString();
-//            }
+            // }
         }
 
         if (src.length() > 0) {
@@ -490,7 +509,7 @@ public class CSViewController {
     }
 
     private boolean credentialsAvailable(PortletRequest req, ModelMap model, PortletConfig portletConfig,
-                                         UserSiteCredential returnSiteCredential, SiteKey siteKey) {
+            UserSiteCredential returnSiteCredential, SiteKey siteKey) {
         boolean userSiteCredentialExist = true;
         if (portletConfig.isAuth()) {
             String uid = lookupUid(req);
@@ -548,5 +567,13 @@ public class CSViewController {
             iFrameHeight = portletConfig.getHtmlAttribute("height-maximized", "600");
         }
         return iFrameHeight;
+    }
+
+    public String getFindMailServerNameServiceUrl() {
+        return findMailServerNameServiceUrl;
+    }
+
+    public void setFindMailServerNameServiceUrl(String findMailServerNameServiceUrl) {
+        this.findMailServerNameServiceUrl = findMailServerNameServiceUrl;
     }
 }
