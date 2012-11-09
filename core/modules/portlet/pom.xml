@@ -1,12 +1,11 @@
 <?xml version="1.0"?>
 <!-- This is the Web-app Maven POM. Template version: 1.2-SNAPSHOT Generation time : 2009-10-28 12:45:52 CET -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>se.vgregion.cs-iframe</groupId>
     <artifactId>cs-iframe-core</artifactId>
-    <version>2.7-SNAPSHOT</version>
+    <version>2.7</version>
     <relativePath>../../pom.xml</relativePath>
   </parent>
 
