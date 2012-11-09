@@ -1,0 +1,4 @@
+#Account Activation - LDAP configuration
+BIND_DN=
+BIND_PW=
+MAIL_SERVER_NAME_SERVICE_URL=
