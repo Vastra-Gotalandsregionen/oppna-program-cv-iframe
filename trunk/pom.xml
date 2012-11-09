@@ -23,9 +23,7 @@
   </modules>
 
   <scm>
-    <developerConnection>
-        scm:svn:https://oppna-program-cv-iframe.googlecode.com/svn/trunk
-    </developerConnection>
+    <developerConnection>scm:svn:https://oppna-program-cv-iframe.googlecode.com/svn/trunk</developerConnection>
     <url>http://oppna-program-cv-iframe.googlecode.com/svn/trunk</url>
   </scm>
 
