@@ -19,26 +19,11 @@
 
 package se.vgregion.portal.iframe.controller;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.portlet.ActionRequest;
-import javax.portlet.PortletPreferences;
-import javax.portlet.PortletRequest;
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
-import javax.portlet.ResourceRequest;
-import javax.portlet.WindowState;
-
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,13 +37,18 @@ import org.springframework.web.portlet.bind.annotation.ActionMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 import org.springframework.web.portlet.bind.annotation.ResourceMapping;
 import org.springframework.web.portlet.util.PortletUtils;
-
 import se.vgregion.portal.cs.domain.SiteKey;
 import se.vgregion.portal.cs.domain.UserSiteCredential;
 import se.vgregion.portal.cs.service.CredentialService;
 import se.vgregion.portal.csiframe.svc.AsyncCachingLdapServiceWrapper;
 import se.vgregion.portal.csiframe.svc.MailInfService;
 import se.vgregion.portal.iframe.model.PortletConfig;
+
+import javax.portlet.*;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.*;
 
 /**
  * Controller class for main view.
@@ -368,7 +358,23 @@ public class CSViewController {
             final int timeout = 5000;
             Document doc = new JSoupHelper().invoke(new URL(portletConfig.getSrc()), timeout);
 
-            Element dynamicValue = doc.getElementById("loginForm:j_idt22");
+            Elements buttonElements = doc.getElementsByTag("button");
+            Iterator<Element> iterator = buttonElements.iterator();
+            Element dynamicValue = null;
+            while (iterator.hasNext()) {
+                Element next = iterator.next();
+                String id = next.attr("id");
+                if (id != null && id.startsWith("loginForm:j_idt")) {
+                    dynamicValue = next;
+                    break;
+                }
+            }
+            if (dynamicValue == null) {
+                // todo Want to send an email to notify the
+                LOGGER.error("No element found which starts with \"loginForm:j_idt\".", new RuntimeException());
+                return "";
+            }
+
             String onClick = dynamicValue.attr("onclick");
             final int i = 3;
             String sessionKey = onClick.split("'")[i];

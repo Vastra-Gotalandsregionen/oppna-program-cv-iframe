@@ -23,8 +23,11 @@ import java.util.concurrent.*;
  *
  * @author Patrik Bergström
  * @see LdapService
+ * @deprecated Use AsyncCachingLdapServiceWrapper from
+ * se.vgregion.commons-util:commons-util-core-bc-composite-svc-ldap:3.14 and later
  */
 @Service
+@Deprecated
 @SuppressWarnings("unchecked")
 public class AsyncCachingLdapServiceWrapper implements LdapService {
 
