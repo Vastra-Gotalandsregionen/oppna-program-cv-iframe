@@ -76,6 +76,8 @@ public class CSViewController {
 
     private String findMailServerNameServiceUrl = "http://aida.vgregion.se/activate.nsf/msrv?openagent&";
 
+    private static ThreadLocal dynamicFieldsDocThreadLocal = new ThreadLocal();
+
     /**
      * Method called by Spring to initiate the postLogin session attribute.
      * 
@@ -337,8 +339,7 @@ public class CSViewController {
             String dynamicValue;
             for (String dynamicField : dynamicFields) {
 
-                final int timeout = 5000;
-                Document doc = new JSoupHelper().invoke(new URL(portletConfig.getDynamicFieldAction()), timeout);
+                Document doc = getDynamicFieldsDocument(portletConfig);
                 dynamicValue = doc.select("body").get(0).getElementsByAttributeValue("name", dynamicField).get(0)
                         .attr("value").replaceAll("\n\r", "").replaceAll("\r", "").replaceAll("\n", "");
                 if (dynamicValue.contains("<>")) {
@@ -346,11 +347,47 @@ public class CSViewController {
                 }
                 dynamicFieldValueMap.put(dynamicField, dynamicValue);
             }
+
+            if (portletConfig.isRdEncode()) {
+                addSpecialFieldForRaindance(dynamicFieldValueMap, portletConfig);
+            }
+
             return dynamicFieldValueMap;
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
             return Collections.emptyMap();
+        } finally {
+            // Remove the ThreadLocal so we don't reuse it in subsequent request which is in a reused thread.
+            dynamicFieldsDocThreadLocal.remove();
         }
+    }
+
+    private Document getDynamicFieldsDocument(PortletConfig portletConfig) throws Exception {
+        try {
+            // We might have made this invocation earlier in the same request.
+            // Note: The use of ThreadLocal is purely optional and the benefit is that we reduce the number of requests,
+            // but feel free to remove it if you change the code and you are uncertain that things get right.
+            Object o = dynamicFieldsDocThreadLocal.get();
+            if (o != null) {
+                return (Document) o;
+            }
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
+        }
+        final int timeout = 5000;
+        Document document = new JSoupHelper().invoke(new URL(portletConfig.getDynamicFieldAction()), timeout);
+        dynamicFieldsDocThreadLocal.set(document);
+        return document;
+    }
+
+    // This method is needed since the raindance application posts a parameter which is generated from the id of a
+    // button element and therefore we can't lookup the parameter by means of the dynamic fields. This is dynamic but
+    // derived in custom way.
+    private void addSpecialFieldForRaindance(Map<String, String> dynamicFieldValueMap, PortletConfig portletConfig)
+            throws Exception {
+        Document doc = getDynamicFieldsDocument(portletConfig);
+        Element button = findButtonWithIdWhichStartsWith(doc, "loginForm:j_idt");
+        dynamicFieldValueMap.put("loginForm:j_idcl", button.attr("id"));
     }
 
     private String encodeRaindancePassword(String uid, PortletConfig portletConfig) {
@@ -358,17 +395,7 @@ public class CSViewController {
             final int timeout = 5000;
             Document doc = new JSoupHelper().invoke(new URL(portletConfig.getSrc()), timeout);
 
-            Elements buttonElements = doc.getElementsByTag("button");
-            Iterator<Element> iterator = buttonElements.iterator();
-            Element dynamicValue = null;
-            while (iterator.hasNext()) {
-                Element next = iterator.next();
-                String id = next.attr("id");
-                if (id != null && id.startsWith("loginForm:j_idt")) {
-                    dynamicValue = next;
-                    break;
-                }
-            }
+            Element dynamicValue = findButtonWithIdWhichStartsWith(doc, "loginForm:j_idt");
             if (dynamicValue == null) {
                 // todo Want to send an email to notify the
                 LOGGER.error("No element found which starts with \"loginForm:j_idt\".", new RuntimeException());
@@ -386,6 +413,21 @@ public class CSViewController {
             e.printStackTrace();
             return "";
         }
+    }
+
+    private Element findButtonWithIdWhichStartsWith(Document doc, String pattern) {
+        Elements buttonElements = doc.getElementsByTag("button");
+        Iterator<Element> iterator = buttonElements.iterator();
+        Element dynamicValue = null;
+        while (iterator.hasNext()) {
+            Element next = iterator.next();
+            String id = next.attr("id");
+            if (id != null && id.startsWith(pattern)) {
+                dynamicValue = next;
+                break;
+            }
+        }
+        return dynamicValue;
     }
 
     private String encodeRaindance(String sitePassword, String sessionKey) {

@@ -19,7 +19,7 @@
     <constructor-arg ref="ldapTemplate"/>
   </bean>
 
-  <bean class="se.vgregion.portal.csiframe.svc.AsyncCachingLdapServiceWrapper">
+  <bean class="se.vgregion.ldapservice.AsyncCachingLdapServiceWrapper">
     <constructor-arg ref="simpleLdapService"/>
   </bean>
 
