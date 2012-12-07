@@ -40,7 +40,7 @@ import org.springframework.web.portlet.util.PortletUtils;
 import se.vgregion.portal.cs.domain.SiteKey;
 import se.vgregion.portal.cs.domain.UserSiteCredential;
 import se.vgregion.portal.cs.service.CredentialService;
-import se.vgregion.portal.csiframe.svc.AsyncCachingLdapServiceWrapper;
+import se.vgregion.ldapservice.AsyncCachingLdapServiceWrapper;
 import se.vgregion.portal.csiframe.svc.MailInfService;
 import se.vgregion.portal.iframe.model.PortletConfig;
 
