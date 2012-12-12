@@ -10,7 +10,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 public class HttpMailInfService implements MailInfService {
 
-    private String serviceUrl = "http://aida.vgregion.se/activate.nsf/msrv?openagent&";
+    private String serviceUrl;
 
     @Override
     public String findServerName(String userId) {
