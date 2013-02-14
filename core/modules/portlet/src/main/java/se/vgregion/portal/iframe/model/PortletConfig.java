@@ -63,6 +63,7 @@ public class PortletConfig implements Serializable {
     private boolean linkoutRedirect;
     private String linkoutRedirectPage;
     private boolean inotesUltralight;
+    private String postRedirectUrl;
 
     private Map<String, String> htmlAttributeMap = new HashMap<String, String>();
 
@@ -106,6 +107,7 @@ public class PortletConfig implements Serializable {
         portletConfig.setLinkoutRedirect(Boolean.valueOf(prefs.getValue("linkoutRedirect", "false")));
         portletConfig.setLinkoutRedirectPage(prefs.getValue("linkoutRedirectPage", "../"));
         portletConfig.setInotesUltralight(Boolean.valueOf(prefs.getValue("inotesUltralight", "false")));
+        portletConfig.setPostRedirectUrl((prefs.getValue("postRedirectUrl", "")));
         return portletConfig;
     }
 
@@ -143,6 +145,7 @@ public class PortletConfig implements Serializable {
             prefs.setValue("linkoutRedirect", String.valueOf(isLinkoutRedirect()));
             prefs.setValue("linkoutRedirectPage", getLinkoutRedirectPage());
             prefs.setValue("inotesUltralight", String.valueOf(isInotesUltralight()));
+            prefs.setValue("postRedirectUrl", getPostRedirectUrl());
 
             prefs.store();
         } catch (ReadOnlyException e) {
@@ -411,5 +414,13 @@ public class PortletConfig implements Serializable {
                 .append("sslUrlsOnly", sslUrlsOnly).append("siteUserNameField", siteUserNameField)
                 .append("sitePasswordField", sitePasswordField).append("hiddenVariables", hiddenVariables)
                 .append("preIFrameAction", preIFrameAction).append("htmlAttributes", htmlAttributes).toString();
+    }
+
+    public String getPostRedirectUrl() {
+        return postRedirectUrl;
+    }
+
+    public void setPostRedirectUrl(String postRedirectUrl) {
+        this.postRedirectUrl = postRedirectUrl;
     }
 }

@@ -124,6 +124,17 @@
         </fieldset>
 
         <fieldset>
+            <legend>Post redirect</legend>
+
+            <table class="lfr-table">
+                <tr>
+                    <td><label for="${ns}postRedirectUrl">Post redirect-url</label></td>
+                    <td><form:input path="postRedirectUrl" id="${ns}postRedirectUrl" size="40"/></td>
+                </tr>
+            </table>
+        </fieldset>
+
+        <fieldset>
             <legend>Login form</legend>
 
             <table class="lfr-table">
