@@ -51,7 +51,7 @@ public class PortletConfig implements Serializable {
     private String siteUserNameField;
     private String sitePasswordField;
     private boolean rdEncode;
-    private String hiddenVariables;
+    private String hiddenVariables = "";
     private String dynamicField;
     private String dynamicFieldAction;
     private String htmlAttributes;
@@ -363,7 +363,7 @@ public class PortletConfig implements Serializable {
     }
 
     /**
-     * Convinience method for access of hidden attribures.
+     * Convenience method for access of hidden attribures.
      *
      * @return Map<String, String> - name/value pair
      */
