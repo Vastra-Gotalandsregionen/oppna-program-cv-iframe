@@ -150,6 +150,7 @@ public class CSViewController {
         model.addAttribute("iFrameSrc", iFrameSrc);
         model.addAttribute("preIFrameSrc", preIFrameSrc);
         model.addAttribute("baseSrc", baseSrc);
+        model.addAttribute("postRedirectUrl", portletConfig.getPostRedirectUrl());
         // ------------------------------------
 
         // iFrame display configuration

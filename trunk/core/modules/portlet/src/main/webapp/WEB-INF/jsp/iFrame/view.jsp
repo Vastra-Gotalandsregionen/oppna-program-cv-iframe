@@ -91,6 +91,7 @@
                 var iFrameSrc = '${iFrameSrc}';
                 var preIFrameSrc = '${preIFrameSrc}';
                 var linkout = '${myPortletConfig.linkout}';
+                var postRedirectUrl = '${postRedirectUrl}';
                 if (preIFrameSrc != iFrameSrc) {
                     if (linkout == 'true') {
                         var linkId = '<portlet:namespace />preLogin';
@@ -132,6 +133,8 @@
                             } else {
                                 iFrame.setAttribute('src', '${postLogin}');
                             }
+                        } else if (postRedirectUrl != 'null' && postRedirectUrl.length > 0) {
+                            iFrame.setAttribute('src', postRedirectUrl);
                         }
                     }
                 });
