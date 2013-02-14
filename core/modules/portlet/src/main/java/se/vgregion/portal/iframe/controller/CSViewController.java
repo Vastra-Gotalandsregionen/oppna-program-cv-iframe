@@ -125,7 +125,7 @@ public class CSViewController {
         }
         if (StringUtils.isNotBlank(newPostLogin)) {
             try {
-                String postLogin = new String(Base64.decodeBase64(newPostLogin));
+                String postLogin = new String(Base64.decodeBase64(newPostLogin), "UTF-8");
                 if ("basic".equals(portletConfig.getAuthType())) {
                     postLogin = prepareBasicAuthAction(siteCredential, postLogin);
                 }
