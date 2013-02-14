@@ -23,7 +23,15 @@
 
 <%@page pageEncoding="UTF-8" %>
 
-<portlet:renderURL portletMode="view" var="showView" secure="${portletConfig.sslUrlsOnly}"/>
+<%-- Only set secure flag if positive. If negative we leave it as it is, i.e. like the address bar in the browser --%>
+<c:choose>
+    <c:when test="${myPortletConfig.sslUrlsOnly}">
+        <portlet:renderURL portletMode="view" var="showView" secure="${portletConfig.sslUrlsOnly}"/>
+    </c:when>
+    <c:otherwise>
+        <portlet:renderURL portletMode="view" var="showView"/>
+    </c:otherwise>
+</c:choose>
 <%@include file="helpContent.jsp" %>
     <span class="vgr-portlet-controlls-right">
         <a class="vgr-portlet-view" href="${showView}">Tillbaka</a>

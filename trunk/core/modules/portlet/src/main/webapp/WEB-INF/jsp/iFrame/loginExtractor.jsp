@@ -15,9 +15,19 @@
     }
 </style>
 
-<portlet:actionURL var="loginExtractorAction" name="loginExtractorAction"
-                   portletMode="EDIT" secure="${portletConfig.sslUrlsOnly}"/>
-<portlet:renderURL var="abort" portletMode="EDIT" secure="${portletConfig.sslUrlsOnly}"/>
+<%-- Only set secure flag if positive. If negative we leave it as it is, i.e. like the address bar in the browser --%>
+<c:choose>
+    <c:when test="${myPortletConfig.sslUrlsOnly}">
+        <portlet:actionURL var="loginExtractorAction" name="loginExtractorAction"
+                           portletMode="EDIT" secure="${portletConfig.sslUrlsOnly}"/>
+        <portlet:renderURL var="abort" portletMode="EDIT" secure="${portletConfig.sslUrlsOnly}"/>
+    </c:when>
+    <c:otherwise>
+        <portlet:actionURL var="loginExtractorAction" name="loginExtractorAction" portletMode="EDIT" />
+        <portlet:renderURL var="abort" portletMode="EDIT" />
+    </c:otherwise>
+</c:choose>
+
 
 <form:form method="post" action="${loginExtractorAction}" commandName="loginExtractor">
     <fieldset>
