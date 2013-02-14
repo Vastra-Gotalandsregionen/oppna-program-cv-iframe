@@ -33,10 +33,30 @@
 
 <portlet:defineObjects/>
 
-<portlet:renderURL var="changeCredentials" secure="${myPortletConfig.sslUrlsOnly}">
-    <portlet:param name="action" value="changeVaultCredentials"/>
-</portlet:renderURL>
-<portlet:renderURL portletMode="help" var="showHelp" secure="${myPortletConfig.sslUrlsOnly}"/>
+<%-- Only set secure flag if positive. If negative we leave it as it is, i.e. like the address bar in the browser --%>
+<c:choose>
+    <c:when test="${myPortletConfig.sslUrlsOnly}">
+        <portlet:renderURL var="changeCredentials" secure="${myPortletConfig.sslUrlsOnly}">
+            <portlet:param name="action" value="changeVaultCredentials"/>
+        </portlet:renderURL>
+    </c:when>
+    <c:otherwise>
+        <portlet:renderURL var="changeCredentials">
+            <portlet:param name="action" value="changeVaultCredentials"/>
+        </portlet:renderURL>
+    </c:otherwise>
+</c:choose>
+
+<%-- Only set secure flag if positive. If negative we leave it as it is, i.e. like the address bar in the browser --%>
+<c:choose>
+    <c:when test="${myPortletConfig.sslUrlsOnly}">
+        <portlet:renderURL portletMode="help" var="showHelp" secure="${myPortletConfig.sslUrlsOnly}"/>
+    </c:when>
+    <c:otherwise>
+        <portlet:renderURL portletMode="help" var="showHelp"/>
+    </c:otherwise>
+</c:choose>
+
 
 <c:if test="${myPortletConfig.linkoutRedirect}">
     <meta http-equiv="refresh" content="7; url=${myPortletConfig.linkoutRedirectPage}">

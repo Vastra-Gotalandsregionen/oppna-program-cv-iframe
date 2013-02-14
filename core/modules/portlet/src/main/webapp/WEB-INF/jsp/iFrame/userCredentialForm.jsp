@@ -30,7 +30,15 @@
     <%@ include file="/style/csadmin-style.css"%>
 </style>
 
-<portlet:actionURL var="formAction" escapeXml="false" secure="${portletConfig.sslUrlsOnly}"/>
+<%-- Only set secure flag if positive. If negative we leave it as it is, i.e. like the address bar in the browser --%>
+<c:choose>
+    <c:when test="${myPortletConfig.sslUrlsOnly}">
+        <portlet:actionURL var="formAction" escapeXml="false" secure="${portletConfig.sslUrlsOnly}"/>
+    </c:when>
+    <c:otherwise>
+        <portlet:actionURL var="formAction" escapeXml="false"/>
+    </c:otherwise>
+</c:choose>
 
 <div class="cs-admin">
     <h2>Ändra inloggning - ${siteKey.title}</h2>
