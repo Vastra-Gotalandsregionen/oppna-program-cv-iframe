@@ -21,6 +21,8 @@ package se.vgregion.portal.iframe.model;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.portlet.PortletPreferences;
 import javax.portlet.ReadOnlyException;
@@ -37,6 +39,7 @@ import java.util.Map;
  */
 public class PortletConfig implements Serializable {
     private static final long serialVersionUID = 526915899524612688L;
+    private static final Logger LOGGER = LoggerFactory.getLogger(PortletConfig.class);
 
     private String siteKey;
 

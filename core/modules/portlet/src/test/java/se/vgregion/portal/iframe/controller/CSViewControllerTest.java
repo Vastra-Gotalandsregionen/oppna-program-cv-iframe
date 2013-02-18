@@ -601,6 +601,21 @@ public class CSViewControllerTest extends BaseTestSetup {
         assertEquals("http://liv.vgregion.se", result);
     }
 
+    @Test
+    public void testGetPopoutUrl() throws Exception {
+        String src = "http://www.google.com/asdf/lakfjlakj.asdf";
+        String popoutUrl = CSViewController.getPopoutUrl(src);
+        assertEquals("http://www.google.com", popoutUrl);
+
+        src = "https://www.google.com/asdf/lakfjlakj.asdf";
+        popoutUrl = CSViewController.getPopoutUrl(src);
+        assertEquals("https://www.google.com", popoutUrl);
+
+        src = "www.google.com/asdf/lakfjlakj.asdf";
+        popoutUrl = CSViewController.getPopoutUrl(src);
+        assertEquals("http://www.google.com", popoutUrl);
+    }
+
     class TestStubMockRenderResponse extends MockRenderResponse {
         @Override
         public ResourceURL createResourceURL() {
