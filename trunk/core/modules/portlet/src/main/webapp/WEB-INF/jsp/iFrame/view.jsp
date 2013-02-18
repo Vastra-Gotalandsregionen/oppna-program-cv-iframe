@@ -57,7 +57,6 @@
     </c:otherwise>
 </c:choose>
 
-
 <c:if test="${myPortletConfig.linkoutRedirect}">
     <meta http-equiv="refresh" content="7; url=${myPortletConfig.linkoutRedirectPage}">
 </c:if>
@@ -68,6 +67,9 @@
     </span>
     <span class="vgr-portlet-controlls-right">
       <a class="vgr-portlet-help" href="${showHelp}" title="Hjälp">Hjälp</a>
+    </span>
+    <span class="open-new-window" style="float: right">
+      <a href="${popoutUrl}" target="_blank">Öppna i nytt fönster</a>
     </span>
     <span>
         <a id="<portlet:namespace />preLogin" href="" target=""></a>

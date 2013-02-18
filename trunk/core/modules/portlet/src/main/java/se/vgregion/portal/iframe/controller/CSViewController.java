@@ -45,6 +45,7 @@ import se.vgregion.portal.csiframe.svc.MailInfService;
 import se.vgregion.portal.iframe.model.PortletConfig;
 
 import javax.portlet.*;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -146,6 +147,12 @@ public class CSViewController {
         }
 
         String baseSrc = getBaseSrc(iFrameSrc);
+
+        // popoutUrl
+        String userId = lookupUid(req);
+        String srcUrl = portletConfig.getSrc();
+        srcUrl = replacePlaceholders(userId, srcUrl);
+        model.addAttribute("popoutUrl", getPopoutUrl(srcUrl));
 
         model.addAttribute("iFrameSrc", iFrameSrc);
         model.addAttribute("preIFrameSrc", preIFrameSrc);
@@ -624,5 +631,22 @@ public class CSViewController {
 
     public void setFindMailServerNameServiceUrl(String findMailServerNameServiceUrl) {
         this.findMailServerNameServiceUrl = findMailServerNameServiceUrl;
+    }
+
+    public static String getPopoutUrl(String srcUrl) {
+        try {
+            URL url = new URL(srcUrl);
+            return url.getProtocol() + "://" + url.getHost();
+        } catch (MalformedURLException e) {
+            srcUrl = "http://" + srcUrl;
+            // Try putting "http://" in front in case that is what is missing.
+            try {
+                URL url = new URL(srcUrl);
+                return url.getProtocol() + "://" + url.getHost();
+            } catch (MalformedURLException e1) {
+                LOGGER.error(e.getMessage(), e);
+                return null;
+            }
+        }
     }
 }
