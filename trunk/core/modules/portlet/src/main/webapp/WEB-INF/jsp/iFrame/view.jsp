@@ -61,15 +61,12 @@
     <meta http-equiv="refresh" content="7; url=${myPortletConfig.linkoutRedirectPage}">
 </c:if>
 
-<div class="vgr-portlet-controlls-container" style="${link_display}">
+<span class="vgr-portlet-controlls-container" style="${link_display}; float: left">
     <span class="vgr-portlet-controlls-left">
       <a title="Ändra inloggning" class="vgr-express-login" href="${changeCredentials}">Ändra inloggning</a>
     </span>
     <span class="vgr-portlet-controlls-right">
       <a class="vgr-portlet-help" href="${showHelp}" title="Hjälp">Hjälp</a>
-    </span>
-    <span class="open-new-window" style="float: right">
-      <a href="${popoutUrl}" target="_blank">Öppna i nytt fönster</a>
     </span>
     <span>
         <a id="<portlet:namespace />preLogin" href="" target=""></a>
@@ -78,7 +75,10 @@
         <a id="<portlet:namespace />postLogin" href=""></a>
     </span>
     <br/>
-</div>
+</span>
+<span class="open-new-window" style="float: right">
+    <a href="${popoutUrl}" target="_blank">Öppna i nytt fönster</a>
+</span>
 
 <div id="<portlet:namespace />iframeWrap">
     <c:choose>
