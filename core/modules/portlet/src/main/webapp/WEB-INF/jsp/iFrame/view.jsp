@@ -57,6 +57,8 @@
     </c:otherwise>
 </c:choose>
 
+<portlet:resourceURL id="infoText" var="infoTextUrl"/>
+
 <c:if test="${myPortletConfig.linkoutRedirect}">
     <meta http-equiv="refresh" content="7; url=${myPortletConfig.linkoutRedirectPage}">
 </c:if>
@@ -73,6 +75,9 @@
     </span>
     <span>
         <a id="<portlet:namespace />postLogin" href=""></a>
+    </span>
+    <span>
+        <a id="<portlet:namespace />link" href=""></a>
     </span>
     <br/>
 </span>
@@ -114,6 +119,7 @@
                 var preIFrameSrc = '${preIFrameSrc}';
                 var linkout = '${myPortletConfig.linkout}';
                 var postRedirectUrl = '${postRedirectUrl}';
+                var infoTextUrl = '${infoTextUrl}';
                 if (preIFrameSrc != iFrameSrc) {
                     if (linkout == 'true') {
                         var linkId = '<portlet:namespace />preLogin';
@@ -125,7 +131,17 @@
                         iFrame.setAttribute('src', preIFrameSrc);
                     }
                 } else {
-                    iFrame.setAttribute('src', iFrameSrc);
+                    // We want to be able to linkout also when there is no authentication to perform.
+                    if (linkout == 'true') {
+                        var linkId = '<portlet:namespace />link';
+                        var link = A.one('#'+linkId);
+                        link.setAttribute('href', iFrameSrc);
+                        link.setAttribute('target', '${myPortletConfig.linkoutTarget}');
+                        actuateLink(linkId, link);
+                        iFrame.setAttribute('src', infoTextUrl);
+                    } else {
+                        iFrame.setAttribute('src', iFrameSrc);
+                    }
                 }
                 // ======================
 

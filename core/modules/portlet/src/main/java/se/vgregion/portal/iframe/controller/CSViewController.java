@@ -305,6 +305,11 @@ public class CSViewController {
 
     }
 
+    @ResourceMapping("infoText")
+    public String showInfoText() {
+        return "infoText";
+    }
+
     /**
      * There are several mail servers that the user might be registred on. This method finds the symbolic name of
      * the server.
