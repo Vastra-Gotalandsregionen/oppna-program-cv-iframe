@@ -110,13 +110,14 @@
 
 <script type="text/javascript">
     function autoOpen() {
+      if (!window.loginProxy) {
         window.loginProxy = document.getElementById('<portlet:namespace />proxy_login');
-
         if ("form" == "${portletConfig.authType}") {
-            setTimeout('window.loginProxy.submit()', 100);
+            void(setTimeout('void(window.loginProxy.submit())', 200));
         } else {
-            setTimeout(clickIfPossible(loginProxy), 100);
+            setTimeout(clickIfPossible(window.loginProxy), 100);
         }
+      } else alert(12345);
     }
 
     function clickIfPossible(link) {
