@@ -117,13 +117,11 @@
         } else {
             setTimeout(clickIfPossible(window.loginProxy), 100);
         }
-      } else alert(12345);
+      }
     }
 
     function clickIfPossible(link) {
         var allowDefaultAction = true;
-        alert('apa');
-        alert(link);
         if (link.click) {
             link.click();
             return;
