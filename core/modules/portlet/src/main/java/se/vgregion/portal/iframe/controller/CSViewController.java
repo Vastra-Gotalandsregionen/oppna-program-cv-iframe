@@ -152,7 +152,7 @@ public class CSViewController {
         String userId = lookupUid(req);
         String srcUrl = portletConfig.getSrc();
         srcUrl = replacePlaceholders(userId, srcUrl);
-        model.addAttribute("popoutUrl", getPopoutUrl(srcUrl));
+        model.addAttribute("popoutUrl", srcUrl);
 
         model.addAttribute("iFrameSrc", iFrameSrc);
         model.addAttribute("preIFrameSrc", preIFrameSrc);
@@ -638,20 +638,4 @@ public class CSViewController {
         this.findMailServerNameServiceUrl = findMailServerNameServiceUrl;
     }
 
-    public static String getPopoutUrl(String srcUrl) {
-        try {
-            URL url = new URL(srcUrl);
-            return url.getProtocol() + "://" + url.getHost();
-        } catch (MalformedURLException e) {
-            srcUrl = "http://" + srcUrl;
-            // Try putting "http://" in front in case that is what is missing.
-            try {
-                URL url = new URL(srcUrl);
-                return url.getProtocol() + "://" + url.getHost();
-            } catch (MalformedURLException e1) {
-                LOGGER.error(e.getMessage(), e);
-                return null;
-            }
-        }
-    }
 }
