@@ -82,7 +82,7 @@
     <br/>
 </span>
 <span class="open-new-window" style="float: right">
-    <a href="${popoutUrl}" target="_blank">Öppna i nytt fönster</a>
+    <a href="${iFrameSrc}" target="_blank">Öppna i nytt fönster</a>
 </span>
 
 <div id="<portlet:namespace />iframeWrap">
