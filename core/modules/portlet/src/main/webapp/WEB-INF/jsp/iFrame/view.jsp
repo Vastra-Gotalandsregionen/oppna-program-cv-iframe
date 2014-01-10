@@ -82,7 +82,7 @@
     <br/>
 </span>
 <span class="open-new-window" style="float: right">
-    <a href="${iFrameSrc}" target="_blank">Öppna i nytt fönster</a>
+    <a href="${iFrameSrc}" target="_blank" id="<portlet:namespace />openNewWindow">Öppna i nytt fönster</a>
 </span>
 
 <div id="<portlet:namespace />iframeWrap">
@@ -177,6 +177,19 @@
                     }
                 });
                 // ======================
+
+                A.one('#<portlet:namespace />openNewWindow').on('click', function (e) {
+                    e.halt();
+                    var newWind = window.open(e.target.get('href'));
+
+                    var postRedirectUrl = '${postRedirectUrl}';
+                    if (postRedirectUrl != 'null' && postRedirectUrl.length > 0) {
+                        A.later('1000', iFrame, function() {
+                            newWind.location = postRedirectUrl;
+                        });
+                    }
+
+                });
 
                 function actuateLink(linkId, auiLink) {
                     var link = document.getElementById(linkId);
