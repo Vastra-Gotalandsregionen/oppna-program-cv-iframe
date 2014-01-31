@@ -64,7 +64,7 @@
             </c:otherwise>
         </c:choose>
 
-        <p>${siteKey.title} laddas i ett eget f&ouml;nster...</p>
+        <p>Systemet laddas i ett eget f&ouml;nster...</p>
         <c:if test="${postLoginLink}">
             <ul>
                 <li>
