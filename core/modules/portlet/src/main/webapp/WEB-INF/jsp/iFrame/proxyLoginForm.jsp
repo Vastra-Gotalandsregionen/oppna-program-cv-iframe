@@ -39,7 +39,6 @@
             <c:when test="${portletConfig.authType == 'form'}">
                 <form action="${proxyAction}"
                       method="${portletConfig.formMethod}"
-                      target="${portletConfig.linkoutTarget}"
                       name="<portlet:namespace />proxy_login"
                       id="<portlet:namespace />proxy_login">
                     <input name="${portletConfig.siteUserNameField}" type="hidden" value="${siteCredential.siteUser}"/>
@@ -61,7 +60,7 @@
                 </form>
             </c:when>
             <c:otherwise>
-                <a id="<portlet:namespace />proxy_login" name="<portlet:namespace />proxy_login" href="${proxyAction}" target="${portletConfig.linkoutTarget}"></a>
+                <a id="<portlet:namespace />proxy_login" name="<portlet:namespace />proxy_login" href="${proxyAction}"></a>
             </c:otherwise>
         </c:choose>
 
@@ -69,7 +68,7 @@
         <c:if test="${postLoginLink}">
             <ul>
                 <li>
-                    Direkt l&auml;nk: <a href="${postLogin}" target="${portletConfig.linkoutTarget}">${postLogin}</a>
+                    Direkt l&auml;nk: <a href="${postLogin}">${postLogin}</a>
                 </li>
             </ul>
         </c:if>
