@@ -63,27 +63,29 @@
     <meta http-equiv="refresh" content="7; url=${myPortletConfig.linkoutRedirectPage}">
 </c:if>
 
-<span class="vgr-portlet-controlls-container" style="${link_display}; float: left">
-    <span class="vgr-portlet-controlls-left">
-      <a title="Ändra inloggning" class="vgr-express-login" href="${changeCredentials}">Ändra inloggning</a>
+<div class="clearfix">
+    <span class="vgr-portlet-controlls-container" style="${link_display}; float: left">
+        <span class="vgr-portlet-controlls-left">
+          <a title="Ändra inloggning" class="vgr-express-login" href="${changeCredentials}">Ändra inloggning</a>
+        </span>
+        <span class="vgr-portlet-controlls-right">
+          <a class="vgr-portlet-help" href="${showHelp}" title="Hjälp">Hjälp</a>
+        </span>
+        <span>
+            <a id="<portlet:namespace />preLogin" href="" target=""></a>
+        </span>
+        <span>
+            <a id="<portlet:namespace />postLogin" href=""></a>
+        </span>
+        <span>
+            <a id="<portlet:namespace />link" href=""></a>
+        </span>
+        <br/>
     </span>
-    <span class="vgr-portlet-controlls-right">
-      <a class="vgr-portlet-help" href="${showHelp}" title="Hjälp">Hjälp</a>
+    <span class="open-new-window" style="float: right">
+        <a href="${iFrameSrc}" target="_blank" id="<portlet:namespace />openNewWindow">Öppna i nytt fönster</a>
     </span>
-    <span>
-        <a id="<portlet:namespace />preLogin" href="" target=""></a>
-    </span>
-    <span>
-        <a id="<portlet:namespace />postLogin" href=""></a>
-    </span>
-    <span>
-        <a id="<portlet:namespace />link" href=""></a>
-    </span>
-    <br/>
-</span>
-<span class="open-new-window" style="float: right">
-    <a href="${iFrameSrc}" target="_blank" id="<portlet:namespace />openNewWindow">Öppna i nytt fönster</a>
-</span>
+</div>
 
 <div id="<portlet:namespace />iframeWrap">
     <c:choose>
