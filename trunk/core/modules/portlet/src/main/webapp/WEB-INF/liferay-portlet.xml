@@ -37,6 +37,7 @@
 
   <portlet>
     <portlet-name>cs-admin</portlet-name>
+    <requires-namespaced-parameters>false</requires-namespaced-parameters>
   </portlet>
 
   <role-mapper>
