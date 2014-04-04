@@ -39,6 +39,7 @@
             <c:when test="${portletConfig.authType == 'form'}">
                 <form action="${proxyAction}"
                       method="${portletConfig.formMethod}"
+                      target="${portletConfig.linkoutTarget}"
                       name="<portlet:namespace />proxy_login"
                       id="<portlet:namespace />proxy_login">
                     <input name="${portletConfig.siteUserNameField}" type="hidden" value="${siteCredential.siteUser}"/>
