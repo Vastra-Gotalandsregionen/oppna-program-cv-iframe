@@ -33,6 +33,7 @@
     <friendly-url-routes>csiframe-friendly-url-routes.xml</friendly-url-routes>
     <instanceable>true</instanceable>
     <requires-namespaced-parameters>false</requires-namespaced-parameters>
+    <css-class-wrapper>cs-iframe</css-class-wrapper>
   </portlet>
 
   <portlet>
