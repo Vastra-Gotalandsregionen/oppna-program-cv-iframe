@@ -1,0 +1,44 @@
+# Introduction #
+
+The Site-key is a placeholder for which credential are used to authenticate the user on login for a particular site.
+
+Different sites sometimes use the same authentication mechanism (a limited SSO domain). Then the site-key is reusable and and CS-IFrame allows the user to only supply the credential once, thus taking advantage of as much of the authentication infrastructure as possible.
+
+
+# Configuration #
+
+## List view ##
+Site-key administration are reached on the settings page of the CS-Admin portlet.
+
+All Site-keys in the portal are displayed in a list.
+
+![http://oppna-program-cv-iframe.googlecode.com/svn/wiki/CS-sitekey.png](http://oppna-program-cv-iframe.googlecode.com/svn/wiki/CS-sitekey.png)
+
+The key is the value used to reference the site-key in code. It also has a title and a description.
+New Site-key's are created by clicking on the button under the list, every Site-key can be edited and deleted.
+
+When deleting a Site-key all user credentials associated with this key will be deleted.
+
+_**- Be careful: Stored user credentials are valuable -**_. Every time the user has to reenter his credentials without having initiated the change himself, will erode the trust of the portal site.
+
+It is often better to inactivate a Site-key first, and later when it is absolutely clear that the credentials never will be needed again, remove it.
+
+## Edit view ##
+
+![http://oppna-program-cv-iframe.googlecode.com/svn/wiki/CS-sitekey_edit.png](http://oppna-program-cv-iframe.googlecode.com/svn/wiki/CS-sitekey_edit.png)
+
+All values in the Site-key can be changed.
+
+However, be very careful when changing the key. It is used in the user credential tabel and big update will be run, and even if everything is done transactional, care is advised.
+
+When doing external integrations it is the key that are referenced, this is another reason to be very restrictive in changing the key.
+
+It is possible to use HTML in the description field, so it is possible to provide both images and links in the site description.
+
+One way to use the description field is to provide instructions and contact information of how to acquire access to the site. If the description is complicated and need a lot of instruction, provide a link to the instructions instead.
+
+A Site-key has to be activated to be selectable in the CS-IFrame configuration.
+
+This is how it can look inside CS-IFrame configuration:
+
+![http://oppna-program-cv-iframe.googlecode.com/svn/wiki/CS-sitekey_dropdown.png](http://oppna-program-cv-iframe.googlecode.com/svn/wiki/CS-sitekey_dropdown.png)

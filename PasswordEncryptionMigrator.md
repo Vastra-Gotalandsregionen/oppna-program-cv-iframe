@@ -1,0 +1,50 @@
+# Introduction #
+
+The PasswordEncryptionMigrator module is a standalone Java application which is run from a command-line terminal. The module was created in order to migrate all stored passwords (i.e. all UserSiteCredentials) from one encryption cipher to another.
+
+The migration module (just called "the module" hereafter) enables the migration of currently stored cipher texts (encrypted passwords) to be based on a new cipher. For a general introduction to ciphers, please go to http://en.wikipedia.org/wiki/Cipher. The module can also migrate the cipher texts calculated by one key to be recalculated using a new key.
+
+The purpose of the module is to retain or increase security even if threats are encountered. Security and cryptography is a dynamic field and what is considered safe today may not be considered safe tomorrow.
+
+The current implementation can migrate between AES with ECB block mode and AES with CTR block mode, in both directions. For more information on cryptographic block modes, see http://en.wikipedia.org/wiki/Block_cipher_modes_of_operation.
+
+When migrating between AES/ECB and AES/CTR the same key is used for the new cipher texts as the old cipher texts (cipher text = encrypted password).
+
+An additional feature is that the cipher texts can be updated so that they can only be decrypted with a newly created key. This may be useful e.g. if there is a risk that the current key has leaked. Even if the key does not leak it is still recommended to update the key regularly.
+
+Note that backup of the database is highly recommended prior to using the PasswordMigration module.
+
+# Details #
+
+To migrate a set of cipher texts an implementation of CryptoUtil are chosen to decrypt the current cipher texts and another implementation is chosen to encrypt the passwords to new cipher texts.
+
+Instructions to run the application can also be found in the doc/README.txt file in the source code tree.
+
+It is convenient to run the module from the local computer where the local development environment is located.
+
+First build the whole project:
+
+`oppna-program-cv-iframe/core/mvn clean install`
+
+Cd to the application target directory:
+
+`cd modules/application/target`
+
+There you will find cs-iframe-core-module-application-X.X.jar. Add a security.properties file into the archive with relevant content (see the securiry.properties.template file). Also add a folder named "security" under the "target" folder. In the "security" folder add a file named "cv.key" with the key used to encrypt the passwords. (Note that the cv.key file cannot reside inside the jar archive since the Spring configuration needs to be able to specify the file by a pure file system path.)
+
+## Migrate to new cipher ##
+
+Run the module by:
+
+`java -jar cs-iframe-core-module-application-X.X.jar ecb2ctr`
+
+If "ecb2ctr" is left out a list of possible arguments is printed.
+
+Note that the portlets must use the implementation (of the CryptoUtil interface) which uses the new cipher directly after the migration is made.
+
+## Update key ##
+In order to update the passwords to a new key run the following command:
+
+`java -jar cs-iframe-core-module-application-X.X.jar updateKey`
+
+This will output the new key in a file named "newCv.key". This file should replace the file which is used by portlets. Note that the portal that contains the CsIFrame should be stopped while running this command and the new key file should be ini place before starting the portal again.
