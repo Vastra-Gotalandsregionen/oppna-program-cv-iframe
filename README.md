@@ -1,6 +1,6 @@
 <td id="wikicontent" class="psdescription">
     <p><strong>IFrames is an easy way to include an existing websites into the portal.</strong> </p>
-    ![](https://github.com/Vastra-Gotalandsregionen/oppna-program-cv-iframe/wiki/CS-website.png?raw=true)
+    ![](https://github.com/Vastra-Gotalandsregionen/oppna-program-cv-iframe/wiki/CS-website.png)
     <p>CS-IFrame provides two functionalities </p>
     <ul>
         <li>Credential Store - for assisted login </li>
