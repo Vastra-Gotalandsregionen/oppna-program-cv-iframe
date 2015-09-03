@@ -8,5 +8,5 @@
     </ul>
     <p></p>
     <p>When accessing resources protected by basic- or form-based authentication it is convenient for the user to store his credentials for the remote site, allowing the portal to automatically log in. </p>
-    <p><a href="/p/oppna-program-cv-iframe/wiki/Overview">Read more...</a> </p>
+    <p><a href="https://github.com/Vastra-Gotalandsregionen/oppna-program-cv-iframe/wiki/Overview">Read more...</a> </p>
 </td>
