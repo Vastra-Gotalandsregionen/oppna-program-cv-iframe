@@ -21,9 +21,9 @@
     <property name="ignoreUnresolvablePlaceholders" value="true" />
     <property name="locations">
       <list>
-        <value>classpath:datasource.properties</value>
-        <value>classpath:ldap-configuration.properties</value>
-        <value>classpath:security.properties</value>
+        <value>file:${user.home}/.rp/cs-iframe/datasource.properties</value>
+        <value>file:${user.home}/.rp/cs-iframe/ldap-configuration.properties</value>
+        <value>file:${user.home}/.rp/cs-iframe/security.properties</value>
       </list>
     </property>
   </bean>

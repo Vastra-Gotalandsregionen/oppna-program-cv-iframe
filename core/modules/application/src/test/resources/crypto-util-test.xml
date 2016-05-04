@@ -25,11 +25,11 @@
        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
   <bean name="cryptoUtil"  class="se.vgregion.portal.cs.util.CryptoUtilImpl">
-    <property name="keyFile" value="classpath:${keyFilePath}" />
+    <property name="keyFile" value="file:${user.home}/.rp/cs-iframe/security/cv.key" />
   </bean>
 
     <bean name="aesCtrCryptoUtil"  class="se.vgregion.portal.cs.util.AesCtrCryptoUtilImpl">
-    <constructor-arg value="classpath:${keyFilePath}"/>
+    <constructor-arg value="file:${user.home}/.rp/cs-iframe/security/cv.key"/>
   </bean>
 
 </beans>
